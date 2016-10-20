@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#303F9F</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="red">#ff0000</color>
+    <color name="blue">#0000FF</color>
+    <color name="orange">#ec6c38</color>
+    <color name="grey">#8A8A8A</color>
+    <color name="navy">#000080</color>
+    <color name="gold">#E08E00</color>
+    <color name="grey_deep">#ff999999</color>
+    <color name="gray_normal">#666666</color>
+
+    <color name="loading_bg">#ededed</color>
+    <color name="c_333333">#333333</color>
+
+    <!-- 分割线条颜色 -->
+    <color name="line_color">#dcdcdc</color>
+</resources>

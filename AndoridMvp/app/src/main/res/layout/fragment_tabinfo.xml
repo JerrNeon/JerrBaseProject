@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <com.zhy.autolayout.AutoFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textinputlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.andreabaccega.widget.FormEditText
+                android:id="@+id/tv1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12px"
+                android:layout_marginTop="20px"
+                android:hint="请输入用户名"
+                android:text=""
+                app:emptyErrorString="用户名不能为空"
+                app:testErrorString="用户名不正确"
+                app:testType="alpha"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <com.andreabaccega.widget.FormEditText
+            android:id="@+id/tv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12px"
+            android:layout_marginTop="140px"
+            android:hint="请输入密码"
+            android:text=""
+            app:emptyErrorString="密码不能为空"
+            app:testErrorString="密码不正确"
+            app:testType="alpha"/>
+
+        <com.andreabaccega.widget.FormEditText
+            android:id="@+id/tv3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12px"
+            android:layout_marginTop="280px"
+            android:hint="请输入邮箱"
+            android:text=""
+            app:emptyErrorString="邮箱不能为空"
+            app:testErrorString="邮箱格式不正确"
+            app:testType="email"/>
+
+        <com.andreabaccega.widget.FormEditText
+            android:id="@+id/tv4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12px"
+            android:layout_marginTop="420px"
+            android:hint="请输入手机"
+            android:text=""
+            app:emptyErrorString="手机号不能为空"
+            app:testErrorString="手机号格式不正确"
+            app:testType="phone"/>
+    </com.zhy.autolayout.AutoFrameLayout>
+
+    <com.zhy.autolayout.AutoFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100px"
+            android:layout_marginTop="200px"
+            android:text="提交"/>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="400px"
+            android:layout_marginTop="200px"
+            android:text="Snackbar"/>
+
+        <com.cw.andoridmvp.widget.PieView
+            android:id="@+id/pieview"
+            android:layout_width="match_parent"
+            android:layout_height="400px"
+            android:layout_marginTop="100px"/>
+
+    </com.zhy.autolayout.AutoFrameLayout>
+
+</LinearLayout>

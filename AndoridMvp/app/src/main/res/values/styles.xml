@@ -1,0 +1,33 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="BaseTheme"/>
+
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="vpiTabPageIndicatorStyle">@style/TabPageIndicator</item>
+    </style>
+
+    <!-- 左右滑动切换的Tab头部样式-->
+    <style name="TabPageIndicator">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/vpi_tabindicator_selector</item>
+        <item name="android:paddingLeft">12dip</item>
+        <item name="android:paddingRight">12dip</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textAppearance">@style/TabPageIndicator_TextAppearance</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/vpi_tabindicator_textcolor</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="TabPageIndicator_TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#838383</item>
+    </style>
+
+</resources>
