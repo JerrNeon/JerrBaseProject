@@ -97,12 +97,32 @@ public class BaseActivity extends AppCompatActivity {
      * 通过类名启动Activity，并且含有Bundle数据，并会再打开另一个activity
      * 例如：登录成功后需要打开新的activity（@param targetcls）
      *
-     * @param cls       需要跳转的类
-     * @param bundle    数据
-     * @param targetcls 要跳转的类后再跳转的类
+     * @param cls               需要跳转的类
+     * @param bundle            数据
+     * @param targetPackageName 要跳转的类的包名
      */
-    protected void openActivity(Class<?> cls, Class<?> targetcls, Bundle bundle) {
+    protected void openActivity(Class<?> cls, String targetPackageName, Bundle bundle) {
         Intent intent = new Intent(this, cls);
+        intent.putExtra(BaseActivity.class.getName(), targetPackageName);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivity(intent);
+    }
+
+    /**
+     * 只有调用了openActivity(Class<?> cls, String targetPackageName, Bundle bundle)此方法才才有效
+     *
+     * @param bundle 数据
+     */
+    protected void openTargetActivity(Bundle bundle) {
+        if (getIntent() == null) return;
+        Intent intent = null;
+        try {
+            intent = new Intent(this, Class.forName(getIntent().getStringExtra(BaseActivity.class.getName())));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         if (bundle != null) {
             intent.putExtras(bundle);
         }

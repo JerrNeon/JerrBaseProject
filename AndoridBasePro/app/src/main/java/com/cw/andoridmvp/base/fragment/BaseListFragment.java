@@ -11,7 +11,6 @@ import android.widget.BaseAdapter;
 import com.cw.andoridmvp.R;
 import com.cw.andoridmvp.pulltorefresh.PullToRefreshBase;
 import com.cw.andoridmvp.pulltorefresh.PullToRefreshListView;
-import com.cw.andoridmvp.widget.lazyviewpager.LazyFragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import butterknife.BindView;
  * @date 2016/10/8 15:46
  * LazyFragmentPagerAdapter.Laziable实现此接口才能让LazyViewpager不会预加载
  */
-public abstract class BaseListFragment<T> extends BaseFragment implements PullToRefreshBase.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, LazyFragmentPagerAdapter.Laziable {
+public abstract class BaseListFragment<T> extends BaseFragment implements PullToRefreshBase.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     /**
      * 当前页

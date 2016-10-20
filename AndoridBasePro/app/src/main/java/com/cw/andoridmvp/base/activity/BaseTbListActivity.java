@@ -1,7 +1,6 @@
 package com.cw.andoridmvp.base.activity;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -49,8 +48,8 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
     PullToRefreshListView mPullToRefreshListView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         initLv();
         setLvListener();
         sendRequest();

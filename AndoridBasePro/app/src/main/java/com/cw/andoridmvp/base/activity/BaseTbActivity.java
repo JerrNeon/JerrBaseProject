@@ -68,14 +68,14 @@ public abstract class BaseTbActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity_layout);
-        initView();
+        initTbView();
         setToolBar(mToolbar);
         setContentViewWithDefaultTitle(getLayoutResourceId());
         unbinder = ButterKnife.bind(this);
         setStatusBar();
     }
 
-    private void initView() {
+    private void initTbView() {
         mToolbar = (Toolbar) findViewById(R.id.base_toolbar);
         tv_titleName = (TextView) findViewById(R.id.midTitle);
         mToolTvLeft = (TextView) findViewById(R.id.tv_title_left);
@@ -100,7 +100,7 @@ public abstract class BaseTbActivity extends BaseActivity {
         }
     }
 
-    protected void setStatusBar(){
+    protected void setStatusBar() {
         StatusBarUtil.setColor(mContext, ContextCompat.getColor(mContext, R.color.colorPrimary), 0);
     }
 
