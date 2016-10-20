@@ -132,7 +132,7 @@ public class TabInfoFragment extends BaseFragment {
     private void initReceiver(){
         Intent intent = new Intent("com.cw.mvp.myreceiver");
         intent.putExtra("argument","已接受到新的信息");
-        //mContext.sendBroadcast(intent);//普通广播
+        mContext.sendBroadcast(intent);//普通广播
         mContext.sendOrderedBroadcast(intent,null);//有序广播
     }
 
