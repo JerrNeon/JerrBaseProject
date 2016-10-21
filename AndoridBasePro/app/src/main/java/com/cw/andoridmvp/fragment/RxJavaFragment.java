@@ -3,6 +3,7 @@ package com.cw.andoridmvp.fragment;
 import android.util.Log;
 
 import com.cw.andoridmvp.R;
+import com.cw.andoridmvp.activity.ImageStatusActivity;
 import com.cw.andoridmvp.base.fragment.BaseFragment;
 import com.cw.andoridmvp.bean.MarketMainModel;
 import com.cw.andoridmvp.bean.MarketMainModelList;
@@ -68,6 +69,11 @@ public class RxJavaFragment extends BaseFragment {
                 index = 0;
                 break;
         }
+    }
+
+    @OnClick(R.id.buttonStatus)
+    public void buttonStatus() {
+        openActivity(ImageStatusActivity.class);
     }
 
     private void rxjava1() {

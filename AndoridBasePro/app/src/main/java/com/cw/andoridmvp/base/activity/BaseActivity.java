@@ -8,6 +8,11 @@ import android.support.v7.widget.Toolbar;
 
 import com.cw.andoridmvp.common.ActivityManager;
 
+import org.greenrobot.eventbus.EventBus;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * @version V1.0
  * @ClassName: ${CLASS_NAME}
@@ -19,6 +24,10 @@ public class BaseActivity extends AppCompatActivity {
 
     protected ActivityManager activityManager = ActivityManager.getActivityManager(this);
     protected BaseActivity mContext = null;
+    /**
+     * ButterKnife操作对象
+     */
+    protected Unbinder unbinder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,12 +37,33 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * 初始化ButterKnife
+     */
+    protected void initButterKnife() {
+        unbinder = ButterKnife.bind(this);
+    }
+
+    /**
+     * 初始化EventBus
+     */
+    protected void initEventBus() {
+        EventBus.getDefault().register(this);
+    }
+
+    /**
      * 设置ToolBar
      *
      * @param toolbar
      */
     protected void setToolBar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
+    }
+
+    /**
+     * 设置状态栏
+     */
+    protected void setStatusBar() {
+
     }
 
     /**
@@ -133,6 +163,10 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         activityManager.removeActivity(this);
+        if (unbinder != null)
+            unbinder.unbind();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
     }
 
 }

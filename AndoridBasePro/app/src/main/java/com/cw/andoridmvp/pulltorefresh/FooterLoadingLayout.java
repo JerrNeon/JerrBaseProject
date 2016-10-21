@@ -57,7 +57,7 @@ public class FooterLoadingLayout extends LoadingLayout {
     
     @Override
     protected View createLoadingView(Context context, AttributeSet attrs) {
-        View container = LayoutInflater.from(context).inflate(R.layout.xlistview_footer, null);
+        View container = LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_xlistview_footer, null);
         return container;
     }
 

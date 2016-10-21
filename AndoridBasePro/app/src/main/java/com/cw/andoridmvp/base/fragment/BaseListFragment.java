@@ -54,7 +54,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mView = super.onCreateView(inflater, container, savedInstanceState);
+        mView = super.onCreateView(inflater, container, savedInstanceState);
         initLv();
         setLvListener();
         sendRequest();

@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.cw.andoridmvp.base.activity.BaseActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -49,6 +51,13 @@ public abstract class BaseFragment extends Fragment {
         mContext = getActivity();
         mFragment = this;
         return mView;
+    }
+
+    /**
+     * 初始化EventBus
+     */
+    protected void initEventBus() {
+        EventBus.getDefault().register(this);
     }
 
     /**
@@ -177,6 +186,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        if (unbinder != null)
+            unbinder.unbind();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
     }
 }

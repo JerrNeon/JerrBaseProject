@@ -53,6 +53,10 @@
             android:name=".activity.CollapsingToolbarActivity"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".activity.ImageStatusActivity"
+            android:launchMode="singleTop"/>
+
         <provider
             android:name=".db.MyContentProvider"
             android:authorities="com.ourslook.mvp.personprovider"/>

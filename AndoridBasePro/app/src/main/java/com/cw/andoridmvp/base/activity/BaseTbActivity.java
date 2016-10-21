@@ -13,9 +13,7 @@ import android.widget.TextView;
 import com.cw.andoridmvp.R;
 import com.jaeger.library.StatusBarUtil;
 
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * @version V1.0
@@ -59,11 +57,6 @@ public abstract class BaseTbActivity extends BaseActivity {
      */
     protected ImageView mToolIvRight;
 
-    /**
-     * ButterKnife操作对象
-     */
-    protected Unbinder unbinder;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,10 +64,13 @@ public abstract class BaseTbActivity extends BaseActivity {
         initTbView();
         setToolBar(mToolbar);
         setContentViewWithDefaultTitle(getLayoutResourceId());
-        unbinder = ButterKnife.bind(this);
+        initButterKnife();
         setStatusBar();
     }
 
+    /**
+     * 初始化ToolBar
+     */
     private void initTbView() {
         mToolbar = (Toolbar) findViewById(R.id.base_toolbar);
         tv_titleName = (TextView) findViewById(R.id.midTitle);
@@ -88,6 +84,11 @@ public abstract class BaseTbActivity extends BaseActivity {
 
     protected abstract int getLayoutResourceId();
 
+    @Override
+    protected void setStatusBar() {
+        StatusBarUtil.setColor(mContext, ContextCompat.getColor(mContext, R.color.colorPrimary), 0);
+    }
+
     /**
      * 使用默认标题栏
      */
@@ -98,10 +99,6 @@ public abstract class BaseTbActivity extends BaseActivity {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             contentLayout.addView(v, params);
         }
-    }
-
-    protected void setStatusBar() {
-        StatusBarUtil.setColor(mContext, ContextCompat.getColor(mContext, R.color.colorPrimary), 0);
     }
 
     /**
@@ -208,12 +205,6 @@ public abstract class BaseTbActivity extends BaseActivity {
     @OnClick(R.id.right_iv)
     public void onClickRightImg() {
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
     }
 
 }
