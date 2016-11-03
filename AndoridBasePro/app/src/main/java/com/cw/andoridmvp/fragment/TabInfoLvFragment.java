@@ -112,6 +112,11 @@ public class TabInfoLvFragment extends BaseListFragment<MarketMainModel> impleme
     }
 
     @Override
+    protected RequestType getRequestType() {
+        return RequestType.PULLTOREFRESHLISTVIEW;
+    }
+
+    @Override
     public void onItemClick(AdapterView adapterView, View view, int position, long id) {
         DialogUtils.showImageDialog(mContext, new OnItemClickListener() {
             @Override

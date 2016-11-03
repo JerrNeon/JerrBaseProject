@@ -3,6 +3,7 @@ package com.cw.andoridmvp.base.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.cw.andoridmvp.R;
 import com.cw.andoridmvp.base.adapter.BaseListAdapter;
@@ -35,9 +36,20 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
      */
     protected boolean isLoad = false;
     /**
+     * ListView
+     */
+    protected ListView mListView = null;
+    /**
      * 适配器
      */
     protected BaseListAdapter<T> mAdapter = null;
+
+    /**
+     * 请求类型
+     */
+    protected enum RequestType {
+        PULLTOREFRESHLISTVIEW, LISTVIEW;//带刷新的/不带刷新的
+    }
 
     @BindView(R.id.common_pullrefreshLv)
     PullToRefreshListView mPullToRefreshListView;
@@ -57,20 +69,28 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
 
     private void initLv() {
         mAdapter = getAdapter();
+        mListView = mPullToRefreshListView.getRefreshableView();
         mPullToRefreshListView.setAdapter(mAdapter);
     }
 
     private void setLvListener() {
-        mPullToRefreshListView.setPullRefreshEnabled(true);
-        mPullToRefreshListView.setPullLoadEnabled(true);
-        mPullToRefreshListView.setOnRefreshListener(this, R.id.common_pullrefreshLv);
-        mPullToRefreshListView.getRefreshableView().setOnItemClickListener(this);
-        mPullToRefreshListView.getRefreshableView().setOnItemLongClickListener(this);
+        if (getRequestType() == RequestType.PULLTOREFRESHLISTVIEW) {
+            mPullToRefreshListView.setPullRefreshEnabled(true);
+            mPullToRefreshListView.setPullLoadEnabled(true);
+            mPullToRefreshListView.setOnRefreshListener(this, R.id.common_pullrefreshLv);
+        } else if (getRequestType() == RequestType.LISTVIEW) {
+            mPullToRefreshListView.setPullRefreshEnabled(false);
+            mPullToRefreshListView.setPullLoadEnabled(false);
+        }
+        mListView.setOnItemClickListener(this);
+        mListView.setOnItemLongClickListener(this);
     }
 
     protected abstract void sendRequest();
 
     protected abstract BaseListAdapter<T> getAdapter();
+
+    protected abstract RequestType getRequestType();
 
     /**
      * 刷新数据
@@ -78,16 +98,27 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
      * @param list 数据集
      */
     public void updateRefreshAndData(List<T> list) {
-        if (list.size() < pageSize)
-            mPullToRefreshListView.setPullLoadEnabled(false);
-        else
-            mPullToRefreshListView.setPullRefreshEnabled(true);
-        if (!isLoad)
-            mAdapter.clear();
-        mAdapter.addAll(list);
-        mAdapter.notifyDataSetChanged();
-        mPullToRefreshListView.onPullUpRefreshComplete();
-        mPullToRefreshListView.onPullDownRefreshComplete();
+        switch (getRequestType()) {
+            case PULLTOREFRESHLISTVIEW:
+                if (list.size() < pageSize)
+                    mPullToRefreshListView.setPullLoadEnabled(false);
+                else
+                    mPullToRefreshListView.setPullRefreshEnabled(true);
+                if (!isLoad)
+                    mAdapter.clear();
+                mAdapter.addAll(list);
+                mAdapter.notifyDataSetChanged();
+                mPullToRefreshListView.onPullUpRefreshComplete();
+                mPullToRefreshListView.onPullDownRefreshComplete();
+                break;
+            case LISTVIEW:
+                mAdapter.clear();
+                mAdapter.addAll(list);
+                mAdapter.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
