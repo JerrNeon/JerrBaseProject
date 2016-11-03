@@ -9,7 +9,6 @@ import com.cw.andoridmvp.base.adapter.BaseListAdapter;
 import com.cw.andoridmvp.pulltorefresh.PullToRefreshBase;
 import com.cw.andoridmvp.pulltorefresh.PullToRefreshListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,10 +38,6 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
      * 适配器
      */
     protected BaseListAdapter<T> mAdapter = null;
-    /**
-     * 数据集
-     */
-    protected List<T> mList = new ArrayList<>();
 
     @BindView(R.id.common_pullrefreshLv)
     PullToRefreshListView mPullToRefreshListView;
@@ -87,9 +82,9 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
             mPullToRefreshListView.setPullLoadEnabled(false);
         else
             mPullToRefreshListView.setPullRefreshEnabled(true);
-        if (!mList.isEmpty() && mList.size() > 0 && !isLoad)
-            mList.clear();
-        mList.addAll(list);
+        if (!isLoad)
+            mAdapter.clear();
+        mAdapter.addAll(list);
         mAdapter.notifyDataSetChanged();
         mPullToRefreshListView.onPullUpRefreshComplete();
         mPullToRefreshListView.onPullDownRefreshComplete();
