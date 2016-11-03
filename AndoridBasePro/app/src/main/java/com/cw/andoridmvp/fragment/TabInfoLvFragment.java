@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 
 import com.bigkoo.alertview.OnItemClickListener;
 import com.cw.andoridmvp.adapter.CarHotListAdapter;
+import com.cw.andoridmvp.base.adapter.BaseListAdapter;
 import com.cw.andoridmvp.base.fragment.BaseListFragment;
 import com.cw.andoridmvp.bean.MarketMainModel;
 import com.cw.andoridmvp.bean.MarketMainModelList;
@@ -96,7 +96,7 @@ public class TabInfoLvFragment extends BaseListFragment<MarketMainModel> impleme
         });
     }
 
-    private void okGoRequest(Map<String, String> params){
+    private void okGoRequest(Map<String, String> params) {
         String url = Constants.baseUrl + Constants.GET_MAIN_LIST;
         OkGo.post(url).tag(this).params(params).execute(new OkgoResultCallback<MarketMainModelList>(mContext) {
             @Override
@@ -107,8 +107,8 @@ public class TabInfoLvFragment extends BaseListFragment<MarketMainModel> impleme
     }
 
     @Override
-    protected BaseAdapter getAdapter() {
-        return new CarHotListAdapter(mContext, mList);
+    protected BaseListAdapter getAdapter() {
+        return new CarHotListAdapter(mContext);
     }
 
     @Override

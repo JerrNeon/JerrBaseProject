@@ -16,16 +16,13 @@ import com.cw.andoridmvp.util.QMUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.List;
-
 /**
  * Created by SEED on 2016/2/19.
  */
 public class CarHotListAdapter extends BaseListAdapter<MarketMainModel> {
 
-
-    public CarHotListAdapter(Context context, List<MarketMainModel> list) {
-        super(context, list);
+    public CarHotListAdapter(Context context) {
+        super(context);
     }
 
     @Override

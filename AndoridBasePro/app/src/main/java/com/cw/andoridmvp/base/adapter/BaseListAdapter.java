@@ -7,44 +7,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by guanzhe on 14-9-23.
  * modify by tulong on 2015/12/18
+ * modify by chenwei on 2016/11/03
  */
 public abstract class BaseListAdapter<T> extends BaseAdapter {
 
-    protected List<T> mList;// 列表List
+    /**
+     * 数据集
+     */
+    protected List<T> mList;
     protected Context mContext;
     protected LayoutInflater inflate;
 
-    /**
-     * 构造器
-     *
-     * @param list
-     *            起始数据
-     */
-    public BaseListAdapter(List<T> list) {
-        mList = list;
-    }
-
     public BaseListAdapter(Context context) {
         mContext = context;
-    }
-
-    public BaseListAdapter(Context context, List<T> list) {
-        mContext = context;
-        mList = list;
-        //this.layoutId = layoutId;
+        mList = new ArrayList<>();
         inflate = LayoutInflater.from(context);
     }
 
     /**
      * 获取item布局id
+     *
      * @return
      */
     public abstract int getLayoutId();
+
     @Override
     public int getCount() {
         return (mList == null) ? 0 : mList.size();
@@ -55,11 +47,9 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         return (mList == null) ? null : mList.get(position);
     }
 
-
     public T getLastItme() {
         return (mList == null) ? null : mList.get(mList.size() - 1);
     }
-
 
     @Override
     public long getItemId(int position) {
@@ -69,11 +59,11 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
     //重写这里修改getview
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ToolViewHolder holder = ToolViewHolder.get(mContext,convertView, parent, getLayoutId());
-        //getView(position, holder, mList.get(position));
+        ToolViewHolder holder = ToolViewHolder.get(mContext, convertView, parent, getLayoutId());
         getView(position, holder, position >= mList.size() ? null : mList.get(position));
         return holder.getConvertView();
     }
+
     public abstract void getView(int position, ToolViewHolder holder, T bean);
 
     /**
@@ -86,7 +76,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
     }
 
     public void add(T bean) {
-        if (bean!= null) {
+        if (bean != null) {
             mList.add(bean);
         }
     }
@@ -104,8 +94,9 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         return null;
     }
 
-    public void clean() {
-        mList.clear();
+    public void clear() {
+        if (!mList.isEmpty() && mList.size() > 0)
+            mList.clear();
     }
 
     public String getNotEmptyData(String str, String defVal) {

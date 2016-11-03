@@ -6,13 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 
 import com.cw.andoridmvp.R;
+import com.cw.andoridmvp.base.adapter.BaseListAdapter;
 import com.cw.andoridmvp.pulltorefresh.PullToRefreshBase;
 import com.cw.andoridmvp.pulltorefresh.PullToRefreshListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,11 +41,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
     /**
      * 适配器
      */
-    protected BaseAdapter mAdapter = null;
-    /**
-     * 数据集
-     */
-    protected List<T> mList = new ArrayList<>();
+    protected BaseListAdapter mAdapter = null;
 
     @BindView(R.id.common_pullrefreshLv)
     PullToRefreshListView mPullToRefreshListView;
@@ -81,7 +76,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
 
     protected abstract void sendRequest();
 
-    protected abstract BaseAdapter getAdapter();
+    protected abstract BaseListAdapter getAdapter();
 
     /**
      * 刷新数据
@@ -93,9 +88,9 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
             mPullToRefreshListView.setPullLoadEnabled(false);
         else
             mPullToRefreshListView.setPullRefreshEnabled(true);
-        if (!mList.isEmpty() && mList.size() > 0 && !isLoad)
-            mList.clear();
-        mList.addAll(list);
+        if (!isLoad)
+            mAdapter.clear();
+        mAdapter.addAll(list);
         mAdapter.notifyDataSetChanged();
         mPullToRefreshListView.onPullUpRefreshComplete();
         mPullToRefreshListView.onPullDownRefreshComplete();
