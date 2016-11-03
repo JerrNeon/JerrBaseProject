@@ -11,12 +11,14 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <com.roughike.bottombar.BottomBar
+    <com.ashokvarma.bottomnavigation.BottomNavigationBar
         android:id="@+id/base_mainBottomBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:bb_activeTabColor="@color/red"
-        app:bb_tabXmlResource="@xml/bottombar_tabs"/>
+        app:bnbActiveColor="@color/red"
+        app:bnbBackgroundStyle="background_style_static"
+        app:bnbInactiveColor="@color/grey"
+        app:bnbMode="mode_fixed"/>
 
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.cw.andoridmvp.activity;
 
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,11 +8,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.cw.andoridmvp.R;
 import com.cw.andoridmvp.base.activity.BaseTbActivity;
 import com.cw.andoridmvp.fragment.MainFragment;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
 
 import butterknife.BindView;
 
@@ -24,16 +23,18 @@ import butterknife.BindView;
  * @create by: chenwei
  * @date 2016/8/23 17:11
  */
-public class MainActivity extends BaseTbActivity implements OnTabSelectListener {
+public class MainActivity extends BaseTbActivity implements BottomNavigationBar.OnTabSelectedListener {
 
     @BindView(R.id.base_mainBottomBar)
-    BottomBar mainBottomBar;
+    BottomNavigationBar mainBottomBar;
 
     /**
      * 再按一次退出程序
      */
     private long exitTime = 0;
 
+    private int[] imgResource = null;
+    private String[] strResource = null;
     private Fragment[] mFragments = null;
 
     @Override
@@ -44,33 +45,48 @@ public class MainActivity extends BaseTbActivity implements OnTabSelectListener 
 
     private void init() {
         mToolIvLeft.setVisibility(View.GONE);
+        imgResource = new int[]{R.drawable.ic_directions_car_white_24dp, R.drawable.ic_directions_car_white_24dp, R.drawable.ic_directions_car_white_24dp};
+        strResource = new String[]{"首页", "超低购", "我的"};
         mFragments = new Fragment[]{MainFragment.instance(), MainFragment.instance(), MainFragment.instance()};
-        mainBottomBar.setOnTabSelectListener(this);
-        mainBottomBar.selectTabWithId(R.id.tab_1);
+        for (int i = 0; i < imgResource.length; i++) {
+            mainBottomBar.addItem(new BottomNavigationItem(imgResource[i], strResource[i]));
+        }
+        mainBottomBar.initialise();
+        mainBottomBar.setTabSelectedListener(this);
+        setDefaultFragment();
     }
 
     @Override
-    public void onTabSelected(@IdRes int tabId) {
-        if (mFragments != null)
-            switch (tabId) {
-                case R.id.tab_1:
-                    setTitleName("首页");
-                    changeFragment(0);
-                    break;
-                case R.id.tab_2:
-                    setTitleName("超低购");
-                    changeFragment(1);
-                    break;
-                case R.id.tab_3:
-                    setTitleName("我的");
-                    changeFragment(2);
-                    break;
-            }
+    public void onTabSelected(int position) {
+        setTitleName(strResource[position]);
+        changeFragment(position);
+    }
+
+    @Override
+    public void onTabUnselected(int position) {
+        if (mFragments != null && position < mFragments.length) {
+            getSupportFragmentManager().beginTransaction().remove(mFragments[position]).commitAllowingStateLoss();
+        }
+    }
+
+    @Override
+    public void onTabReselected(int position) {
+
     }
 
     @Override
     protected int getLayoutResourceId() {
         return R.layout.base_main_layout;
+    }
+
+    /**
+     * 设置默认的
+     */
+    private void setDefaultFragment() {
+        setTitleName(strResource[0]);
+        if (mFragments != null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.base_mainContent, mFragments[0]).commit();
+        }
     }
 
     private void changeFragment(int position) {
@@ -93,9 +109,12 @@ public class MainActivity extends BaseTbActivity implements OnTabSelectListener 
     @Override
     public void onBackPressed() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Toast.makeText(getApplicationContext(), "再按一次退出程序",
-                    Toast.LENGTH_SHORT).show();
-            exitTime = System.currentTimeMillis();
+            if (mainBottomBar.getCurrentSelectedPosition() == 0) {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序",
+                        Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else
+                mainBottomBar.selectTab(0);
         } else {
             super.onBackPressed();
             exit();
