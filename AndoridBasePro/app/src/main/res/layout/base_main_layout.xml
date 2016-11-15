@@ -11,14 +11,18 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:id="@+id/base_mainBottomBar"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"/>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/base_mainBottomView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:bnbActiveColor="@color/red"
-        app:bnbBackgroundStyle="background_style_static"
-        app:bnbInactiveColor="@color/grey"
-        app:bnbMode="mode_fixed"/>
+        app:itemIconTint="@color/mainmenu_selector_color"
+        app:itemTextColor="@color/mainmenu_selector_color"
+        app:menu="@menu/main_menu"/>
 
 </LinearLayout>
