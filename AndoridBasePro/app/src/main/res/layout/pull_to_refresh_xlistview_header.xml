@@ -28,7 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/load_succeed_drak_gray"
+                    android:src="@drawable/pull_to_refresh_xlistview_load_succeed"
                     android:visibility="gone" />
 
                 <TextView
@@ -70,7 +70,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="40dp"
-            android:src="@drawable/xlistview_arrow" />
+            android:src="@drawable/pull_to_refresh_xlistview_arrow" />
 
         <ProgressBar
             android:id="@+id/xlistview_header_progressbar"
