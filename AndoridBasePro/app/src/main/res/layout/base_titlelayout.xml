@@ -18,7 +18,7 @@
             android:layout_width="35dp"
             android:layout_height="match_parent"
             android:scaleType="center"
-            android:src="@drawable/arrowleft"/>
+            android:src="@drawable/ic_arrowleft_white"/>
 
         <TextView
             android:id="@+id/tv_title_left"
