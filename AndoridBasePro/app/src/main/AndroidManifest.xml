@@ -57,6 +57,10 @@
             android:name=".activity.ImageStatusActivity"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".activity.AutoLayoutTestActivity"
+            android:launchMode="singleTop"/>
+
         <provider
             android:name=".db.MyContentProvider"
             android:authorities="com.ourslook.mvp.personprovider"/>

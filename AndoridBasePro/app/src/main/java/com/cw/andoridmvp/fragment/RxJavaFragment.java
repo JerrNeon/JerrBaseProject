@@ -3,6 +3,7 @@ package com.cw.andoridmvp.fragment;
 import android.util.Log;
 
 import com.cw.andoridmvp.R;
+import com.cw.andoridmvp.activity.AutoLayoutTestActivity;
 import com.cw.andoridmvp.activity.ImageStatusActivity;
 import com.cw.andoridmvp.base.fragment.BaseFragment;
 import com.cw.andoridmvp.bean.MarketMainModel;
@@ -75,6 +76,9 @@ public class RxJavaFragment extends BaseFragment {
     public void buttonStatus() {
         openActivity(ImageStatusActivity.class);
     }
+
+    @OnClick(R.id.autoLayout)
+    public void autoLayout(){openActivity(AutoLayoutTestActivity.class);}
 
     private void rxjava1() {
         Observable.create(new Observable.OnSubscribe<Integer>() {
