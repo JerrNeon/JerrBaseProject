@@ -11,7 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.cw.andoridmvp.R;
-import com.cw.andoridmvp.adapter.recyerAdapter;
+import com.cw.andoridmvp.adapter.RecyerAdapter;
 import com.cw.andoridmvp.base.activity.BaseActivity;
 import com.jaeger.library.StatusBarUtil;
 
@@ -76,7 +76,7 @@ public class CollapsingToolbarActivity extends BaseActivity {
         for (int i = 0; i < 20; i++) {
             s.add(i + "");
         }
-        recyerAdapter adapter = new recyerAdapter(mContext, s);
+        RecyerAdapter adapter = new RecyerAdapter(mContext, s);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(adapter);

@@ -19,13 +19,13 @@ import java.util.List;
  * @create by: chenwei
  * @date 2016/10/17 9:43
  */
-public class recyerAdapter extends RecyclerView.Adapter<recyerAdapter.itemViewHolder> {
+public class RecyerAdapter extends RecyclerView.Adapter<RecyerAdapter.itemViewHolder> {
 
     private Context mContext;
     private List<String> s = new ArrayList<>();
     private onItemClickListener mOnItemClickListener;
 
-    public recyerAdapter(Context context, List<String> s) {
+    public RecyerAdapter(Context context, List<String> s) {
         mContext = context;
         this.s = s;
     }

@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 
 import com.cw.andoridmvp.R;
 import com.cw.andoridmvp.activity.CollapsingToolbarActivity;
-import com.cw.andoridmvp.adapter.recyerAdapter;
+import com.cw.andoridmvp.adapter.RecyerAdapter;
 import com.cw.andoridmvp.base.fragment.BaseFragment;
+import com.cw.andoridmvp.pulltorefresh.PullToRefreshBase;
+import com.cw.andoridmvp.pulltorefresh.PullToRefreshRecyerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,28 +28,38 @@ import butterknife.BindView;
  * @create by: chenwei
  * @date 2016/10/17 9:39
  */
-public class RecyerViewFragment extends BaseFragment {
+public class RecyerViewFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener {
 
-    @BindView(R.id.recyerview)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.pRecyerView)
+    PullToRefreshRecyerView mPrecyclerView;
+
+    private RecyclerView mRecyclerView;
+    RecyerAdapter adapter = null;
+    private List<String> s = null;
+
+    private int pageIndex = 1, pageSize = 10;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
         init();
+        initData();
         return mView;
     }
 
     private void init() {
-        List<String> s = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            s.add(i + "");
-        }
-        recyerAdapter adapter = new recyerAdapter(mContext, s);
+        mPrecyclerView.setPullRefreshEnabled(true);
+        mPrecyclerView.setPullLoadEnabled(true);
+        mPrecyclerView.setOnRefreshListener(this, R.id.pRecyerView);
+        mRecyclerView = mPrecyclerView.getRefreshableView();
+
+        s = new ArrayList<>();
+        adapter = new RecyerAdapter(mContext, s);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        //mRecyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
         mRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new recyerAdapter.onItemClickListener() {
+        adapter.setOnItemClickListener(new RecyerAdapter.onItemClickListener() {
             @Override
             public void onItemCLick(int position) {
                 startActivity(new Intent(mContext, CollapsingToolbarActivity.class));
@@ -55,9 +67,31 @@ public class RecyerViewFragment extends BaseFragment {
         });
     }
 
+    private void initData() {
+        if (pageIndex == 1 && !s.isEmpty())
+            s.clear();
+        for (int i = 0; i < pageSize; i++) {
+            s.add(i + "");
+        }
+        adapter.notifyDataSetChanged();
+        mPrecyclerView.onPullUpRefreshComplete();
+        mPrecyclerView.onPullDownRefreshComplete();
+    }
+
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_recyerview;
     }
 
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+        pageIndex = 1;
+        initData();
+    }
+
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+        pageIndex++;
+        initData();
+    }
 }

@@ -11,14 +11,14 @@ import android.view.View;
  * @author Li Hong
  * @since 2013-8-22
  */
-public class PullToRefreshCustomScrollView extends PullToRefreshBase<CustomScrollView> {
+public class PullToRefreshViewPagerInScrollView extends PullToRefreshBase<ViewPagerInScrollView> {
 
 	/**
      * 构造方法
      *
      * @param context context
      */
-    public PullToRefreshCustomScrollView(Context context) {
+    public PullToRefreshViewPagerInScrollView(Context context) {
         this(context, null);
     }
 
@@ -28,7 +28,7 @@ public class PullToRefreshCustomScrollView extends PullToRefreshBase<CustomScrol
      * @param context context
      * @param attrs attrs
      */
-    public PullToRefreshCustomScrollView(Context context, AttributeSet attrs) {
+    public PullToRefreshViewPagerInScrollView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
@@ -39,18 +39,15 @@ public class PullToRefreshCustomScrollView extends PullToRefreshBase<CustomScrol
      * @param attrs attrs
      * @param defStyle defStyle
      */
-    public PullToRefreshCustomScrollView(Context context, AttributeSet attrs, int defStyle) {
+    public PullToRefreshViewPagerInScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-
     @Override
-    protected CustomScrollView createRefreshableView(Context context, AttributeSet attrs) {
-        CustomScrollView scrollView = new CustomScrollView(context,attrs);
+    protected ViewPagerInScrollView createRefreshableView(Context context, AttributeSet attrs) {
+        ViewPagerInScrollView scrollView = new ViewPagerInScrollView(context,attrs);
         return scrollView;
     }
-
-
 
     @Override
     protected boolean isReadyForPullDown() {
@@ -63,7 +60,6 @@ public class PullToRefreshCustomScrollView extends PullToRefreshBase<CustomScrol
         if (null != scrollViewChild) {
             return mRefreshableView.getScrollY() >= (scrollViewChild.getHeight() - getHeight());
         }
-        
         return false;
     }
 }

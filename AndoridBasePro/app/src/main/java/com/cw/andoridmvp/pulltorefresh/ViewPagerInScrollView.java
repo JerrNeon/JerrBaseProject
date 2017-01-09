@@ -10,11 +10,11 @@ import android.widget.ScrollView;
  *
  * @Description: 解决了ViewPager在ScrollView中的滑动反弹问题
  */
-public class CustomScrollView extends ScrollView {
+public class ViewPagerInScrollView extends ScrollView {
     // 滑动距离及坐标
     private float xDistance, yDistance, xLast, yLast;
 
-    public CustomScrollView(Context context, AttributeSet attrs) {
+    public ViewPagerInScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
