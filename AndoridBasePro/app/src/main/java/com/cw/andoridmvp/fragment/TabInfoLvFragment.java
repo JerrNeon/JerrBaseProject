@@ -81,6 +81,12 @@ public class TabInfoLvFragment extends BaseListFragment<MarketMainModel> impleme
             public void onResponse(MarketMainModelList response) {
                 updateRefreshAndData(response.getMainList());
             }
+
+            @Override
+            public void onAfter() {
+                super.onAfter();
+                setPullUpOrDownRefreshComplete();
+            }
         });
     }
 

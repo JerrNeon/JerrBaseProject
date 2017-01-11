@@ -23,7 +23,6 @@ import butterknife.BindView;
  * @Description: (base 刷新fragment)
  * @create by: chenwei
  * @date 2016/10/8 15:46
- * LazyFragmentPagerAdapter.Laziable实现此接口才能让LazyViewpager不会预加载
  */
 public abstract class BaseListFragment<T> extends BaseFragment implements PullToRefreshBase.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
@@ -35,10 +34,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
      * 每页的个数
      */
     protected int pageSize = 10;
-    /**
-     * 是否可以加载
-     */
-    protected boolean isLoad = false;
     /**
      * ListView
      */
@@ -110,12 +105,10 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
                     mPullToRefreshListView.setPullLoadEnabled(false);
                 else
                     mPullToRefreshListView.setPullRefreshEnabled(true);
-                if (!isLoad)
+                if (pageIndex == 1)
                     mAdapter.clear();
                 mAdapter.addAll(list);
                 mAdapter.notifyDataSetChanged();
-                mPullToRefreshListView.onPullUpRefreshComplete();
-                mPullToRefreshListView.onPullDownRefreshComplete();
                 break;
             case LISTVIEW:
                 mAdapter.clear();
@@ -127,17 +120,23 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
         }
     }
 
+    /**
+     * 设置下拉或上拉完成(当请求完成时)
+     */
+    public void setPullUpOrDownRefreshComplete(){
+        mPullToRefreshListView.onPullUpRefreshComplete();
+        mPullToRefreshListView.onPullDownRefreshComplete();
+    }
+
     @Override
     public void onPullDownToRefresh(PullToRefreshBase refreshView) {
         pageIndex = 1;
-        isLoad = false;
         sendRequest();
     }
 
     @Override
     public void onPullUpToRefresh(PullToRefreshBase refreshView) {
         pageIndex++;
-        isLoad = true;
         sendRequest();
     }
 

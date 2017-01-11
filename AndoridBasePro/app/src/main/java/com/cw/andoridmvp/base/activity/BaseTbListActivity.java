@@ -32,10 +32,6 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
      */
     protected int pageSize = 10;
     /**
-     * 是否可以加载
-     */
-    protected boolean isLoad = false;
-    /**
      * ListView
      */
     protected ListView mListView = null;
@@ -104,12 +100,10 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
                     mPullToRefreshListView.setPullLoadEnabled(false);
                 else
                     mPullToRefreshListView.setPullRefreshEnabled(true);
-                if (!isLoad)
+                if (pageIndex == 1)
                     mAdapter.clear();
                 mAdapter.addAll(list);
                 mAdapter.notifyDataSetChanged();
-                mPullToRefreshListView.onPullUpRefreshComplete();
-                mPullToRefreshListView.onPullDownRefreshComplete();
                 break;
             case LISTVIEW:
                 mAdapter.clear();
@@ -121,17 +115,23 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
         }
     }
 
+    /**
+     * 设置下拉或上拉完成(当请求完成时)
+     */
+    public void setPullUpOrDownRefreshComplete() {
+        mPullToRefreshListView.onPullUpRefreshComplete();
+        mPullToRefreshListView.onPullDownRefreshComplete();
+    }
+
     @Override
     public void onPullDownToRefresh(PullToRefreshBase refreshView) {
         pageIndex = 1;
-        isLoad = false;
         sendRequest();
     }
 
     @Override
     public void onPullUpToRefresh(PullToRefreshBase refreshView) {
         pageIndex++;
-        isLoad = true;
         sendRequest();
     }
 
