@@ -97,7 +97,7 @@ public class TabInfoLvFragment extends BaseListFragment<MarketMainModel> impleme
             public void onSuccess(MarketMainModelList marketMainModelList) {
                 updateRefreshAndData(marketMainModelList.getMainList());
                 //DialogUtils.showDateTimeDialog(mContext);
-
+                setPullUpOrDownRefreshComplete();
             }
         });
     }
@@ -108,6 +108,7 @@ public class TabInfoLvFragment extends BaseListFragment<MarketMainModel> impleme
             @Override
             public void onSuccess(MarketMainModelList marketMainModelList) {
                 updateRefreshAndData(marketMainModelList.getMainList());
+                setPullUpOrDownRefreshComplete();
             }
         });
     }
