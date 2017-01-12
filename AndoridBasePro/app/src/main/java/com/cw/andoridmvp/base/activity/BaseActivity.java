@@ -1,5 +1,6 @@
 package com.cw.andoridmvp.base.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class BaseActivity extends AppCompatActivity {
     private static final String LAYOUT_RELATIVELAYOUT = "RelativeLayout";
 
     protected ActivityManager activityManager = ActivityManager.getActivityManager(this);
-    protected BaseActivity mContext = null;
+    protected Activity mContext = null;
     /**
      * ButterKnife操作对象
      */
