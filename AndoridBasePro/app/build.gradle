@@ -74,4 +74,6 @@ dependencies {
     compile dep["okgo"]
     //RecyerView万能适配器
     compile dep["base-rvadapter"]
+    //okhttp
+    compile dep["okhttp"]
 }

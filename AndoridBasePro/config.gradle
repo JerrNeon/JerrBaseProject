@@ -27,6 +27,7 @@ ext {
             "annotations"                    : "com.android.support:support-annotations:${android["androidSupportSdkVersion"]}",
             "recyclerview-v7"                : "com.android.support:recyclerview-v7:${android["androidSupportSdkVersion"]}",
 
+            "okhttp"                         : "com.squareup.okhttp:okhttp:2.5.0",
             "okhttp3"                        : "com.squareup.okhttp3:okhttp:3.4.2",
             "retrofit"                       : "com.squareup.retrofit2:retrofit:${android["retrofitSdkVersion"]}",
             "retrofit-converter-gson"        : "com.squareup.retrofit2:converter-gson:${android["retrofitSdkVersion"]}",
