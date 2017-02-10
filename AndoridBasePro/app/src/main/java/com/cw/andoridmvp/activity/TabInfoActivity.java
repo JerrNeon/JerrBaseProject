@@ -1,5 +1,7 @@
 package com.cw.andoridmvp.activity;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.cw.andoridmvp.base.activity.BaseTabActivity;
@@ -16,6 +18,12 @@ import com.cw.andoridmvp.fragment.TabInfoLvFragment;
  * @date 2016/8/23 15:28
  */
 public class TabInfoActivity extends BaseTabActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setOffscreenPageLimit();
+    }
 
     @Override
     protected Fragment[] getFragments() {

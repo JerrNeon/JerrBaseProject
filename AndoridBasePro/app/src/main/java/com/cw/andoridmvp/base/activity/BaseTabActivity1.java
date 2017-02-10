@@ -2,28 +2,30 @@ package com.cw.andoridmvp.base.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.view.ViewGroup;
 
 import com.cw.andoridmvp.R;
+import com.cw.andoridmvp.widget.lazyviewpager.LazyFragmentPagerAdapter;
+import com.cw.andoridmvp.widget.viewpagerindicator.LazyTabPageIndicator;
+import com.cw.andoridmvp.widget.viewpagerindicator.LazyViewPager;
 
 /**
  * @version V1.0
  * @ClassName: ${CLASS_NAME}
- * @Description: (base选项卡activity--->使用TabLayout和ViewPager实现的)
+ * @Description: (base选项卡activity--->使用LazyTabPageIndicator和LazyViewPager实现的)
  * @create by: chenwei
  * @date 2016/8/23 15:08
  */
-public abstract class BaseTabActivity extends BaseTbActivity {
+@Deprecated
+public abstract class BaseTabActivity1 extends BaseTbActivity {
 
     protected Fragment[] fragments = null;
     protected String[] titles = null;
 
-    protected TabLayout tabLayout = null;
-    protected ViewPager tabViewPager = null;
+    protected LazyTabPageIndicator tabLayout = null;
+    protected LazyViewPager tabViewPager = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,33 +35,25 @@ public abstract class BaseTabActivity extends BaseTbActivity {
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.base_tabactivity_layout;
+        return R.layout.base_tabactivity_layout1;
     }
 
     private void initTabView() {
         fragments = getFragments();
         titles = getTitles();
 
-        tabLayout = (TabLayout) findViewById(R.id.basetab_layout);
-        tabViewPager = (ViewPager) findViewById(R.id.basetab_viewpager);
+        tabLayout = (LazyTabPageIndicator) findViewById(R.id.basetab_layout);
+        tabViewPager = (LazyViewPager) findViewById(R.id.basetab_viewpager);
         tabViewPager.setAdapter(new BaseTabFragmentAdapter(getSupportFragmentManager()));
-        tabLayout.setupWithViewPager(tabViewPager);
+        tabLayout.setViewPager(tabViewPager);
     }
+
 
     protected abstract Fragment[] getFragments();
 
     protected abstract String[] getTitles();
 
-    /**
-     * 设置ViewPager的预加载数量(没有使用BaseLazyFragment或BaseLazyListFragment时无需调用此方法)
-     * 注：设置了预加载为总Tab的个数后，每次点击Tab时就不会再去重新请求数据(还没找到更好的方法解决真正的懒加载问题)
-     */
-    protected void setOffscreenPageLimit() {
-        if (fragments != null)
-            tabViewPager.setOffscreenPageLimit(fragments.length);
-    }
-
-    private class BaseTabFragmentAdapter extends FragmentPagerAdapter {
+    private class BaseTabFragmentAdapter extends LazyFragmentPagerAdapter {
 
         public BaseTabFragmentAdapter(FragmentManager fm) {
             super(fm);
@@ -76,9 +70,8 @@ public abstract class BaseTabActivity extends BaseTbActivity {
         }
 
         @Override
-        public Fragment getItem(int position) {
+        protected Fragment getItem(ViewGroup container, int position) {
             return fragments[position];
         }
-
     }
 }

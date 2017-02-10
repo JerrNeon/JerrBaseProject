@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.cw.andoridmvp.adapter.CarHotListAdapter;
 import com.cw.andoridmvp.base.adapter.BaseListAdapter;
-import com.cw.andoridmvp.base.fragment.BaseListFragment;
+import com.cw.andoridmvp.base.fragment.BaseLazyListFragment;
 import com.cw.andoridmvp.bean.MarketMainModel;
 import com.cw.andoridmvp.bean.MarketMainModelList;
 import com.cw.andoridmvp.common.Constants;
@@ -48,7 +48,7 @@ import java.util.Map;
  * @create by: chenwei
  * @date 2016/10/8 16:39
  */
-public class TabInfoLvFragment extends BaseListFragment<MarketMainModel> implements TakePhoto.TakeResultListener, InvokeListener {
+public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> implements TakePhoto.TakeResultListener, InvokeListener {
 
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
