@@ -1,5 +1,9 @@
 package com.cw.andoridmvp.bean;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+
 import java.io.Serializable;
 
 /**
@@ -9,8 +13,12 @@ import java.io.Serializable;
  * @create by: chenwei
  * @date 2016/9/14 10:56
  */
+@Entity
 public class MarketMainModel implements Serializable {
 
+    private static final long serialVersionUID = 23837587814483930L;
+    
+    @Id
     private long id;//ID
     private String name;//车型名称
     private String img;//图片路径(列表小图片，如果是车源则读取品牌对应的logo，如果是寻车则为固定内容app默认)
@@ -34,6 +42,41 @@ public class MarketMainModel implements Serializable {
     private String customcar;//自定义车型(返回的是个json字符串，第一个为自定义车型内容，第二个为外观颜色，第三个为内饰颜色)
     private String feerule;//价格规则(下点，直接报价，优惠，加)
     private String feevalue;//下点的数量
+
+    @Generated(hash = 1504032918)
+    public MarketMainModel(long id, String name, String img, String color1,
+            String color2, String specifications, String starlevelname,
+            String remark, long time, String price, String guideprice1,
+            String guideprice2, String adprice, String cardiscount,
+            String carstatus, String addressfrom, String addressto, String type,
+            String licensearea, String customcar, String feerule, String feevalue) {
+        this.id = id;
+        this.name = name;
+        this.img = img;
+        this.color1 = color1;
+        this.color2 = color2;
+        this.specifications = specifications;
+        this.starlevelname = starlevelname;
+        this.remark = remark;
+        this.time = time;
+        this.price = price;
+        this.guideprice1 = guideprice1;
+        this.guideprice2 = guideprice2;
+        this.adprice = adprice;
+        this.cardiscount = cardiscount;
+        this.carstatus = carstatus;
+        this.addressfrom = addressfrom;
+        this.addressto = addressto;
+        this.type = type;
+        this.licensearea = licensearea;
+        this.customcar = customcar;
+        this.feerule = feerule;
+        this.feevalue = feevalue;
+    }
+
+    @Generated(hash = 1906261345)
+    public MarketMainModel() {
+    }
 
     public long getId() {
         return id;

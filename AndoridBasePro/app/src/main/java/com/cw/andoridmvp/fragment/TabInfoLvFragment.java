@@ -18,12 +18,16 @@ import com.cw.andoridmvp.base.fragment.BaseLazyListFragment;
 import com.cw.andoridmvp.bean.MarketMainModel;
 import com.cw.andoridmvp.bean.MarketMainModelList;
 import com.cw.andoridmvp.common.Constants;
+import com.cw.andoridmvp.db.GreenDaoUtil;
+import com.cw.andoridmvp.db.greendaogen.MarketMainModelDao;
+import com.cw.andoridmvp.net.XaResult;
 import com.cw.andoridmvp.net.callback.ResultCallback;
 import com.cw.andoridmvp.net.request.OkHttpRequest;
 import com.cw.andoridmvp.okgo.OkgoResultCallback;
 import com.cw.andoridmvp.retrofit.HttpRequestClient;
 import com.cw.andoridmvp.retrofit.HttpResultCallback;
 import com.cw.andoridmvp.util.ImageUtil;
+import com.cw.andoridmvp.util.QMUtil;
 import com.cw.andoridmvp.util.dialog.DialogUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoImpl;
@@ -36,9 +40,11 @@ import com.jph.takephoto.permission.InvokeListener;
 import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 import com.lzy.okgo.OkGo;
+import com.squareup.okhttp.Request;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,11 +59,15 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
 
+    //数据库操作类
+    private MarketMainModelDao mMarketMainModelDao = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
         //Log.i("tag", getParemters(getClass()));
+        mMarketMainModelDao = GreenDaoUtil.getDao(mContext);
         return mView;
     }
 
@@ -68,9 +78,9 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
         params.put("type", "1");//查询类型（1资源，2寻车，空为全部）
         params.put("page", pageIndex + "");
         params.put("rows", pageSize + "");
-        //okhttpRequest(params);
+        okhttpRequest(params);
         //retrofitRequest(params);
-        okGoRequest(params);
+        //okGoRequest(params);
     }
 
     private void okhttpRequest(Map<String, String> params) {
@@ -80,12 +90,19 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
             @Override
             public void onResponse(MarketMainModelList response) {
                 updateRefreshAndData(response.getMainList());
+                add(response.getMainList());
             }
 
             @Override
             public void onAfter() {
                 super.onAfter();
                 setPullUpOrDownRefreshComplete();
+            }
+
+            @Override
+            public void onError(XaResult<MarketMainModelList> result, Request request, Exception e) {
+                super.onError(result, request, e);
+                queryAll();
             }
         });
     }
@@ -111,6 +128,23 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
                 setPullUpOrDownRefreshComplete();
             }
         });
+    }
+
+    private void add(List<MarketMainModel> list) {
+        if (list.size() <= 0) return;
+        for (MarketMainModel model : list) {
+            long count = mMarketMainModelDao.queryBuilder().where(MarketMainModelDao.Properties.Id.eq(model.getId())).count();
+            if (count <= 0)
+               mMarketMainModelDao.insert(model);
+        }
+        //mMarketMainModelDao.insertInTx(list);
+    }
+
+    public void queryAll() {
+        List<MarketMainModel> marketMainModels = mMarketMainModelDao.queryBuilder().list();
+        if (QMUtil.isEmpty(marketMainModels))
+            return;
+        updateRefreshAndData(marketMainModels);
     }
 
     @Override

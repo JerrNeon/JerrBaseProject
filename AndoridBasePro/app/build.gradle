@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 def config = rootProject.ext.android // 配置
 def dep = rootProject.ext.dependencies // 依赖
+def greenDao = rootProject.ext.greendao // greenDao
 
 android {
     compileSdkVersion config.compileSdkVersion
@@ -20,6 +22,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //针对greenDao的一些配置
+    greendao {
+        schemaVersion greenDao.schemaVersion //数据库版本号
+        daoPackage greenDao.daoPackage //自动生成的工具类的包名
+        targetGenDir greenDao.targetGenDir //路径
+    }
+
 }
 
 repositories {
@@ -27,7 +37,6 @@ repositories {
         dirs 'libs'
     }
 }
-
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -76,4 +85,6 @@ dependencies {
     compile dep["base-rvadapter"]
     //okhttp
     compile dep["okhttp"]
+    //greendao
+    compile dep["greendao"]
 }
