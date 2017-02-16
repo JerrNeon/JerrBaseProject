@@ -48,7 +48,8 @@ ext {
             "pickerview"                     : 'com.bigkoo:pickerview:2.1.1',//日期时间选择、三级联动
             "convenientbanner"               : 'com.bigkoo:convenientbanner:2.0.5',//banner图
             "kprogresshud"                   : 'com.kaopiz:kprogresshud:1.0.5',//加载框
-            "numberprogressbar"              : "com.daimajia.numberprogressbar:library:1.2@aar",//进度条
+            "numberprogressbar"              : "com.daimajia.numberprogressbar:library:1.2@aar",//水平进度条
+            "circular-progress-button"       : "com.github.dmytrodanylyk.circular-progress-button:library:1.1.3",//圆形进度条
 
             "statusbarlibrary"               : 'com.jaeger.statusbaruitl:library:1.2.5',//状态栏一体化
             "photoview"                      : "com.github.chrisbanes.photoview:library:1.3.1",//图片放大缩小
