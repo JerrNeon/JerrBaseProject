@@ -17,10 +17,6 @@ import butterknife.OnClick;
  */
 public class MainFragment extends BaseFragment {
 
-    public static MainFragment instance() {
-        return new MainFragment();
-    }
-
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_main;

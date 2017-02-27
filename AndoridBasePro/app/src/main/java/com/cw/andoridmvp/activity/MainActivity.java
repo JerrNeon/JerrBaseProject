@@ -50,7 +50,7 @@ public class MainActivity extends BaseTbActivity implements BottomNavigationView
     private void init() {
         mToolIvLeft.setVisibility(View.GONE);
         strResource = new String[]{"首页", "超低购", "我的"};
-        mFragments = new Fragment[]{MainFragment.instance(), MainFragment.instance(), MainFragment.instance()};
+        mFragments = new Fragment[]{MainFragment.newInstance(MainFragment.class), MainFragment.newInstance(MainFragment.class), MainFragment.newInstance(MainFragment.class)};
         setDefaultFragment();
         mainBottomView.setOnNavigationItemSelectedListener(this);
     }
