@@ -87,4 +87,6 @@ dependencies {
     compile dep["okhttp"]
     //greendao
     compile dep["greendao"]
+    //stetho
+    compile dep["stetho"]
 }

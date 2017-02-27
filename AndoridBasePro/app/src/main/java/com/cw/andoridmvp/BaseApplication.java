@@ -3,6 +3,7 @@ package com.cw.andoridmvp;
 import android.app.Application;
 
 import com.cw.andoridmvp.base.exception.CrashHandler;
+import com.facebook.stetho.Stetho;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
@@ -28,6 +29,7 @@ public class BaseApplication extends Application {
         initAutoLayout();
         initLeakCanary();
         initOkGo();
+        initStetho();
     }
 
     public static BaseApplication getInstance() {
@@ -94,5 +96,8 @@ public class BaseApplication extends Application {
         }
     }
 
+    private void initStetho(){
+        Stetho.initializeWithDefaults(this);
+    }
 
 }
