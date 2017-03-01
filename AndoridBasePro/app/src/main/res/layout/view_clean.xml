@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:divider="@drawable/line_divider"
+              android:orientation="vertical"
+              android:showDividers="middle">
+
+    <LinearLayout
+        android:id="@+id/ll_expanded_clean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.cw.andoridmvp.widget.NoScrollGridView
+            android:id="@+id/ll_expanded_gv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:horizontalSpacing="8dp"
+            android:numColumns="4"
+            android:verticalSpacing="8dp"/>
+
+        <ImageView
+            android:id="@+id/iv_expanded_cleanindicator"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="6dp"
+            android:layout_gravity="top"
+            android:src="@drawable/ic_clear"/>
+
+    </LinearLayout>
+</LinearLayout>

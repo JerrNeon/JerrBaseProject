@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,11 +120,11 @@ public class TabInfoFragment extends BaseFragment {
         getContext().getContentResolver().delete(Uri.parse(MyContentProvider.content_person),"_id=?",new String[]{"1"});
         //查询
         Cursor cursor = getContext().getContentResolver().query(Uri.parse(MyContentProvider.content_persons), null, null, null, null);
-        Log.i("tag", "getCount--->" + cursor.getCount());//多少条数据
-        Log.i("tag", "getColumnCount--->" + cursor.getColumnCount());//表中有多少列
+        //Log.i("tag", "getCount--->" + cursor.getCount());//多少条数据
+        //Log.i("tag", "getColumnCount--->" + cursor.getColumnCount());//表中有多少列
         while (cursor.moveToNext()) {
-            Log.i("tag", "_id--->" + cursor.getInt(cursor.getColumnIndex("_id")));
-            Log.i("tag", "name--->" + cursor.getString(cursor.getColumnIndex("name")));
+           // Log.i("tag", "_id--->" + cursor.getInt(cursor.getColumnIndex("_id")));
+            //Log.i("tag", "name--->" + cursor.getString(cursor.getColumnIndex("name")));
         }
     }
 
