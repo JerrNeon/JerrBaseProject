@@ -1,4 +1,4 @@
-package com.cw.jerrbase.activity;
+package com.cw.jerrbase.activity.other;
 
 import android.graphics.Color;
 import android.os.Bundle;

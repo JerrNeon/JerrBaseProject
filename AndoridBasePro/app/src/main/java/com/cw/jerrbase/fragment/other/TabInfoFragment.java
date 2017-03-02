@@ -1,4 +1,4 @@
-package com.cw.jerrbase.fragment;
+package com.cw.jerrbase.fragment.other;
 
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;

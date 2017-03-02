@@ -9,6 +9,9 @@ package com.cw.jerrbase.common;
  */
 public class Config {
 
+    public static final String TAG = "tag";
+    public static final String BAIDUMAP = "BaiduMap";
+
     /**
      * 操作类型
      */

@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @date 2016/9/14 10:56
  */
 @Entity
-public class MarketMainModelVO implements Serializable {
+public class MarketMainModel implements Serializable {
 
     private static final long serialVersionUID = 23837587814483930L;
     
@@ -44,12 +44,12 @@ public class MarketMainModelVO implements Serializable {
     private String feevalue;//下点的数量
 
     @Generated(hash = 1504032918)
-    public MarketMainModelVO(long id, String name, String img, String color1,
-                             String color2, String specifications, String starlevelname,
-                             String remark, long time, String price, String guideprice1,
-                             String guideprice2, String adprice, String cardiscount,
-                             String carstatus, String addressfrom, String addressto, String type,
-                             String licensearea, String customcar, String feerule, String feevalue) {
+    public MarketMainModel(long id, String name, String img, String color1,
+                           String color2, String specifications, String starlevelname,
+                           String remark, long time, String price, String guideprice1,
+                           String guideprice2, String adprice, String cardiscount,
+                           String carstatus, String addressfrom, String addressto, String type,
+                           String licensearea, String customcar, String feerule, String feevalue) {
         this.id = id;
         this.name = name;
         this.img = img;
@@ -75,7 +75,7 @@ public class MarketMainModelVO implements Serializable {
     }
 
     @Generated(hash = 1906261345)
-    public MarketMainModelVO() {
+    public MarketMainModel() {
     }
 
     public long getId() {

@@ -13,7 +13,7 @@ import java.util.List;
 public class MarketMainModelList implements Serializable {
 
     private PageModelVO page;//分类
-    private List<MarketMainModelVO> mainList;//首页搜索列表
+    private List<MarketMainModel> mainList;//首页搜索列表
 
     public PageModelVO getPage() {
         return page;
@@ -23,11 +23,11 @@ public class MarketMainModelList implements Serializable {
         this.page = page;
     }
 
-    public List<MarketMainModelVO> getMainList() {
+    public List<MarketMainModel> getMainList() {
         return mainList;
     }
 
-    public void setMainList(List<MarketMainModelVO> mainList) {
+    public void setMainList(List<MarketMainModel> mainList) {
         this.mainList = mainList;
     }
 }

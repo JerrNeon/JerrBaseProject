@@ -1,4 +1,4 @@
-package com.cw.jerrbase.fragment;
+package com.cw.jerrbase.fragment.other;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cw.jerrbase.R;
-import com.cw.jerrbase.activity.CollapsingToolbarActivity;
+import com.cw.jerrbase.activity.other.CollapsingToolbarActivity;
 import com.cw.jerrbase.adapter.RecyerAdapter;
 import com.cw.jerrbase.base.fragment.BaseFragment;
 import com.cw.jerrbase.pulltorefresh.PullToRefreshBase;

@@ -1,4 +1,4 @@
-package com.cw.jerrbase.activity;
+package com.cw.jerrbase.activity.other;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

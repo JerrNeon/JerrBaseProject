@@ -18,8 +18,8 @@ android {
         versionName config.versionName
     }
 
-    signingConfigs{
-        debug{
+    signingConfigs {
+        debug {
             storeFile file(signConfig.storeFile)
             storePassword signConfig.storePassword
             keyAlias signConfig.keyAlias
@@ -34,7 +34,7 @@ android {
                 }
             }
         }
-        release{
+        release {
             storeFile file(signConfig.storeFile)
             storePassword signConfig.storePassword
             keyAlias signConfig.keyAlias
@@ -62,6 +62,12 @@ android {
         targetGenDir greenDao.targetGenDir //路径
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ["libs"]
+        }
+    }
+
 }
 
 repositories {
@@ -73,6 +79,9 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile dep["junit"]
+
+    compile files("libs/BaiduLBS_Android.jar")
+
     compile dep["support-v4"]
     compile dep["appcompat-v7"]
     compile dep["design"]

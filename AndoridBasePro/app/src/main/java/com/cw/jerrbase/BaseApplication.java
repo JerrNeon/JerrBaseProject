@@ -2,6 +2,7 @@ package com.cw.jerrbase;
 
 import android.app.Application;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.cw.jerrbase.base.exception.CrashHandler;
 import com.facebook.stetho.Stetho;
 import com.lzy.okgo.OkGo;
@@ -30,6 +31,7 @@ public class BaseApplication extends Application {
         initLeakCanary();
         initOkGo();
         initStetho();
+        initBaiduMap();
     }
 
     public static BaseApplication getInstance() {
@@ -96,8 +98,12 @@ public class BaseApplication extends Application {
         }
     }
 
-    private void initStetho(){
+    private void initStetho() {
         Stetho.initializeWithDefaults(this);
+    }
+
+    private void initBaiduMap() {
+        SDKInitializer.initialize(this);
     }
 
 }

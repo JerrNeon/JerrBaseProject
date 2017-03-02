@@ -1,12 +1,12 @@
-package com.cw.jerrbase.fragment;
+package com.cw.jerrbase.fragment.other;
 
 import android.util.Log;
 
 import com.cw.jerrbase.R;
-import com.cw.jerrbase.activity.AutoLayoutTestActivity;
-import com.cw.jerrbase.activity.ImageStatusActivity;
+import com.cw.jerrbase.activity.other.AutoLayoutTestActivity;
+import com.cw.jerrbase.activity.other.ImageStatusActivity;
 import com.cw.jerrbase.base.fragment.BaseFragment;
-import com.cw.jerrbase.bean.MarketMainModelVO;
+import com.cw.jerrbase.bean.MarketMainModel;
 import com.cw.jerrbase.bean.MarketMainModelList;
 
 import java.util.ArrayList;
@@ -145,9 +145,9 @@ public class RxJavaFragment extends BaseFragment {
     private void rxjava4() {
         List<MarketMainModelList> mlist = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            List<MarketMainModelVO> list = new ArrayList<>();
+            List<MarketMainModel> list = new ArrayList<>();
             for (int j = 0; j < 10; j++) {
-                MarketMainModelVO model = new MarketMainModelVO();
+                MarketMainModel model = new MarketMainModel();
                 model.setColor1("颜色" + j);
                 list.add(model);
             }
@@ -155,12 +155,12 @@ public class RxJavaFragment extends BaseFragment {
             modellist.setMainList(list);
             mlist.add(modellist);
         }
-        Observable.from(mlist).flatMap(new Func1<MarketMainModelList, Observable<MarketMainModelVO>>() {
+        Observable.from(mlist).flatMap(new Func1<MarketMainModelList, Observable<MarketMainModel>>() {
             @Override
-            public Observable<MarketMainModelVO> call(MarketMainModelList marketMainModelList) {
+            public Observable<MarketMainModel> call(MarketMainModelList marketMainModelList) {
                 return Observable.from(marketMainModelList.getMainList());
             }
-        }).subscribe(new Subscriber<MarketMainModelVO>() {
+        }).subscribe(new Subscriber<MarketMainModel>() {
             @Override
             public void onCompleted() {
 
@@ -172,7 +172,7 @@ public class RxJavaFragment extends BaseFragment {
             }
 
             @Override
-            public void onNext(MarketMainModelVO marketMainModel) {
+            public void onNext(MarketMainModel marketMainModel) {
                 Log.i("tag", "rajava4------>" + marketMainModel.getColor1());
             }
         });

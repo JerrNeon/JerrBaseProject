@@ -1,4 +1,4 @@
-package com.cw.jerrbase.fragment;
+package com.cw.jerrbase.fragment.other;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,7 +15,7 @@ import com.bigkoo.alertview.OnItemClickListener;
 import com.cw.jerrbase.adapter.CarHotListAdapter;
 import com.cw.jerrbase.base.adapter.BaseListAdapter;
 import com.cw.jerrbase.base.fragment.BaseLazyListFragment;
-import com.cw.jerrbase.bean.MarketMainModelVO;
+import com.cw.jerrbase.bean.MarketMainModel;
 import com.cw.jerrbase.bean.MarketMainModelList;
 import com.cw.jerrbase.common.Constants;
 import com.cw.jerrbase.db.GreenDaoUtil;
@@ -54,7 +54,7 @@ import java.util.Map;
  * @create by: chenwei
  * @date 2016/10/8 16:39
  */
-public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModelVO> implements TakePhoto.TakeResultListener, InvokeListener {
+public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> implements TakePhoto.TakeResultListener, InvokeListener {
 
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
@@ -130,9 +130,9 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModelVO> i
         });
     }
 
-    private void add(List<MarketMainModelVO> list) {
+    private void add(List<MarketMainModel> list) {
         if (list.size() <= 0) return;
-        for (MarketMainModelVO model : list) {
+        for (MarketMainModel model : list) {
             long count = mMarketMainModelDao.queryBuilder().where(MarketMainModelDao.Properties.Id.eq(model.getId())).count();
             if (count <= 0)
                mMarketMainModelDao.insert(model);
@@ -141,7 +141,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModelVO> i
     }
 
     public void queryAll() {
-        List<MarketMainModelVO> marketMainModels = mMarketMainModelDao.queryBuilder().list();
+        List<MarketMainModel> marketMainModels = mMarketMainModelDao.queryBuilder().list();
         if (QMUtil.isEmpty(marketMainModels))
             return;
         updateRefreshAndData(marketMainModels);

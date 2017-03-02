@@ -15,6 +15,14 @@
         android:padding="16dp"
         android:text="TabLayout And OkHttp"/>
 
+    <TextView
+        android:id="@+id/tv_baiduMap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="BaiduMap"/>
+
     <include layout="@layout/base_line_layout"/>
 
 </LinearLayout>

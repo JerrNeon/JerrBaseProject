@@ -1,14 +1,14 @@
-package com.cw.jerrbase.activity;
+package com.cw.jerrbase.activity.other;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.cw.jerrbase.base.activity.BaseTabActivity;
-import com.cw.jerrbase.fragment.RecyerViewFragment;
-import com.cw.jerrbase.fragment.RxJavaFragment;
-import com.cw.jerrbase.fragment.TabInfoFragment;
-import com.cw.jerrbase.fragment.TabInfoLvFragment;
+import com.cw.jerrbase.fragment.other.RecyerViewFragment;
+import com.cw.jerrbase.fragment.other.RxJavaFragment;
+import com.cw.jerrbase.fragment.other.TabInfoFragment;
+import com.cw.jerrbase.fragment.other.TabInfoLvFragment;
 
 /**
  * @version V1.0

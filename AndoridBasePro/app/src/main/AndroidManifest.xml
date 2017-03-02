@@ -22,10 +22,11 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!--BaiduMap-->
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <!--监听来电状态-->
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
 
@@ -53,19 +54,23 @@
             android:launchMode="singleTop"/>
 
         <activity
-            android:name="com.cw.jerrbase.activity.TabInfoActivity"
+            android:name="com.cw.jerrbase.activity.other.TabInfoActivity"
             android:launchMode="singleTop"/>
 
         <activity
-            android:name="com.cw.jerrbase.activity.CollapsingToolbarActivity"
+            android:name="com.cw.jerrbase.activity.other.CollapsingToolbarActivity"
             android:launchMode="singleTop"/>
 
         <activity
-            android:name="com.cw.jerrbase.activity.ImageStatusActivity"
+            android:name="com.cw.jerrbase.activity.other.ImageStatusActivity"
             android:launchMode="singleTop"/>
 
         <activity
-            android:name="com.cw.jerrbase.activity.AutoLayoutTestActivity"
+            android:name="com.cw.jerrbase.activity.other.AutoLayoutTestActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".activity.other.BaiduMapActivity"
             android:launchMode="singleTop"/>
 
         <provider
@@ -106,6 +111,16 @@
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
         </receiver>
+
+        <!--BaiduMap-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="mWRW73TNgt5CgfGixtDo7P57qPtkjFD8"/>
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"/>
+
     </application>
 
 </manifest>

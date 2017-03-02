@@ -10,7 +10,7 @@ import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.adapter.BaseListAdapter;
 import com.cw.jerrbase.base.adapter.ToolViewHolder;
 import com.cw.jerrbase.base.glide.GlideUtil;
-import com.cw.jerrbase.bean.MarketMainModelVO;
+import com.cw.jerrbase.bean.MarketMainModel;
 import com.cw.jerrbase.util.QMUtil;
 
 import org.json.JSONArray;
@@ -19,7 +19,7 @@ import org.json.JSONException;
 /**
  * Created by SEED on 2016/2/19.
  */
-public class CarHotListAdapter extends BaseListAdapter<MarketMainModelVO> {
+public class CarHotListAdapter extends BaseListAdapter<MarketMainModel> {
 
     public CarHotListAdapter(Context context) {
         super(context);
@@ -31,8 +31,8 @@ public class CarHotListAdapter extends BaseListAdapter<MarketMainModelVO> {
     }
 
     @Override
-    public void getView(int position, ToolViewHolder holder, MarketMainModelVO bean) {
-        MarketMainModelVO model = getItem(position);
+    public void getView(int position, ToolViewHolder holder, MarketMainModel bean) {
+        MarketMainModel model = getItem(position);
         ImageView iv_product_icon = holder.getChildView(R.id.iv_postcar_img);//车型图标
         TextView tv_product_title = holder.getChildView(R.id.tv_postcar_name);//车型
         TextView tv_product_price = holder.getChildView(R.id.tv_postcar_price);//价格
