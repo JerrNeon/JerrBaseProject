@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.cw.andoridmvp.widget.NoScrollGridView
+        <com.cw.jerrbase.widget.NoScrollGridView
             android:id="@+id/ll_expanded_gv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

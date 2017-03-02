@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.cw.andoridmvp.pulltorefresh.PullToRefreshRecyerView
+    <com.cw.jerrbase.pulltorefresh.PullToRefreshRecyerView
         android:id="@+id/pRecyerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

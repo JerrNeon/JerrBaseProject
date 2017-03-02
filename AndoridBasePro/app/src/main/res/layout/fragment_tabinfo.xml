@@ -90,7 +90,7 @@
 
         </com.zhy.autolayout.AutoFrameLayout>
 
-        <com.cw.andoridmvp.widget.PieView
+        <com.cw.jerrbase.widget.PieView
             android:id="@+id/pieview"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"/>
 
-        <com.cw.andoridmvp.widget.ExpandedView
+        <com.cw.jerrbase.widget.ExpandedView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -108,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"/>
 
-        <com.cw.andoridmvp.widget.CleanView
+        <com.cw.jerrbase.widget.CleanView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.cw.andoridmvp.widget.viewpagerindicator.LazyTabPageIndicator
+    <com.cw.jerrbase.widget.viewpagerindicator.LazyTabPageIndicator
         android:id="@+id/basetab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <com.cw.andoridmvp.widget.viewpagerindicator.LazyViewPager
+        <com.cw.jerrbase.widget.viewpagerindicator.LazyViewPager
             android:id="@+id/basetab_viewpager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

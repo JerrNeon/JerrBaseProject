@@ -4,7 +4,7 @@ ext {
             compileSdkVersion       : 25,
             buildToolsVersion       : "25.0.2",
 
-            applicationId           : "com.cw.andoridmvp",
+            applicationId           : "com.cw.jerrbase",
             minSdkVersion           : 14,
             targetSdkVersion        : 24,
             versionCode             : 1,
@@ -93,7 +93,7 @@ ext {
 
     greendao = [
             schemaVersion: 1, //数据库版本号
-            daoPackage   : "com.cw.andoridmvp.db.greendaogen", //自动生成的工具类的包名
+            daoPackage   : "com.cw.jerrbase.db.greendaogen", //自动生成的工具类的包名
             targetGenDir : "src/main/java", //路径
     ]
 
