@@ -18,7 +18,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="276px"
             android:layout_marginTop="26px"
-            android:src="@drawable/icon_wode_on"/>
+            android:src="@drawable/ic_mine"/>
 
         <TextView
             android:layout_width="wrap_content"

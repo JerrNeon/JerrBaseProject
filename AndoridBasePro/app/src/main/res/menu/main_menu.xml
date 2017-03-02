@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/main"
-        android:icon="@drawable/icon_home_on"
-        android:title="首页"/>
+        android:icon="@drawable/ic_home"
+        android:title="Home"/>
 
     <item
         android:id="@+id/chaodigou"
-        android:icon="@drawable/icon_cdgx_on"
-        android:title="超低购"/>
+        android:icon="@drawable/ic_component"
+        android:title="Component"/>
 
     <item
         android:id="@+id/mine"
-        android:icon="@drawable/icon_wode_on"
-        android:title="我的"/>
+        android:icon="@drawable/ic_mine"
+        android:title="Mine"/>
 
 </menu>

@@ -89,4 +89,8 @@ dependencies {
     compile dep["greendao"]
     //stetho
     compile dep["stetho"]
+    //banner
+    compile dep["convenientbanner"]
+    //view-pager-transforms
+    compile dep["view-pager-transforms"]
 }

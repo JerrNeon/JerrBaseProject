@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:divider="@drawable/line_divider"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:showDividers="middle">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="我的工作"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="我的行程"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="我的订单"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="我的收藏"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="设置"/>
+
+    <include layout="@layout/base_line_layout"/>
+
+</LinearLayout>

@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.cw.andoridmvp.R;
 import com.cw.andoridmvp.base.activity.BaseTbActivity;
+import com.cw.andoridmvp.fragment.ComponentFragment;
 import com.cw.andoridmvp.fragment.MainFragment;
+import com.cw.andoridmvp.fragment.MineFragment;
 
 import butterknife.BindView;
 
@@ -37,6 +39,10 @@ public class MainActivity extends BaseTbActivity implements BottomNavigationView
      * 当前菜单项
      */
     private int currPosition;
+    /**
+     * 上一个菜单项
+     */
+    private int prePositon = 0;
 
     private String[] strResource = null;
     private Fragment[] mFragments = null;
@@ -49,8 +55,8 @@ public class MainActivity extends BaseTbActivity implements BottomNavigationView
 
     private void init() {
         mToolIvLeft.setVisibility(View.GONE);
-        strResource = new String[]{"首页", "超低购", "我的"};
-        mFragments = new Fragment[]{MainFragment.newInstance(MainFragment.class), MainFragment.newInstance(MainFragment.class), MainFragment.newInstance(MainFragment.class)};
+        strResource = new String[]{"Home", "Component", "Mine"};
+        mFragments = new Fragment[]{MainFragment.newInstance(MainFragment.class), ComponentFragment.newInstance(ComponentFragment.class), MineFragment.newInstance(MineFragment.class)};
         setDefaultFragment();
         mainBottomView.setOnNavigationItemSelectedListener(this);
     }
@@ -102,11 +108,12 @@ public class MainActivity extends BaseTbActivity implements BottomNavigationView
             FragmentTransaction ft = fm.beginTransaction();
             Fragment fragment = mFragments[position];
             if (fragment.isAdded()) {
-                ft.replace(R.id.base_mainContent, fragment);
+                ft.show(fragment).hide(mFragments[prePositon]);
             } else {
                 ft.add(R.id.base_mainContent, fragment);
             }
             ft.commitAllowingStateLoss();
+            prePositon = currPosition;
         }
     }
 

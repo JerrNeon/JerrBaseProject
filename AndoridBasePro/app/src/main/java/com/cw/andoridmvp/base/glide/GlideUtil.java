@@ -21,7 +21,7 @@ import com.cw.andoridmvp.R;
  */
 public class GlideUtil {
 
-    private static final int defaultErrorResourceId = R.drawable.icon_home_on;
+    private static final int defaultErrorResourceId = R.drawable.ic_launcher;
 
     /*----------------------------------------    使用默认错误图片(无占位图)   -------------------------------------------*/
 
