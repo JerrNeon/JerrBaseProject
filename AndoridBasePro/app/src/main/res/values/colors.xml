@@ -17,6 +17,7 @@
 
     <color name="loading_bg">#ededed</color>
     <color name="c_333333">#333333</color>
+    <color name="c_000002">#000002</color>
 
     <!-- 分割线条颜色 -->
     <color name="line_color">#dcdcdc</color>

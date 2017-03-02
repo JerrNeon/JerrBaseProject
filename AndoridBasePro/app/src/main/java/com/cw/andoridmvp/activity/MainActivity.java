@@ -7,15 +7,21 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cw.andoridmvp.R;
-import com.cw.andoridmvp.base.activity.BaseTbActivity;
+import com.cw.andoridmvp.base.activity.BaseActivity;
 import com.cw.andoridmvp.fragment.ComponentFragment;
 import com.cw.andoridmvp.fragment.MainFragment;
 import com.cw.andoridmvp.fragment.MineFragment;
+import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
 
@@ -26,10 +32,22 @@ import butterknife.BindView;
  * @create by: chenwei
  * @date 2016/8/23 17:11
  */
-public class MainActivity extends BaseTbActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.base_mainBottomView)
     BottomNavigationView mainBottomView;
+    @BindView(R.id.main_drawerLayout)
+    DrawerLayout mMainDrawerLayout;
+    @BindView(R.id.left_iv)
+    ImageView mLeftIv;
+    @BindView(R.id.tv_title_left)
+    TextView mTvTitleLeft;
+    @BindView(R.id.tv_title_right)
+    TextView mTvTitleRight;
+    @BindView(R.id.right_iv)
+    ImageView mRightIv;
+    @BindView(R.id.midTitle)
+    TextView mMidTitle;
 
     /**
      * 再按一次退出程序
@@ -50,20 +68,71 @@ public class MainActivity extends BaseTbActivity implements BottomNavigationView
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.base_main_layout);
+        initButterKnife();
         init();
+        initDrawerLayout();
+        setStatusBar();
     }
 
     private void init() {
-        mToolIvLeft.setVisibility(View.GONE);
+        mLeftIv.setImageResource(R.drawable.ic_menu_slide);
         strResource = new String[]{"Home", "Component", "Mine"};
         mFragments = new Fragment[]{MainFragment.newInstance(MainFragment.class), ComponentFragment.newInstance(ComponentFragment.class), MineFragment.newInstance(MineFragment.class)};
         setDefaultFragment();
         mainBottomView.setOnNavigationItemSelectedListener(this);
+
+        mLeftIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMainDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+    }
+
+    private void initDrawerLayout() {
+        mMainDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                View mContent = mMainDrawerLayout.getChildAt(0);
+                View mMenu = drawerView;
+                float scale = 1 - slideOffset;
+                float leftScale = 1 - 0.3f * scale;
+                float rightScale = 0.8f + scale * 0.2f;
+
+                //mMenu.setScaleX(leftScale);
+                //mMenu.setScaleY(leftScale);
+                mMenu.setAlpha(0.6f + 0.4f * (1 - scale));
+
+                mContent.setTranslationX(mMenu.getMeasuredWidth() * (1 - scale));
+                mContent.setPivotX(0);
+                mContent.setPivotY(mContent.getMeasuredHeight()/2);
+                mContent.invalidate();
+                mContent.setScaleX(rightScale);
+                mContent.setScaleY(rightScale);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     @Override
-    protected int getLayoutResourceId() {
-        return R.layout.base_main_layout;
+    protected void setStatusBar() {
+        super.setStatusBar();
+        StatusBarUtil.setColorNoTranslucentForDrawerLayout(mContext, mMainDrawerLayout, ContextCompat.getColor(mContext, R.color.colorPrimary));
     }
 
     @Override
@@ -71,12 +140,15 @@ public class MainActivity extends BaseTbActivity implements BottomNavigationView
         switch (item.getItemId()) {
             case R.id.main:
                 currPosition = 0;
+                mLeftIv.setVisibility(View.VISIBLE);
                 break;
             case R.id.chaodigou:
                 currPosition = 1;
+                mLeftIv.setVisibility(View.GONE);
                 break;
             case R.id.mine:
                 currPosition = 2;
+                mLeftIv.setVisibility(View.GONE);
                 break;
             default:
                 currPosition = -1;
@@ -101,6 +173,7 @@ public class MainActivity extends BaseTbActivity implements BottomNavigationView
     }
 
     private void changeFragment(int position) {
+        if (prePositon == position) return;
         if (strResource != null)
             setTitleName(strResource[currPosition]);
         if (mFragments != null) {
@@ -115,6 +188,10 @@ public class MainActivity extends BaseTbActivity implements BottomNavigationView
             ft.commitAllowingStateLoss();
             prePositon = currPosition;
         }
+    }
+
+    public void setTitleName(String titleName) {
+        mMidTitle.setText(titleName);
     }
 
     /**
