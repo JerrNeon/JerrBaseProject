@@ -15,6 +15,7 @@ out/
 
 # Gradle files
 .gradle/
+.idea/
 build/
 
 # Local configuration file (sdk path, etc)
@@ -37,4 +38,4 @@ captures/
 .idea/workspace.xml
 
 # Keystore files
-*.jks
+#*.jks
