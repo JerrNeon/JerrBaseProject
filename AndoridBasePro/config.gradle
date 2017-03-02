@@ -96,4 +96,11 @@ ext {
             daoPackage   : "com.cw.andoridmvp.db.greendaogen", //自动生成的工具类的包名
             targetGenDir : "src/main/java", //路径
     ]
+
+    signconfig = [
+            storeFile    : "../../keystore/JerrBase.jks",//签名文件路径
+            storePassword: "123456",
+            keyAlias     : "JerrBase",
+            keyPassword  : "123456",
+    ]
 }

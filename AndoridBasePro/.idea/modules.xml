@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndoridMvp.iml" filepath="$PROJECT_DIR$/AndoridMvp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndoridBasePro.iml" filepath="$PROJECT_DIR$/AndoridBasePro.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

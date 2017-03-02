@@ -4,6 +4,7 @@ apply plugin: 'org.greenrobot.greendao'
 def config = rootProject.ext.android // 配置
 def dep = rootProject.ext.dependencies // 依赖
 def greenDao = rootProject.ext.greendao // greenDao
+def signConfig = rootProject.ext.signconfig // signConfig
 
 android {
     compileSdkVersion config.compileSdkVersion
@@ -16,8 +17,40 @@ android {
         versionCode config.versionCode
         versionName config.versionName
     }
+
+    signingConfigs{
+        debug{
+            storeFile file(signConfig.storeFile)
+            storePassword signConfig.storePassword
+            keyAlias signConfig.keyAlias
+            keyPassword signConfig.keyPassword
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为JerrBase_v1.0.apk
+                        def fileName = "JerrBase_v${config.versionName}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+        release{
+            storeFile file(signConfig.storeFile)
+            storePassword signConfig.storePassword
+            keyAlias signConfig.keyAlias
+            keyPassword signConfig.keyPassword
+        }
+    }
+
     buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            signingConfig signingConfigs.debug
+        }
         release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
