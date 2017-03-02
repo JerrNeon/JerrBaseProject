@@ -102,5 +102,6 @@ ext {
             storePassword: "123456",
             keyAlias     : "JerrBase",
             keyPassword  : "123456",
+            fileName :"JerrBase_v${android["versionName"]}.apk"// 输出apk名称为JerrBase_v1.0.apk
     ]
 }

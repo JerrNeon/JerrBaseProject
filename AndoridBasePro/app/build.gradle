@@ -29,8 +29,7 @@ android {
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         // 输出apk名称为JerrBase_v1.0.apk
-                        def fileName = "JerrBase_v${config.versionName}.apk"
-                        output.outputFile = new File(outputFile.parent, fileName)
+                        output.outputFile = new File(outputFile.parent, signConfig.fileName)
                     }
                 }
             }
