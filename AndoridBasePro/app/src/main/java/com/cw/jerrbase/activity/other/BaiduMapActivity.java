@@ -283,7 +283,8 @@ public class BaiduMapActivity extends BaseTbActivity {
 
     private void searchRoute(int type) {
         LatLng ll = new LatLng(31.116581, 121.391623);
-        Log.i(Config.TAG, "searchRoute: " + DistanceUtil.getDistance(locLng, ll) + "m");
+        if (BuildConfig.LOG_DEBUG)
+            Log.i(Config.TAG, "searchRoute: " + DistanceUtil.getDistance(locLng, ll) + "m");
         pSearch = RoutePlanSearch.newInstance();
         pSearch.setOnGetRoutePlanResultListener(new MyOnGetRoutePlanResultListener());
         PlanNode fromNode = PlanNode.withLocation(locLng);
@@ -328,7 +329,8 @@ public class BaiduMapActivity extends BaseTbActivity {
                 if (wSteps == null) return;
                 List<LatLng> lls = wSteps.get(0).getWayPoints();
                 if (null == lls) return;
-                Log.i(Config.TAG, "onGetWalkingRouteResult: " + JsonUtils.toJson(lls));
+                if (BuildConfig.LOG_DEBUG)
+                    Log.i(Config.TAG, "onGetWalkingRouteResult: " + JsonUtils.toJson(lls));
                 //创建步行路线规划线路覆盖物
                 WalkingRouteOverlay overlay = new WalkingRouteOverlay(mBaiduMap);
                 //设置步行路线规划数据
@@ -358,7 +360,8 @@ public class BaiduMapActivity extends BaseTbActivity {
                 if (wSteps == null) return;
                 List<LatLng> lls = wSteps.get(0).getWayPoints();
                 if (null == lls) return;
-                Log.i(Config.TAG, "onGetTransitRouteResult: " + JsonUtils.toJson(lls));
+                if (BuildConfig.LOG_DEBUG)
+                    Log.i(Config.TAG, "onGetTransitRouteResult: " + JsonUtils.toJson(lls));
                 //创建公交路线规划线路覆盖物
                 TransitRouteOverlay overlay = new TransitRouteOverlay(mBaiduMap);
                 //设置公交路线规划数据
@@ -393,7 +396,8 @@ public class BaiduMapActivity extends BaseTbActivity {
                 if (null == wSteps) return;
                 List<LatLng> lls = wSteps.get(0).getWayPoints();
                 if (null == lls) return;
-                Log.i(Config.TAG, "onGetDrivingRouteResult: " + JsonUtils.toJson(lls));
+                if (BuildConfig.LOG_DEBUG)
+                    Log.i(Config.TAG, "onGetDrivingRouteResult: " + JsonUtils.toJson(lls));
                 //创建驾车路线规划线路覆盖物
                 DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
                 //设置驾车路线规划数据
@@ -427,7 +431,8 @@ public class BaiduMapActivity extends BaseTbActivity {
                 if (wSteps == null) return;
                 List<LatLng> lls = wSteps.get(0).getWayPoints();
                 if (null == lls) return;
-                Log.i(Config.TAG, "onGetBikingRouteResult: " + JsonUtils.toJson(lls));
+                if (BuildConfig.LOG_DEBUG)
+                    Log.i(Config.TAG, "onGetBikingRouteResult: " + JsonUtils.toJson(lls));
                 //创建骑行路线规划线路覆盖物
                 BikingRouteOverlay overlay = new BikingRouteOverlay(mBaiduMap);
                 //设置骑行路线规划数据
