@@ -292,10 +292,12 @@ public class BaiduMapActivity extends BaseTbActivity {
         mBaiduMap.clear();
         switch (type) {
             case 0:
-                pSearch.drivingSearch(new DrivingRoutePlanOption().currentCity(cityName).from(fromNode).to(toNode));
+                //policy:最少时间
+                pSearch.drivingSearch(new DrivingRoutePlanOption().currentCity(cityName).from(fromNode).to(toNode).policy(DrivingRoutePlanOption.DrivingPolicy.ECAR_DIS_FIRST));
                 break;
             case 1:
-                pSearch.transitSearch(new TransitRoutePlanOption().city(cityName).from(fromNode).to(toNode));
+                //policy:时间优先
+                pSearch.transitSearch(new TransitRoutePlanOption().city(cityName).from(fromNode).to(toNode).policy(TransitRoutePlanOption.TransitPolicy.EBUS_TIME_FIRST));
                 break;
             case 2:
                 pSearch.bikingSearch(new BikingRoutePlanOption().from(fromNode).to(toNode));
