@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -15,6 +16,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.route.BikingRouteLine;
 import com.baidu.mapapi.search.route.BikingRoutePlanOption;
 import com.baidu.mapapi.search.route.BikingRouteResult;
@@ -32,10 +34,15 @@ import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.cw.jerrbase.BuildConfig;
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.activity.BaseTbActivity;
 import com.cw.jerrbase.common.Config;
+import com.cw.jerrbase.ttpapi.map.overlayutil.BikingRouteOverlay;
+import com.cw.jerrbase.ttpapi.map.overlayutil.DrivingRouteOverlay;
+import com.cw.jerrbase.ttpapi.map.overlayutil.TransitRouteOverlay;
+import com.cw.jerrbase.ttpapi.map.overlayutil.WalkingRouteOverlay;
 import com.cw.jerrbase.util.gson.JsonUtils;
 
 import java.util.List;
@@ -54,10 +61,19 @@ public class BaiduMapActivity extends BaseTbActivity {
 
     @BindView(R.id.bm_view)
     MapView mBmView;
+    @BindView(R.id.bm_car)
+    TextView mBmCar;
+    @BindView(R.id.bm_bus)
+    TextView mBmBus;
+    @BindView(R.id.bm_cycling)
+    TextView mBmCycling;
+    @BindView(R.id.bm_walk)
+    TextView mBmWalk;
 
     private BaiduMap mBaiduMap = null;
     private LocationClient mLocationClient = null;
-    private BDLocationListener myListener = new MyLocationListener();
+    private BDLocationListener myListener = null;//定位监听
+    private LocationClientOption mOption = null;//定位参数
     private RoutePlanSearch pSearch = null;
     private LatLng locLng = null;
     private String cityName = "";
@@ -75,37 +91,39 @@ public class BaiduMapActivity extends BaseTbActivity {
     }
 
     private void initBm() {
+        mBmCar.setSelected(true);
+
         mBaiduMap = mBmView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
 
         mLocationClient = new LocationClient(getApplicationContext());
+        myListener = new MyLocationListener();
         mLocationClient.registerLocationListener(myListener);
 
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        mOption = new LocationClientOption();
+        mOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-        option.setCoorType("bd09ll");
+        mOption.setCoorType("bd09ll");
         //可选，默认gcj02，设置返回的定位结果坐标系
-        int span = 1000;
-        option.setScanSpan(span);
+        mOption.setScanSpan(0);
         //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-        option.setIsNeedAddress(true);
+        mOption.setIsNeedAddress(true);
         //可选，设置是否需要地址信息，默认不需要
-        option.setOpenGps(true);
+        mOption.setOpenGps(true);
         //可选，默认false,设置是否使用gps
-        option.setLocationNotify(true);
+        mOption.setLocationNotify(true);
         //可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
-        option.setIsNeedLocationDescribe(true);
+        mOption.setIsNeedLocationDescribe(true);
         //可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        option.setIsNeedLocationPoiList(true);
+        mOption.setIsNeedLocationPoiList(true);
         //可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        option.setIgnoreKillProcess(false);
+        mOption.setIgnoreKillProcess(false);
         //可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
-        option.SetIgnoreCacheException(false);
+        mOption.SetIgnoreCacheException(false);
         //可选，默认false，设置是否收集CRASH信息，默认收集
-        option.setEnableSimulateGps(false);
+        mOption.setEnableSimulateGps(false);
         //可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
-        mLocationClient.setLocOption(option);
+        mLocationClient.setLocOption(mOption);
 
         mLocationClient.start();
     }
@@ -115,15 +133,31 @@ public class BaiduMapActivity extends BaseTbActivity {
         switch (view.getId()) {
             case R.id.bm_car:
                 searchRoute(0);
+                mBmCar.setSelected(true);
+                mBmBus.setSelected(false);
+                mBmCycling.setSelected(false);
+                mBmWalk.setSelected(false);
                 break;
             case R.id.bm_bus:
                 searchRoute(1);
+                mBmCar.setSelected(false);
+                mBmBus.setSelected(true);
+                mBmCycling.setSelected(false);
+                mBmWalk.setSelected(false);
                 break;
             case R.id.bm_cycling:
                 searchRoute(2);
+                mBmCar.setSelected(false);
+                mBmBus.setSelected(false);
+                mBmCycling.setSelected(true);
+                mBmWalk.setSelected(false);
                 break;
             case R.id.bm_walk:
                 searchRoute(3);
+                mBmCar.setSelected(false);
+                mBmBus.setSelected(false);
+                mBmCycling.setSelected(false);
+                mBmWalk.setSelected(true);
                 break;
         }
     }
@@ -249,10 +283,12 @@ public class BaiduMapActivity extends BaseTbActivity {
 
     private void searchRoute(int type) {
         LatLng ll = new LatLng(31.116581, 121.391623);
+        Log.i(Config.TAG, "searchRoute: " + DistanceUtil.getDistance(locLng, ll) + "m");
         pSearch = RoutePlanSearch.newInstance();
         pSearch.setOnGetRoutePlanResultListener(new MyOnGetRoutePlanResultListener());
         PlanNode fromNode = PlanNode.withLocation(locLng);
         PlanNode toNode = PlanNode.withLocation(ll);
+        mBaiduMap.clear();
         switch (type) {
             case 0:
                 pSearch.drivingSearch(new DrivingRoutePlanOption().currentCity(cityName).from(fromNode).to(toNode));
@@ -275,26 +311,62 @@ public class BaiduMapActivity extends BaseTbActivity {
 
         @Override
         public void onGetWalkingRouteResult(WalkingRouteResult walkingRouteResult) {
-            //获取步行线路规划结果
-            List<WalkingRouteLine> wrLines = walkingRouteResult.getRouteLines();
-            if (null == wrLines) return;
-            List<WalkingRouteLine.WalkingStep> wSteps = wrLines.get(0).getAllStep();
-            if (wSteps == null) return;
-            List<LatLng> lls = wSteps.get(0).getWayPoints();
-            if (null == lls) return;
-            Log.i(Config.TAG, "onGetWalkingRouteResult: " + JsonUtils.toJson(lls));
+            if (walkingRouteResult == null || walkingRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                //未找到结果
+                return;
+            }
+            if (walkingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+                //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+                //walkingRouteResult.getSuggestAddrInfo()
+                return;
+            }
+            if (walkingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
+                //获取步行线路规划结果
+                List<WalkingRouteLine> wrLines = walkingRouteResult.getRouteLines();
+                if (null == wrLines) return;
+                List<WalkingRouteLine.WalkingStep> wSteps = wrLines.get(0).getAllStep();
+                if (wSteps == null) return;
+                List<LatLng> lls = wSteps.get(0).getWayPoints();
+                if (null == lls) return;
+                Log.i(Config.TAG, "onGetWalkingRouteResult: " + JsonUtils.toJson(lls));
+                //创建步行路线规划线路覆盖物
+                WalkingRouteOverlay overlay = new WalkingRouteOverlay(mBaiduMap);
+                //设置步行路线规划数据
+                overlay.setData(wrLines.get(0));
+                //将步行路线规划覆盖物添加到地图中
+                overlay.addToMap();
+                overlay.zoomToSpan();
+            }
         }
 
         @Override
         public void onGetTransitRouteResult(TransitRouteResult transitRouteResult) {
-            //获取公交换乘路径规划结果
-            List<TransitRouteLine> wrLines = transitRouteResult.getRouteLines();
-            if (null == wrLines) return;
-            List<TransitRouteLine.TransitStep> wSteps = wrLines.get(0).getAllStep();
-            if (wSteps == null) return;
-            List<LatLng> lls = wSteps.get(0).getWayPoints();
-            if (null == lls) return;
-            Log.i(Config.TAG, "onGetTransitRouteResult: " + JsonUtils.toJson(lls));
+            if (transitRouteResult == null || transitRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                //未找到结果
+                return;
+            }
+            if (transitRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+                //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+                //transitRouteResult.getSuggestAddrInfo()
+                return;
+            }
+            if (transitRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
+                //获取公交换乘路径规划结果
+                List<TransitRouteLine> wrLines = transitRouteResult.getRouteLines();
+                if (null == wrLines) return;
+                List<TransitRouteLine.TransitStep> wSteps = wrLines.get(0).getAllStep();
+                if (wSteps == null) return;
+                List<LatLng> lls = wSteps.get(0).getWayPoints();
+                if (null == lls) return;
+                Log.i(Config.TAG, "onGetTransitRouteResult: " + JsonUtils.toJson(lls));
+                //创建公交路线规划线路覆盖物
+                TransitRouteOverlay overlay = new TransitRouteOverlay(mBaiduMap);
+                //设置公交路线规划数据
+                overlay.setData(wrLines.get(0));
+                //将公交路线规划覆盖物添加到地图中
+                overlay.addToMap();
+                overlay.zoomToSpan();
+            }
         }
 
         @Override
@@ -304,14 +376,32 @@ public class BaiduMapActivity extends BaseTbActivity {
 
         @Override
         public void onGetDrivingRouteResult(DrivingRouteResult drivingRouteResult) {
-            //获取驾车线路规划结果
-            List<DrivingRouteLine> wrLines = drivingRouteResult.getRouteLines();
-            if (null == wrLines) return;
-            List<DrivingRouteLine.DrivingStep> wSteps = wrLines.get(0).getAllStep();
-            if (null == wSteps) return;
-            List<LatLng> lls = wSteps.get(0).getWayPoints();
-            if (null == lls) return;
-            Log.i(Config.TAG, "onGetDrivingRouteResult: " + JsonUtils.toJson(lls));
+            if (drivingRouteResult == null || drivingRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                //未找到结果
+                return;
+            }
+            if (drivingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+                //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+                //drivingRouteResult.getSuggestAddrInfo()
+                return;
+            }
+            if (drivingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
+                //获取驾车线路规划结果
+                List<DrivingRouteLine> wrLines = drivingRouteResult.getRouteLines();
+                if (null == wrLines) return;
+                List<DrivingRouteLine.DrivingStep> wSteps = wrLines.get(0).getAllStep();
+                if (null == wSteps) return;
+                List<LatLng> lls = wSteps.get(0).getWayPoints();
+                if (null == lls) return;
+                Log.i(Config.TAG, "onGetDrivingRouteResult: " + JsonUtils.toJson(lls));
+                //创建驾车路线规划线路覆盖物
+                DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
+                //设置驾车路线规划数据
+                overlay.setData(wrLines.get(0));
+                //将驾车路线规划覆盖物添加到地图中
+                overlay.addToMap();
+                overlay.zoomToSpan();
+            }
         }
 
         @Override
@@ -321,13 +411,31 @@ public class BaiduMapActivity extends BaseTbActivity {
 
         @Override
         public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
-            List<BikingRouteLine> wrLines = bikingRouteResult.getRouteLines();
-            if (null == wrLines) return;
-            List<BikingRouteLine.BikingStep> wSteps = wrLines.get(0).getAllStep();
-            if (wSteps == null) return;
-            List<LatLng> lls = wSteps.get(0).getWayPoints();
-            if (null == lls) return;
-            Log.i(Config.TAG, "onGetBikingRouteResult: " + JsonUtils.toJson(lls));
+            if (bikingRouteResult == null || bikingRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                //未找到结果
+                return;
+            }
+            if (bikingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+                //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+                //bikingRouteResult.getSuggestAddrInfo()
+                return;
+            }
+            if (bikingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
+                List<BikingRouteLine> wrLines = bikingRouteResult.getRouteLines();
+                if (null == wrLines) return;
+                List<BikingRouteLine.BikingStep> wSteps = wrLines.get(0).getAllStep();
+                if (wSteps == null) return;
+                List<LatLng> lls = wSteps.get(0).getWayPoints();
+                if (null == lls) return;
+                Log.i(Config.TAG, "onGetBikingRouteResult: " + JsonUtils.toJson(lls));
+                //创建骑行路线规划线路覆盖物
+                BikingRouteOverlay overlay = new BikingRouteOverlay(mBaiduMap);
+                //设置骑行路线规划数据
+                overlay.setData(wrLines.get(0));
+                //将骑行路线规划覆盖物添加到地图中
+                overlay.addToMap();
+                overlay.zoomToSpan();
+            }
         }
     }
 

@@ -3,8 +3,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:divider="@drawable/line_divider"
-              android:showDividers="middle"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:showDividers="middle">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
-            android:text="驾车路线"/>
+            android:text="驾车路线"
+            android:textColor="@color/bmap_selector_color"/>
 
         <TextView
             android:id="@+id/bm_bus"
@@ -28,7 +29,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
-            android:text="公交路线"/>
+            android:text="公交路线"
+            android:textColor="@color/bmap_selector_color"/>
 
         <TextView
             android:id="@+id/bm_cycling"
@@ -37,7 +39,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
-            android:text="骑行路线"/>
+            android:text="骑行路线"
+            android:textColor="@color/bmap_selector_color"/>
 
         <TextView
             android:id="@+id/bm_walk"
@@ -46,7 +49,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
-            android:text="步行路线"/>
+            android:text="步行路线"
+            android:textColor="@color/bmap_selector_color"/>
     </LinearLayout>
 
     <com.baidu.mapapi.map.MapView
