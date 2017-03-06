@@ -134,4 +134,6 @@ dependencies {
     compile dep["convenientbanner"]
     //view-pager-transforms
     compile dep["view-pager-transforms"]
+    //GSYVideoPlayer
+    compile dep["GSYVideoPlayer"]
 }

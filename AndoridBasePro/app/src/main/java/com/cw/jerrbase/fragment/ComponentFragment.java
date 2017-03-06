@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.activity.other.BaiduMapActivity;
 import com.cw.jerrbase.activity.other.TabInfoActivity;
+import com.cw.jerrbase.activity.other.VideoActivity;
 import com.cw.jerrbase.base.fragment.BaseFragment;
 
 import butterknife.OnClick;
@@ -31,5 +32,10 @@ public class ComponentFragment extends BaseFragment {
     @OnClick(R.id.tv_baiduMap)
     public void onBaiduMap() {
         startActivity(new Intent(mContext, BaiduMapActivity.class));
+    }
+
+    @OnClick(R.id.tv_video)
+    public void onVideo() {
+        startActivity(new Intent(mContext, VideoActivity.class));
     }
 }

@@ -5,7 +5,7 @@ ext {
             buildToolsVersion       : "25.0.2",
 
             applicationId           : "com.cw.jerrbase",
-            minSdkVersion           : 14,
+            minSdkVersion           : 16,
             targetSdkVersion        : 24,
             versionCode             : 1,
             versionName             : "1.0",
@@ -71,6 +71,8 @@ ext {
             "dagger2"                        : "com.google.dagger:dagger:${android["dagger2SdkVersion"]}",
             "dagger2-annotationProcessor"    : "com.google.dagger:dagger-compiler:${android["dagger2SdkVersion"]}",
 
+            "GSYVideoPlayer"                 : "com.github.CarGuo:GSYVideoPlayer:v1.6.0",
+
             "umeng-analytics"                : "com.umeng.analytics:analytics:6.0.1",//友盟统计分析
             "picasso"                        : "com.squareup.picasso:picasso:2.5.2",//图片加载
             "nineoldandroids"                : "com.nineoldandroids:library:2.4.0",//动画(兼容Android 3.0以下)
@@ -102,6 +104,6 @@ ext {
             storePassword: "123456",
             keyAlias     : "JerrBase",
             keyPassword  : "123456",
-            fileName :"JerrBase_v${android["versionName"]}.apk"// 输出apk名称为JerrBase_v1.0.apk
+            fileName     : "JerrBase_v${android["versionName"]}.apk"// 输出apk名称为JerrBase_v1.0.apk
     ]
 }

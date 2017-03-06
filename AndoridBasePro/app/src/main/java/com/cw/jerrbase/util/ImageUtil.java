@@ -45,6 +45,10 @@ public class ImageUtil {
      */
     private static final String IMAGE_CACHE_DIR = "image";
     /**
+     * 图片缓存目录
+     */
+    private static final String VIDEO_CACHE_DIR = "video";
+    /**
      * 文件缓存目录
      */
     private static final String FILE_CACHE_DIR = "file";
@@ -61,6 +65,15 @@ public class ImageUtil {
      */
     public static String getImageCachPath(String imageName) {
         return getImageCacheFile().getAbsolutePath() + "/" + imageName + ".png";
+    }
+
+    /**
+     * 获取视频缓存路径
+     *
+     * @return
+     */
+    public static String getVideoCachePath() {
+        return getVideoCacheFile().getAbsolutePath();
     }
 
     /**
@@ -83,6 +96,23 @@ public class ImageUtil {
         if (getCacheRootFile() != null) {
             result = new File(
                     getCacheRootFile().getAbsoluteFile() + "/" + APP_CACHE_DIR + "/" + IMAGE_CACHE_DIR);
+        } else {
+            result = BaseApplication.getInstance().getFilesDir();
+        }
+        if (!result.exists())
+            result.mkdirs();
+        return result;
+    }
+
+    /**
+     * 获取视频缓存目录
+     * @return
+     */
+    public static File getVideoCacheFile() {
+        File result = null;
+        if (getCacheRootFile() != null) {
+            result = new File(
+                    getCacheRootFile().getAbsoluteFile() + "/" + APP_CACHE_DIR + "/" + VIDEO_CACHE_DIR);
         } else {
             result = BaseApplication.getInstance().getFilesDir();
         }

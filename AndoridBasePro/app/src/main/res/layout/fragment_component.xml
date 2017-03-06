@@ -23,6 +23,14 @@
         android:padding="16dp"
         android:text="BaiduMap"/>
 
+    <TextView
+        android:id="@+id/tv_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="Video"/>
+
     <include layout="@layout/base_line_layout"/>
 
 </LinearLayout>

@@ -190,6 +190,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         activityManager.removeActivity(this);
+        if (mContext != null)
+            mContext = null;
         if (unbinder != null)
             unbinder.unbind();
         if (EventBus.getDefault().isRegistered(this))
