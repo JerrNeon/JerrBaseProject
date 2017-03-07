@@ -136,4 +136,5 @@ dependencies {
     compile dep["view-pager-transforms"]
     //GSYVideoPlayer
     compile dep["GSYVideoPlayer"]
+    compile dep["constraint-layout"]
 }
