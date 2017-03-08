@@ -4,34 +4,42 @@
           package="com.cw.jerrbase">
 
     uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+    <!--网络-->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
     <!--BaiduMap-->
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <!--监听来电状态-->
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
-    <!--友盟分享登录-->
+
+    <!-- ================================友盟分享登录========================== -->
+    <!--允许一个程序访问精良位置(如GPS)-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--允许一个程序访问CellID或WiFi热点来获取粗略的位置-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--允许应用程序访问额外的位置提供命令-->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+
+    <!-- ================================shareSdk============================== -->
+    <!--suppress DeprecatedClassUsageInspection （允许程序获取当前或最近运行的应用）-->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <!--允许程序管理AccountManager中的账户列表-->
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <!--访问GMail账户列表-->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <application
         android:name="com.cw.jerrbase.BaseApplication"
@@ -82,15 +90,20 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".activity.UMShareActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.UMShareActivity"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+            </intent-filter>
+        </activity>
 
         <!--数据库-->
         <provider
             android:name="com.cw.jerrbase.db.MyContentProvider"
             android:authorities="com.ourslook.mvp.personprovider"/>
 
-        <!--<<<<<<<<<<<<<<<<<<<<< 广播 >>>>>>>>>>>>>>>>>>>>>>>>>>-->
+        <!-- ==========================广播 =============================== -->
         <receiver android:name="com.cw.jerrbase.receiver.MyReceiver">
             <intent-filter android:priority="20">
                 <action android:name="com.cw.mvp.myreceiver"/>
@@ -109,7 +122,7 @@
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
         </receiver>
-        <!--<<<<<<<<<<<<<<<<<<<<< 广播 >>>>>>>>>>>>>>>>>>>>>>>>>>-->
+
 
         <!-- autoLayout配置 -->
         <meta-data
@@ -136,23 +149,8 @@
             android:enabled="true"
             android:process=":remote"/>
 
-        <!--友盟分享登录-->
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="58be69faa325116efd00014b"/>
-
-        <activity
-            android:name=".ttpapi.share.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <activity
-            android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- =====================分享登录======================= -->
+        <!--QQ-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -169,8 +167,15 @@
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <!--新浪微博-->
+        <activity
+            android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
 
     </application>
 

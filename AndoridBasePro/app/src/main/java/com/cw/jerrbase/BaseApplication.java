@@ -9,8 +9,6 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.squareup.leakcanary.LeakCanary;
-import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.UMShareAPI;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 
 /**
@@ -34,13 +32,6 @@ public class BaseApplication extends Application {
         initOkGo();
         initStetho();
         initBaiduMap();
-        initUMShare();
-    }
-
-    {
-        PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");
-        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
-        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
     }
 
     public static BaseApplication getInstance() {
@@ -70,10 +61,6 @@ public class BaseApplication extends Application {
 
     private void initBaiduMap() {
         SDKInitializer.initialize(this);
-    }
-
-    private void initUMShare() {
-        UMShareAPI.get(this);
     }
 
     /**
