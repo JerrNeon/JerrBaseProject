@@ -3,6 +3,7 @@ package com.cw.jerrbase.fragment;
 import android.content.Intent;
 
 import com.cw.jerrbase.R;
+import com.cw.jerrbase.activity.UMShareActivity;
 import com.cw.jerrbase.activity.other.BaiduMapActivity;
 import com.cw.jerrbase.activity.other.TabInfoActivity;
 import com.cw.jerrbase.activity.other.VideoActivity;
@@ -37,5 +38,10 @@ public class ComponentFragment extends BaseFragment {
     @OnClick(R.id.tv_video)
     public void onVideo() {
         startActivity(new Intent(mContext, VideoActivity.class));
+    }
+
+    @OnClick(R.id.tv_UMShare)
+    public void onUMShare() {
+        openActivity(UMShareActivity.class);
     }
 }

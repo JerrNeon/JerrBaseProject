@@ -10,6 +10,7 @@ ext {
             versionCode             : 1,
             versionName             : "1.0",
             androidSupportSdkVersion: "25.0.0",
+            multiDexEnabled         : true,
 
             butterknifeSdkVersion   : "8.4.0",
             retrofitSdkVersion      : "2.1.0",
