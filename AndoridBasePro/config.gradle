@@ -73,7 +73,9 @@ ext {
             "dagger2"                        : "com.google.dagger:dagger:${android["dagger2SdkVersion"]}",
             "dagger2-annotationProcessor"    : "com.google.dagger:dagger-compiler:${android["dagger2SdkVersion"]}",
 
-            "GSYVideoPlayer"                 : "com.github.CarGuo:GSYVideoPlayer:v1.6.0",
+            "GSYVideoPlayer"                 : "com.github.CarGuo:GSYVideoPlayer:v1.6.0",//视频播放
+
+            "wechat-sdk"                     : 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2',
 
             "umeng-analytics"                : "com.umeng.analytics:analytics:6.0.1",//友盟统计分析
             "picasso"                        : "com.squareup.picasso:picasso:2.5.2",//图片加载

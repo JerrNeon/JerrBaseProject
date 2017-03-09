@@ -17,7 +17,7 @@ import com.cw.jerrbase.base.adapter.BaseListAdapter;
 import com.cw.jerrbase.base.fragment.BaseLazyListFragment;
 import com.cw.jerrbase.bean.MarketMainModel;
 import com.cw.jerrbase.bean.MarketMainModelList;
-import com.cw.jerrbase.common.Constants;
+import com.cw.jerrbase.common.ServerURL;
 import com.cw.jerrbase.db.GreenDaoUtil;
 import com.cw.jerrbase.db.greendaogen.MarketMainModelDao;
 import com.cw.jerrbase.net.XaResult;
@@ -84,7 +84,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
     }
 
     private void okhttpRequest(Map<String, String> params) {
-        String url = Constants.baseUrl + Constants.GET_MAIN_LIST;
+        String url = ServerURL.baseUrl + ServerURL.GET_MAIN_LIST;
         new OkHttpRequest.Builder().params(params).url(url).postValiForm(new ResultCallback<MarketMainModelList>(getActivity(), url) {
 
             @Override
@@ -108,7 +108,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
     }
 
     private void retrofitRequest(Map<String, Object> params) {
-        HttpRequestClient.post(Constants.GET_MAIN_LIST, params, new HttpResultCallback<MarketMainModelList>(getActivity()) {
+        HttpRequestClient.post(ServerURL.GET_MAIN_LIST, params, new HttpResultCallback<MarketMainModelList>(getActivity()) {
 
             @Override
             public void onSuccess(MarketMainModelList marketMainModelList) {
@@ -120,7 +120,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
     }
 
     private void okGoRequest(Map<String, String> params) {
-        String url = Constants.baseUrl + Constants.GET_MAIN_LIST;
+        String url = ServerURL.baseUrl + ServerURL.GET_MAIN_LIST;
         OkGo.post(url).tag(this).params(params).execute(new OkgoResultCallback<MarketMainModelList>(mContext) {
             @Override
             public void onSuccess(MarketMainModelList marketMainModelList) {

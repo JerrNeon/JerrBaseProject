@@ -1,7 +1,7 @@
 package com.cw.jerrbase.retrofit;
 
 import com.cw.jerrbase.BaseApplication;
-import com.cw.jerrbase.common.Constants;
+import com.cw.jerrbase.common.ServerURL;
 import com.cw.jerrbase.util.ImageUtil;
 import com.cw.jerrbase.util.NetUtils;
 
@@ -56,7 +56,7 @@ public class HttpRequest {
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(Constants.baseUrl)
+                .baseUrl(ServerURL.baseUrl)
                 .build();
     }
 

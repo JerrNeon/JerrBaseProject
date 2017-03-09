@@ -11,6 +11,9 @@ public class Config {
 
     public static final String TAG = "tag";
     public static final String BAIDUMAP = "BaiduMap";
+    public static final String PAY = "pay";
+    public static final String LOGIN = "login";
+    public static final String SHARE = "share";
 
     /**
      * 操作类型
