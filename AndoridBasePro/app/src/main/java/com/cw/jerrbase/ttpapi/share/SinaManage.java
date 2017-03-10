@@ -35,6 +35,7 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
     private Activity mContext = null;
     private SsoHandler mSsoHandler = null;
     private IWeiboShareAPI mIWeiboShareAPI = null;
+    private SinaResultListener mSinaResultListener = null;//登录、分享结果监听
 
     public static SinaManage getInstance(Activity context) {
         if (sSinaManage == null) {
@@ -54,15 +55,26 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
         mIWeiboShareAPI.registerApp();//将应用注册到微博客户端
     }
 
-    public void login() {
-        if (mSsoHandler != null)
-            mSsoHandler.authorize(this);
+    /**
+     * 新浪微博登录
+     *
+     * @param listener 结果监听
+     */
+    public void login(SinaResultListener listener) {
+        if (mSsoHandler == null)
+            return;
+        mSinaResultListener = listener;
+        mSsoHandler.authorize(this);
     }
 
     /**
      * 新浪微博分享
+     *
+     * @param listener 结果监听
      */
-    public void share() {
+    public void share(SinaResultListener listener) {
+        if (mIWeiboShareAPI == null) return;
+        mSinaResultListener = listener;
         sendMultiMessage(true, false, false, false, false, false);
     }
 
@@ -86,8 +98,7 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
         SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
         request.transaction = String.valueOf(System.currentTimeMillis());
         request.multiMessage = message;
-        if (mIWeiboShareAPI != null)
-            mIWeiboShareAPI.sendRequest(mContext, request);
+        mIWeiboShareAPI.sendRequest(mContext, request);
     }
 
     public void authorizeCallBack(int requestCode, int resultCode, Intent data) {
@@ -100,12 +111,15 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
             mIWeiboShareAPI.handleWeiboResponse(intent, this);
     }
 
+    //登录
     @Override
     public void onComplete(Bundle bundle) {
         // 从 Bundle 中解析 Token
         Oauth2AccessToken mAccessToken = Oauth2AccessToken.parseAccessToken(bundle);
         if (mAccessToken.isSessionValid()) {
             // 保存 Token 到 SharedPreferences
+            if (mSinaResultListener != null)
+                mSinaResultListener.onSuccess();
         } else {
             // 当您注册的应用程序签名不正确时，就会收到 Code，请确保签名正确
             String code = bundle.getString("code", "");
@@ -118,6 +132,8 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
     public void onWeiboException(WeiboException e) {
         if (BuildConfig.LOG_DEBUG)
             Log.i(Config.TAG, "onWeiboException: " + e.getMessage());
+        if (mSinaResultListener != null)
+            mSinaResultListener.onFailure();
     }
 
     @Override
@@ -126,12 +142,15 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
             Log.i(Config.TAG, "onCancel: ");
     }
 
+    //分享
     @Override
     public void onResponse(BaseResponse baseResponse) {
         switch (baseResponse.errCode) {
             case WBConstants.ErrorCode.ERR_OK:
                 if (BuildConfig.LOG_DEBUG)
                     Log.i(Config.TAG, "onResponse: ok");
+                if (mSinaResultListener != null)
+                    mSinaResultListener.onSuccess();
                 break;
             case WBConstants.ErrorCode.ERR_CANCEL:
                 if (BuildConfig.LOG_DEBUG)
@@ -140,9 +159,17 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
             case WBConstants.ErrorCode.ERR_FAIL:
                 if (BuildConfig.LOG_DEBUG)
                     Log.i(Config.TAG, "onResponse: fail");
+                if (mSinaResultListener != null)
+                    mSinaResultListener.onFailure();
                 break;
             default:
                 break;
         }
+    }
+
+    public interface SinaResultListener {
+        void onSuccess();
+
+        void onFailure();
     }
 }

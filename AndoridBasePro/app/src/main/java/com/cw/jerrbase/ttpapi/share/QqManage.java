@@ -33,6 +33,7 @@ public class QqManage implements IUiListener {
     private static QqManage sMQqManage = null;
     private Activity mContext = null;
     private Tencent mTencent = null;
+    private QqResultListener mQqResultListener = null;//登录、分享结果监听
 
     public static QqManage getInstance(Activity context) {
         if (sMQqManage == null) {
@@ -53,23 +54,29 @@ public class QqManage implements IUiListener {
     /**
      * 登录
      */
-    public void login() {
-        if (mTencent != null && !mTencent.isSessionValid())
-            mTencent.login(mContext, "", this);
+    public void login(QqResultListener listener) {
+        if (!checkTecentAvailable())
+            return;
+        mQqResultListener = listener;
+        mTencent.login(mContext, "", this);
     }
 
     /**
      * 注销
      */
     public void logout() {
-        if (mTencent != null && !mTencent.isSessionValid())
-            mTencent.logout(mContext);
+        if (!checkTecentAvailable())
+            return;
+        mTencent.logout(mContext);
     }
 
     /**
      * QQ分享
      */
-    public void shareWithQQ() {
+    public void shareWithQQ(QqResultListener listener) {
+        if (!checkTecentAvailable())
+            return;
+        mQqResultListener = listener;
         Bundle params = new Bundle();
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
         //分享的标题。注：PARAM_TITLE、PARAM_IMAGE_URL、PARAM_SUMMARY不能全为空，最少必须有一个是有值的。
@@ -89,7 +96,10 @@ public class QqManage implements IUiListener {
     /**
      * Qzone分享
      */
-    public void shareWithQzone() {
+    public void shareWithQzone(QqResultListener listener) {
+        if (!checkTecentAvailable())
+            return;
+        mQqResultListener = listener;
         Bundle params = new Bundle();
         params.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
         params.putString(QzoneShare.SHARE_TO_QQ_TITLE, "标题");//必填
@@ -109,10 +119,18 @@ public class QqManage implements IUiListener {
      * 获取用户信息
      */
     public void getUserInfo() {
-        if (mTencent != null && mTencent.isSessionValid()) {
-            UserInfo userInfo = new UserInfo(mContext, mTencent.getQQToken());
-            userInfo.getUserInfo(this);
-        }
+        if (!checkTecentAvailable())
+            return;
+        UserInfo userInfo = new UserInfo(mContext, mTencent.getQQToken());
+        userInfo.getUserInfo(this);
+    }
+
+    private boolean checkTecentAvailable() {
+        if (mTencent == null)
+            return false;
+        if (mTencent.isSessionValid())
+            return false;
+        return true;
     }
 
     @Override
@@ -130,18 +148,28 @@ public class QqManage implements IUiListener {
         }
         if (BuildConfig.LOG_DEBUG)
             Log.i(Config.TAG, "onComplete: " + JsonUtils.toJson(jsonResponse));
+        if (mQqResultListener != null)
+            mQqResultListener.onSuccess(jsonResponse);
     }
 
     @Override
     public void onError(UiError uiError) {
         if (BuildConfig.LOG_DEBUG)
             Log.i(Config.TAG, "onError: " + uiError.errorMessage);
+        if (mQqResultListener != null)
+            mQqResultListener.onFailure();
     }
 
     @Override
     public void onCancel() {
         if (BuildConfig.LOG_DEBUG)
             Log.i(Config.TAG, "onCancel: ");
+    }
+
+    public interface QqResultListener {
+        void onSuccess(JSONObject response);
+
+        void onFailure();
     }
 
 }

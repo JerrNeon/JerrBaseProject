@@ -11,7 +11,7 @@ public class TtpConstants {
 
     public static final String QQ_APP_ID = "100424468";//QQ_APP_ID
 
-    public static final String WECHAT_APP_ID = "";//WeChat_APP_ID
+    public static final String WECHAT_APP_ID = "wxd930ea5d5a258f4f";//WeChat_APP_ID
     public static final String WECHAT_SECRET = "";//WeChat_SECRET
 
     public static final String SINA_APP_KEY = "3921700954";//新浪AppKey

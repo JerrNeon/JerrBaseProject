@@ -57,11 +57,11 @@ public class ShareDialog extends BaseDialog {
 
     private void init() {
         ShareAdapter adapter = new ShareAdapter(mContext);
-        adapter.add(new ShareVO(R.drawable.umeng_socialize_wechat, "微信好友"));
-        adapter.add(new ShareVO(R.drawable.umeng_socialize_wxcircle, "微信朋友圈"));
-        adapter.add(new ShareVO(R.drawable.umeng_socialize_qq, "手机QQ"));
-        adapter.add(new ShareVO(R.drawable.umeng_socialize_qzone, "QQ空间"));
-        adapter.add(new ShareVO(R.drawable.umeng_socialize_sina, "新浪微博"));
+        adapter.add(new ShareVO(R.drawable.ic_appwechat_logo, "微信好友"));
+        adapter.add(new ShareVO(R.drawable.ic_appwxcircle_logo, "微信朋友圈"));
+        adapter.add(new ShareVO(R.drawable.ic_appqq_logo, "手机QQ"));
+        adapter.add(new ShareVO(R.drawable.ic_appqzone_logo, "QQ空间"));
+        adapter.add(new ShareVO(R.drawable.ic_appsina_logo, "新浪微博"));
         mGvShare.setAdapter(adapter);
     }
 

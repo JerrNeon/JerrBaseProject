@@ -3,6 +3,7 @@ package com.cw.jerrbase.ttpapi.share;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.bean.WeChatAccessTokenVO;
@@ -10,24 +11,28 @@ import com.cw.jerrbase.bean.WeChatUserInfoVo;
 import com.cw.jerrbase.net.callback.ResultCallback;
 import com.cw.jerrbase.net.request.OkHttpRequest;
 import com.cw.jerrbase.ttpapi.TtpConstants;
+import com.cw.jerrbase.ttpapi.pay.wxpay.WxPayInfoVO;
 import com.cw.jerrbase.util.ToastUtil;
+import com.cw.jerrbase.wxapi.WXEntryActivity;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.WeakHashMap;
 
-import static com.cw.jerrbase.ttpapi.share.WeChatManage.ShareType.WeiXinFreind;
+import static com.cw.jerrbase.ttpapi.share.WeChatManage.ShareType.WeiXinFriend;
+
 
 /**
  * @version V1.0
  * @ClassName: ${CLASS_NAME}
- * @Description: (微信登录、分享管理)
+ * @Description: (微信登录、分享、支付管理)
  * @create by: chenwei
  * @date 2017/3/9 13:55
  */
@@ -37,8 +42,8 @@ public class WeChatManage {
     private Context mContext;
     private IWXAPI mIWXAPI = null;
 
-    public static enum ShareType {
-        WeiXinFreind, WeiXinCircle
+    public enum ShareType {
+        WeiXinFriend, WeiXinCircle
     }
 
     public static WeChatManage getInstance(Context context) {
@@ -53,10 +58,20 @@ public class WeChatManage {
 
     private WeChatManage(Context context) {
         this.mContext = context;
+        mIWXAPI = WXAPIFactory.createWXAPI(mContext, TtpConstants.WECHAT_APP_ID, true);
+        mIWXAPI.registerApp(TtpConstants.WECHAT_APP_ID);
     }
 
-    public void login() {
-        mIWXAPI = WXAPIFactory.createWXAPI(mContext, TtpConstants.WECHAT_APP_ID, true);
+    /**
+     * 登录
+     *
+     * @param listener 结果监听
+     */
+    public void login(WeChatResultListener listener) {
+        if (mIWXAPI == null)
+            return;
+        if (listener != null)
+            WXEntryActivity.setWeChatResultListener(listener);
         SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";//应用授权作用域
         req.state = "wechat_sdk_demo_test";//用于保持请求和回调的状态，授权请求后原样带回给第三方。可设置为简单的随机数加session进行校验
@@ -66,15 +81,16 @@ public class WeChatManage {
     /**
      * 微信分享
      *
-     * @param type 0:好友分享  1：朋友圈分享
+     * @param type     WeiXinFriend: 好友分享,WeiXinCircle：朋友圈分享
+     * @param listener 结果监听
      */
-    public void share(ShareType type) {
-        IWXAPI iwxapi = WXAPIFactory.createWXAPI(mContext, TtpConstants.WECHAT_APP_ID, true);
-        iwxapi.registerApp(TtpConstants.WECHAT_APP_ID);
-
-        if (!iwxapi.isWXAppInstalled())
-            ToastUtil.showToast(mContext, "您手机未安装微信客户端");
-
+    public void share(ShareType type, WeChatResultListener listener) {
+        if (mIWXAPI == null)
+            return;
+        if (!checkWXAppInstalled())
+            return;
+        if (listener != null)
+            WXEntryActivity.setWeChatResultListener(listener);
         WXWebpageObject wxWebpageObject = new WXWebpageObject();//网页地址分享
         wxWebpageObject.webpageUrl = "url";
 
@@ -84,10 +100,10 @@ public class WeChatManage {
         wxMediaMessage.setThumbImage(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher));//不能超过32k
 
         SendMessageToWX.Req req = new SendMessageToWX.Req();
-        if (type == WeiXinFreind)
+        if (type == WeiXinFriend)
             req.scene = SendMessageToWX.Req.WXSceneSession;//发送到微信好友(默认)
         else {
-            if (iwxapi.getWXAppSupportAPI() >= 0x21020001)
+            if (mIWXAPI.getWXAppSupportAPI() >= 0x21020001)
                 req.scene = SendMessageToWX.Req.WXSceneTimeline;//发送到朋友圈
             else
                 ToastUtil.showToast(mContext, "微信版本太低,不能分享到朋友圈");
@@ -95,11 +111,51 @@ public class WeChatManage {
         req.transaction = String.valueOf(System.currentTimeMillis());//用于唯一标识一个请求
         req.message = wxMediaMessage;
 
-        iwxapi.sendReq(req);
+        mIWXAPI.sendReq(req);
+    }
+
+    /**
+     * 支付
+     *
+     * @param info     支付信息
+     * @param listener 结果监听
+     */
+    public void pay(WxPayInfoVO info, WeChatResultListener listener) {
+        if (mIWXAPI == null)
+            return;
+        if (!checkWXAppInstalled())
+            return;
+        if (listener != null)
+            WXEntryActivity.setWeChatResultListener(listener);
+        PayReq request = new PayReq();
+        request.appId = TtpConstants.WECHAT_APP_ID;
+        request.partnerId = info.getPartnerid();//微信支付分配的商户号
+        //微信返回的支付交易会话ID(服务器生成预付单，获取到prepay_id后将参数再次签名传输给APP发起支付)
+        request.prepayId = info.getPrepayid();
+        request.packageValue = "Sign=WXPay";
+        request.nonceStr = info.getNoncestr();//随机字符串，不长于32位
+        request.timeStamp = info.getTimestamp();
+        request.sign = info.getSign();
+        mIWXAPI.sendReq(request);
     }
 
     public void handleIntent(Intent intent, IWXAPIEventHandler iwxapiEventHandler) {
+        if (mIWXAPI == null)
+            return;
         mIWXAPI.handleIntent(intent, iwxapiEventHandler);
+    }
+
+    /**
+     * 检查微信是否安装
+     *
+     * @return
+     */
+    private boolean checkWXAppInstalled() {
+        if (!mIWXAPI.isWXAppInstalled()) {
+            Toast.makeText(mContext, "您还未安装微信,请安装微信客户端", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -175,5 +231,11 @@ public class WeChatManage {
 
             }
         });
+    }
+
+    public interface WeChatResultListener {
+        void onSuccess(BaseResp resp);
+
+        void onFailure(BaseResp resp);
     }
 }

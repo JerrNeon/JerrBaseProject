@@ -11,6 +11,9 @@ import com.cw.jerrbase.dialog.ShareDialog;
 import com.cw.jerrbase.ttpapi.share.QqManage;
 import com.cw.jerrbase.ttpapi.share.SinaManage;
 import com.cw.jerrbase.ttpapi.share.WeChatManage;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+
+import org.json.JSONObject;
 
 import butterknife.OnClick;
 
@@ -46,19 +49,69 @@ public class ShareActivity extends BaseTbActivity {
                     public void onItemClick(int position) {
                         switch (position) {
                             case 0:
-                                WeChatManage.getInstance(mContext).share(WeChatManage.ShareType.WeiXinFreind);
+                                WeChatManage.getInstance(mContext).share(WeChatManage.ShareType.WeiXinFriend, new WeChatManage.WeChatResultListener() {
+                                    @Override
+                                    public void onSuccess(BaseResp resp) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(BaseResp resp) {
+
+                                    }
+                                });
                                 break;
                             case 1:
-                                WeChatManage.getInstance(mContext).share(WeChatManage.ShareType.WeiXinCircle);
+                                WeChatManage.getInstance(mContext).share(WeChatManage.ShareType.WeiXinCircle, new WeChatManage.WeChatResultListener() {
+                                    @Override
+                                    public void onSuccess(BaseResp resp) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(BaseResp resp) {
+
+                                    }
+                                });
                                 break;
                             case 2:
-                                QqManage.getInstance(mContext).shareWithQQ();
+                                QqManage.getInstance(mContext).shareWithQQ(new QqManage.QqResultListener() {
+                                    @Override
+                                    public void onSuccess(JSONObject response) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+                                });
                                 break;
                             case 3:
-                                QqManage.getInstance(mContext).shareWithQzone();
+                                QqManage.getInstance(mContext).shareWithQzone(new QqManage.QqResultListener() {
+                                    @Override
+                                    public void onSuccess(JSONObject response) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+                                });
                                 break;
                             case 4:
-                                SinaManage.getInstance(mContext).share();
+                                SinaManage.getInstance(mContext).share(new SinaManage.SinaResultListener() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+                                });
                                 break;
                             default:
                                 break;
@@ -72,13 +125,43 @@ public class ShareActivity extends BaseTbActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_qq:
-                QqManage.getInstance(mContext).login();
+                QqManage.getInstance(mContext).login(new QqManage.QqResultListener() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
                 break;
             case R.id.tv_weixin:
-                WeChatManage.getInstance(mContext).login();
+                WeChatManage.getInstance(mContext).login(new WeChatManage.WeChatResultListener() {
+                    @Override
+                    public void onSuccess(BaseResp resp) {
+
+                    }
+
+                    @Override
+                    public void onFailure(BaseResp resp) {
+
+                    }
+                });
                 break;
             case R.id.tv_sina:
-                SinaManage.getInstance(mContext).login();
+                SinaManage.getInstance(mContext).login(new SinaManage.SinaResultListener() {
+                    @Override
+                    public void onSuccess() {
+                        
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
                 break;
         }
     }
