@@ -18,6 +18,7 @@ import com.sina.weibo.sdk.api.share.WeiboShareSDK;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
+import com.sina.weibo.sdk.auth.sso.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.constant.WBConstants;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -33,8 +34,9 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
 
     private static SinaManage sSinaManage = null;
     private Activity mContext = null;
-    private SsoHandler mSsoHandler = null;
-    private IWeiboShareAPI mIWeiboShareAPI = null;
+    private SsoHandler mSsoHandler = null;//授权关键类(登录仅用到此类)
+    private IWeiboShareAPI mIWeiboShareAPI = null;//分享关键类
+    private AuthInfo mAuthInfo = null;
     private SinaResultListener mSinaResultListener = null;//登录、分享结果监听
 
     public static SinaManage getInstance(Activity context) {
@@ -48,11 +50,23 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
     }
 
     private SinaManage(Activity context) {
-        this.mContext = context;
-        AuthInfo authInfo = new AuthInfo(context, TtpConstants.SINA_APP_KEY, TtpConstants.SINA_REDIRECT_URL, TtpConstants.SINA_SCOPE);
-        mSsoHandler = new SsoHandler(context, authInfo);
+        if (mContext == null)
+            this.mContext = context;
+    }
+
+    /**
+     * 分享时在onCreate()方法中调用
+     *
+     * @param savedInstanceState
+     * @param intent
+     */
+    public void onCreate(Bundle savedInstanceState, Intent intent) {
+        if (mAuthInfo == null)
+            mAuthInfo = new AuthInfo(mContext, TtpConstants.SINA_APP_KEY, TtpConstants.SINA_REDIRECT_URL, TtpConstants.SINA_SCOPE);
         mIWeiboShareAPI = WeiboShareSDK.createWeiboAPI(mContext, TtpConstants.SINA_APP_KEY);
         mIWeiboShareAPI.registerApp();//将应用注册到微博客户端
+        if (savedInstanceState != null)
+            handleWeiboResponse(intent);
     }
 
     /**
@@ -61,8 +75,9 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
      * @param listener 结果监听
      */
     public void login(SinaResultListener listener) {
-        if (mSsoHandler == null)
-            return;
+        if (mAuthInfo == null)
+            mAuthInfo = new AuthInfo(mContext, TtpConstants.SINA_APP_KEY, TtpConstants.SINA_REDIRECT_URL, TtpConstants.SINA_SCOPE);
+        mSsoHandler = new SsoHandler(mContext, mAuthInfo);
         mSinaResultListener = listener;
         mSsoHandler.authorize(this);
     }
@@ -98,14 +113,31 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
         SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
         request.transaction = String.valueOf(System.currentTimeMillis());
         request.multiMessage = message;
-        mIWeiboShareAPI.sendRequest(mContext, request);
+        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(mContext);
+        String token = "";
+        if (accessToken != null) {
+            token = accessToken.getToken();
+        }
+        mIWeiboShareAPI.sendRequest(mContext, request, mAuthInfo, token, this);
     }
 
+    /**
+     * 授权时在Activity中onActivityResult()方法中调用
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void authorizeCallBack(int requestCode, int resultCode, Intent data) {
         if (mSsoHandler != null)
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
     }
 
+    /**
+     * 分享时在Activity中onNewIntent()方法中调用
+     *
+     * @param intent
+     */
     public void handleWeiboResponse(Intent intent) {
         if (mIWeiboShareAPI != null)
             mIWeiboShareAPI.handleWeiboResponse(intent, this);
@@ -118,6 +150,7 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
         Oauth2AccessToken mAccessToken = Oauth2AccessToken.parseAccessToken(bundle);
         if (mAccessToken.isSessionValid()) {
             // 保存 Token 到 SharedPreferences
+            AccessTokenKeeper.writeAccessToken(mContext, mAccessToken);
             if (mSinaResultListener != null)
                 mSinaResultListener.onSuccess();
         } else {

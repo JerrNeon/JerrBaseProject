@@ -3,11 +3,17 @@ package com.cw.jerrbase.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
+import com.cw.jerrbase.BuildConfig;
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.activity.BaseTbActivity;
+import com.cw.jerrbase.common.Config;
 import com.cw.jerrbase.dialog.ShareDialog;
+import com.cw.jerrbase.ttpapi.pay.alipay.AlipayManage;
+import com.cw.jerrbase.ttpapi.pay.unionpay.UnionPayManage;
+import com.cw.jerrbase.ttpapi.pay.wxpay.WxPayInfoVO;
 import com.cw.jerrbase.ttpapi.share.QqManage;
 import com.cw.jerrbase.ttpapi.share.SinaManage;
 import com.cw.jerrbase.ttpapi.share.WeChatManage;
@@ -36,8 +42,9 @@ public class ShareActivity extends BaseTbActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitleName("分享和登录");
+        setTitleName("分享、登录和支付");
         setRightIcon(R.drawable.ic_share);
+        SinaManage.getInstance(mContext).onCreate(savedInstanceState, getIntent());
     }
 
     @Override
@@ -121,7 +128,7 @@ public class ShareActivity extends BaseTbActivity {
     }
 
 
-    @OnClick({R.id.tv_qq, R.id.tv_weixin, R.id.tv_sina})
+    @OnClick({R.id.tv_qq, R.id.tv_weixin, R.id.tv_sina, R.id.tv_weChatPay, R.id.tv_aliPay, R.id.tv_unionPay})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_qq:
@@ -154,12 +161,60 @@ public class ShareActivity extends BaseTbActivity {
                 SinaManage.getInstance(mContext).login(new SinaManage.SinaResultListener() {
                     @Override
                     public void onSuccess() {
-                        
+
                     }
 
                     @Override
                     public void onFailure() {
 
+                    }
+                });
+                break;
+            case R.id.tv_weChatPay:
+                WxPayInfoVO wxPayInfoVO = new WxPayInfoVO();
+                WeChatManage.getInstance(mContext).pay(wxPayInfoVO, new WeChatManage.WeChatResultListener() {
+                    @Override
+                    public void onSuccess(BaseResp resp) {
+                        if (BuildConfig.LOG_DEBUG)
+                            Log.i(Config.PAY, "onSuccess: ");
+                    }
+
+                    @Override
+                    public void onFailure(BaseResp resp) {
+                        if (BuildConfig.LOG_DEBUG)
+                            Log.i(Config.PAY, "onFailure: ");
+                    }
+                });
+                break;
+            case R.id.tv_aliPay:
+                new AlipayManage.Builder(mContext)
+                        .setAlipayType(AlipayManage.AlipayType.PAY)
+                        .setAlipayResultListener(new AlipayManage.AlipayResultListener() {
+                            @Override
+                            public void onSuccess() {
+                                if (BuildConfig.LOG_DEBUG)
+                                    Log.i(Config.PAY, "onSuccess: ");
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                if (BuildConfig.LOG_DEBUG)
+                                    Log.i(Config.PAY, "onFailure: ");
+                            }
+                        }).build();
+                break;
+            case R.id.tv_unionPay:
+                UnionPayManage.getInstance(mContext).startPay(new UnionPayManage.UnionPayResultListener() {
+                    @Override
+                    public void onSuccess() {
+                        if (BuildConfig.LOG_DEBUG)
+                            Log.i(Config.PAY, "onSuccess: ");
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        if (BuildConfig.LOG_DEBUG)
+                            Log.i(Config.PAY, "onFailure: ");
                     }
                 });
                 break;
@@ -169,7 +224,6 @@ public class ShareActivity extends BaseTbActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        setIntent(intent);
         SinaManage.getInstance(mContext).handleWeiboResponse(intent);
     }
 
@@ -178,5 +232,6 @@ public class ShareActivity extends BaseTbActivity {
         super.onActivityResult(requestCode, resultCode, data);
         SinaManage.getInstance(mContext).authorizeCallBack(requestCode, resultCode, data);
         QqManage.getInstance(mContext).onActivityResultData(requestCode, resultCode, data);
+        UnionPayManage.getInstance(mContext).onActivityResult(requestCode, resultCode, data);
     }
 }

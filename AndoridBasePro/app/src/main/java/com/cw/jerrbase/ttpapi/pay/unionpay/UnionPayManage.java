@@ -37,25 +37,15 @@ public class UnionPayManage implements Callback, Runnable {
     private KProgressHUD mHUD = null;//加载框
     private UnionPayResultListener mUnionPayResultListener = null;//支付结果监听
 
-    private UnionPayManage() {
-    }
-
     private UnionPayManage(Activity mContext) {
-        this.mContext = mContext;
-        this.mHandler = new Handler(this);
-        mHUD = KProgressHUD.create(mContext)
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setDimAmount(0.5f);
-    }
-
-    public static UnionPayManage getInstance() {
-        if (instance == null) {
-            synchronized (UnionPayManage.class) {
-                if (instance == null)
-                    instance = new UnionPayManage();
-            }
-        }
-        return instance;
+        if (mContext == null)
+            this.mContext = mContext;
+        if (mHandler == null)
+            this.mHandler = new Handler(this);
+        if (mHUD == null)
+            mHUD = KProgressHUD.create(mContext)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setDimAmount(0.5f);
     }
 
     public static UnionPayManage getInstance(Activity context) {
@@ -121,13 +111,13 @@ public class UnionPayManage implements Callback, Runnable {
     @Override
     public boolean handleMessage(Message msg) {
         if (BuildConfig.LOG_DEBUG)
-            Log.i(Config.PAY, msg.obj + "");
+            Log.i(Config.PAY, "UnionPayTn: " + msg.obj);
         if (mHUD.isShowing())
             mHUD.dismiss();
         if (msg.obj == null || ((String) msg.obj).length() == 0) {
             new AlertDialog.Builder(mContext)
                     .setTitle("错误提示")
-                    .setMessage("网络连接失败,请重试!?")
+                    .setMessage("网络连接失败,请重试!")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -150,7 +140,7 @@ public class UnionPayManage implements Callback, Runnable {
     private void doStartUnionPayPlugin(Activity activity, String tn, String mode) {
         int ret = UPPayAssistEx.startPay(activity, null, null, tn, mode);
         if (BuildConfig.LOG_DEBUG)
-            Log.e(Config.PAY, ret + "");
+            Log.e(Config.PAY, "UnionPayResult: " + ret);
         if (!UPPayAssistEx.checkInstalled(mContext))//是否安装了银联Apk
             return;
         if (ret == UnionPayConstants.PLUGIN_NEED_UPGRADE || ret == UnionPayConstants.PLUGIN_NOT_INSTALLED) {
@@ -186,9 +176,9 @@ public class UnionPayManage implements Callback, Runnable {
      * @param data
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null)
-            return;
+        if (data == null) return;
         String str = data.getExtras().getString("pay_result");
+        if (str == null) return;
         if (str.equalsIgnoreCase("success")) {
             // 如果想对结果数据验签，可使用下面这段代码，但建议不验签，直接去商户后台查询交易结果
             if (data.hasExtra("result_data")) {

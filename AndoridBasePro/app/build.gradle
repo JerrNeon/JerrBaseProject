@@ -84,10 +84,10 @@ dependencies {
     compile files('libs/BaiduLBS_Android.jar')//百度地图
     compile files('libs/open_sdk_r5781.jar')//QQ
     compile files('libs/mta-sdk-1.6.2.jar')//QQ
-    compile files('libs/weiboSDKCore_3.1.4.jar')//新浪
     compile files('libs/alipaySdk-20161222.jar')//支付宝
     compile files('libs/UPPayAssistEx.jar')//银联
     compile files('libs/UPPayPluginExPro.jar')//银联
+    compile(name: 'openDefault-1.0.0', ext: 'aar')//新浪微博
 
     compile dep["support-v4"]
     compile dep["appcompat-v7"]

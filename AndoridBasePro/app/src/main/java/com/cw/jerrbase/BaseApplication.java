@@ -29,7 +29,7 @@ public class BaseApplication extends Application {
         //initCrashHandler();
         initAutoLayout();
         initLeakCanary();
-        initOkGo();
+        //initOkGo();
         initStetho();
         initBaiduMap();
     }

@@ -47,8 +47,10 @@ public class QqManage implements IUiListener {
 
 
     private QqManage(Activity context) {
-        this.mContext = context;
-        mTencent = Tencent.createInstance(TtpConstants.QQ_APP_ID, mContext.getApplicationContext());
+        if (mContext == null)
+            this.mContext = context;
+        if (mTencent == null)
+            mTencent = Tencent.createInstance(TtpConstants.QQ_APP_ID, mContext.getApplicationContext());
     }
 
     /**

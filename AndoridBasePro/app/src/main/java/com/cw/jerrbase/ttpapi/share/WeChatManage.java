@@ -57,9 +57,12 @@ public class WeChatManage {
     }
 
     private WeChatManage(Context context) {
-        this.mContext = context;
-        mIWXAPI = WXAPIFactory.createWXAPI(mContext, TtpConstants.WECHAT_APP_ID, true);
-        mIWXAPI.registerApp(TtpConstants.WECHAT_APP_ID);
+        if (mContext == null)
+            this.mContext = context;
+        if (mIWXAPI == null)
+            mIWXAPI = WXAPIFactory.createWXAPI(mContext, TtpConstants.WECHAT_APP_ID, true);
+        if (mIWXAPI != null)
+            mIWXAPI.registerApp(TtpConstants.WECHAT_APP_ID);
     }
 
     /**

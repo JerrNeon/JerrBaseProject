@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableRight="@drawable/ic_right_arrow"
+        android:drawableLeft="@drawable/ic_appqq_logo"
+        android:gravity="center_vertical"
         android:padding="16dp"
         android:text="QQ登录"/>
 
@@ -18,7 +20,9 @@
         android:id="@+id/tv_weixin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_appwechat_logo"
         android:drawableRight="@drawable/ic_right_arrow"
+        android:gravity="center_vertical"
         android:padding="16dp"
         android:text="微信登录"/>
 
@@ -26,9 +30,38 @@
         android:id="@+id/tv_sina"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_appsina_logo"
         android:drawableRight="@drawable/ic_right_arrow"
+        android:gravity="center_vertical"
         android:padding="16dp"
         android:text="新浪微博登录"/>
+
+
+    <TextView
+        android:id="@+id/tv_weChatPay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_appwechat_logo"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:text="微信支付"/>
+
+    <TextView
+        android:id="@+id/tv_aliPay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="支付宝支付"/>
+
+    <TextView
+        android:id="@+id/tv_unionPay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:padding="16dp"
+        android:text="银联支付"/>
 
     <include layout="@layout/base_line_layout"/>
 

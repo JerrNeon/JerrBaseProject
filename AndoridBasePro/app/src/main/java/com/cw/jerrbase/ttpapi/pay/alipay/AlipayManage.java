@@ -36,7 +36,7 @@ public class AlipayManage implements Handler.Callback {
     /**
      * 支付类型
      */
-    public static enum AlipayType {
+    public enum AlipayType {
         PAY, AUTH
     }
 
@@ -80,7 +80,7 @@ public class AlipayManage implements Handler.Callback {
                 PayTask alipay = new PayTask(mContext);
                 Map<String, String> result = alipay.payV2(orderInfo, true);
                 if (BuildConfig.LOG_DEBUG)
-                    Log.i(Config.PAY, "AlipayResult：" + result.toString());
+                    Log.i(Config.PAY, "AliPayResult：" + result.toString());
 
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
