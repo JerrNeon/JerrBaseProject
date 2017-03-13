@@ -33,6 +33,11 @@ import butterknife.OnClick;
  */
 public class ShareActivity extends BaseTbActivity {
 
+    private WeChatManage mWeChatManage = null;
+    private QqManage mQqManage = null;
+    private SinaManage mSinaManage = null;
+    private AlipayManage mAlipayManage = null;
+    private UnionPayManage mUnionPayManage = null;
 
     @Override
     protected int getLayoutResourceId() {
@@ -44,7 +49,16 @@ public class ShareActivity extends BaseTbActivity {
         super.onCreate(savedInstanceState);
         setTitleName("分享、登录和支付");
         setRightIcon(R.drawable.ic_share);
-        SinaManage.getInstance(mContext).onCreate(savedInstanceState, getIntent());
+        init();
+        mSinaManage.onCreate(savedInstanceState, getIntent());
+    }
+
+    private void init() {
+        mWeChatManage = WeChatManage.getInstance(mContext);
+        mQqManage = QqManage.getInstance(mContext);
+        mSinaManage = SinaManage.getInstance(mContext);
+        mAlipayManage = AlipayManage.getInstance(mContext);
+        mUnionPayManage = UnionPayManage.getInstance();
     }
 
     @Override
@@ -56,7 +70,7 @@ public class ShareActivity extends BaseTbActivity {
                     public void onItemClick(int position) {
                         switch (position) {
                             case 0:
-                                WeChatManage.getInstance(mContext).share(WeChatManage.ShareType.WeiXinFriend, new WeChatManage.WeChatResultListener() {
+                                mWeChatManage.share(mActivity,WeChatManage.ShareType.WeiXinFriend, new WeChatManage.WeChatResultListener() {
                                     @Override
                                     public void onSuccess(BaseResp resp) {
 
@@ -69,7 +83,7 @@ public class ShareActivity extends BaseTbActivity {
                                 });
                                 break;
                             case 1:
-                                WeChatManage.getInstance(mContext).share(WeChatManage.ShareType.WeiXinCircle, new WeChatManage.WeChatResultListener() {
+                                mWeChatManage.share(mActivity,WeChatManage.ShareType.WeiXinCircle, new WeChatManage.WeChatResultListener() {
                                     @Override
                                     public void onSuccess(BaseResp resp) {
 
@@ -82,7 +96,7 @@ public class ShareActivity extends BaseTbActivity {
                                 });
                                 break;
                             case 2:
-                                QqManage.getInstance(mContext).shareWithQQ(new QqManage.QqResultListener() {
+                                mQqManage.shareWithQQ(mActivity, new QqManage.QqResultListener() {
                                     @Override
                                     public void onSuccess(JSONObject response) {
 
@@ -95,7 +109,7 @@ public class ShareActivity extends BaseTbActivity {
                                 });
                                 break;
                             case 3:
-                                QqManage.getInstance(mContext).shareWithQzone(new QqManage.QqResultListener() {
+                                mQqManage.shareWithQzone(mActivity, new QqManage.QqResultListener() {
                                     @Override
                                     public void onSuccess(JSONObject response) {
 
@@ -108,7 +122,7 @@ public class ShareActivity extends BaseTbActivity {
                                 });
                                 break;
                             case 4:
-                                SinaManage.getInstance(mContext).share(new SinaManage.SinaResultListener() {
+                                mSinaManage.share(mActivity, new SinaManage.SinaResultListener() {
                                     @Override
                                     public void onSuccess() {
 
@@ -132,7 +146,7 @@ public class ShareActivity extends BaseTbActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_qq:
-                QqManage.getInstance(mContext).login(new QqManage.QqResultListener() {
+                mQqManage.login(mActivity, new QqManage.QqResultListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
 
@@ -145,7 +159,7 @@ public class ShareActivity extends BaseTbActivity {
                 });
                 break;
             case R.id.tv_weixin:
-                WeChatManage.getInstance(mContext).login(new WeChatManage.WeChatResultListener() {
+                mWeChatManage.login(mActivity,new WeChatManage.WeChatResultListener() {
                     @Override
                     public void onSuccess(BaseResp resp) {
 
@@ -158,7 +172,7 @@ public class ShareActivity extends BaseTbActivity {
                 });
                 break;
             case R.id.tv_sina:
-                SinaManage.getInstance(mContext).login(new SinaManage.SinaResultListener() {
+                mSinaManage.login(mActivity, new SinaManage.SinaResultListener() {
                     @Override
                     public void onSuccess() {
 
@@ -172,7 +186,7 @@ public class ShareActivity extends BaseTbActivity {
                 break;
             case R.id.tv_weChatPay:
                 WxPayInfoVO wxPayInfoVO = new WxPayInfoVO();
-                WeChatManage.getInstance(mContext).pay(wxPayInfoVO, new WeChatManage.WeChatResultListener() {
+                mWeChatManage.pay(mActivity,wxPayInfoVO, new WeChatManage.WeChatResultListener() {
                     @Override
                     public void onSuccess(BaseResp resp) {
                         if (BuildConfig.LOG_DEBUG)
@@ -187,24 +201,22 @@ public class ShareActivity extends BaseTbActivity {
                 });
                 break;
             case R.id.tv_aliPay:
-                new AlipayManage.Builder(mContext)
-                        .setAlipayType(AlipayManage.AlipayType.PAY)
-                        .setAlipayResultListener(new AlipayManage.AlipayResultListener() {
-                            @Override
-                            public void onSuccess() {
-                                if (BuildConfig.LOG_DEBUG)
-                                    Log.i(Config.PAY, "onSuccess: ");
-                            }
+                mAlipayManage.pay(mActivity, new AlipayManage.AlipayResultListener() {
+                    @Override
+                    public void onSuccess() {
+                        if (BuildConfig.LOG_DEBUG)
+                            Log.i(Config.PAY, "onSuccess: ");
+                    }
 
-                            @Override
-                            public void onFailure() {
-                                if (BuildConfig.LOG_DEBUG)
-                                    Log.i(Config.PAY, "onFailure: ");
-                            }
-                        }).build();
+                    @Override
+                    public void onFailure() {
+                        if (BuildConfig.LOG_DEBUG)
+                            Log.i(Config.PAY, "onFailure: ");
+                    }
+                });
                 break;
             case R.id.tv_unionPay:
-                UnionPayManage.getInstance(mContext).startPay(new UnionPayManage.UnionPayResultListener() {
+                mUnionPayManage.startPay(mActivity, new UnionPayManage.UnionPayResultListener() {
                     @Override
                     public void onSuccess() {
                         if (BuildConfig.LOG_DEBUG)
@@ -224,14 +236,14 @@ public class ShareActivity extends BaseTbActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        SinaManage.getInstance(mContext).handleWeiboResponse(intent);
+        mSinaManage.handleWeiboResponse(intent);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        SinaManage.getInstance(mContext).authorizeCallBack(requestCode, resultCode, data);
-        QqManage.getInstance(mContext).onActivityResultData(requestCode, resultCode, data);
-        UnionPayManage.getInstance(mContext).onActivityResult(requestCode, resultCode, data);
+        mSinaManage.authorizeCallBack(requestCode, resultCode, data);
+        mQqManage.onActivityResultData(requestCode, resultCode, data);
+        mUnionPayManage.onActivityResult(requestCode, resultCode, data);
     }
 }

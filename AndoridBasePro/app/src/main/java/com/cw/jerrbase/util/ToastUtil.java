@@ -87,7 +87,7 @@ public class ToastUtil {
 
 	public static void showToast(Context context, String s) {
 		if (mToast == null) {
-			mToast = Toast.makeText(context, s, Toast.LENGTH_SHORT);
+			mToast = Toast.makeText(context.getApplicationContext(), s, Toast.LENGTH_SHORT);
 			mToast.show();
 			oneTime = System.currentTimeMillis();
 		} else {

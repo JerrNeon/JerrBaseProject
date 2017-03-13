@@ -31,6 +31,6 @@ public class ImageStatusActivity extends BaseActivity {
 
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setTranslucentForImageView(mContext, 0, iv);
+        StatusBarUtil.setTranslucentForImageView(mActivity, 0, iv);
     }
 }

@@ -60,7 +60,7 @@ public class CollapsingToolbarActivity extends BaseActivity {
 
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setTranslucentForCoordinatorLayout(mContext,122);
+        StatusBarUtil.setTranslucentForCoordinatorLayout(mActivity,122);
     }
 
     private void initCollapsingToolbarLayout() {

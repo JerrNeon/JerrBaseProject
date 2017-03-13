@@ -67,13 +67,9 @@ public class BaiduMapManage {
     private BaiduMapManage() {
     }
 
-    public static BaiduMapManage getInstance() {
-        if (instance == null) {
-            synchronized (BaiduMapManage.class) {
-                if (instance == null)
-                    instance = new BaiduMapManage();
-            }
-        }
+    public static synchronized BaiduMapManage getInstance() {
+        if (instance == null)
+            instance = new BaiduMapManage();
         return instance;
     }
 
@@ -83,6 +79,7 @@ public class BaiduMapManage {
     private void initLoc() {
         mLocationClient = new LocationClient(BaseApplication.getInstance().getApplicationContext());
         myListener = new MyLocationListener();
+        mLocationClient.registerLocationListener(myListener);
 
         mOption = new LocationClientOption();
         mOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -113,13 +110,16 @@ public class BaiduMapManage {
     public void startLoc(@NonNull LoctionResultListener listener) {
         initLoc();
         mLoctionResultListener = listener;
-        mLocationClient.registerLocationListener(myListener);
         mLocationClient.start();
     }
 
+    /**
+     * 更新定位图层
+     *
+     * @param baiduMap
+     * @param location
+     */
     public void updateLocationMapStatus(@NonNull BaiduMap baiduMap, @NonNull BDLocation location) {
-//        cityName = location.getCity();
-//        baiduMap.setMyLocationEnabled(true);
         LatLng locLng = new LatLng(location.getLatitude(), location.getLongitude());
         MyLocationData myLocationData = new MyLocationData.Builder()
                 .accuracy(location.getRadius())

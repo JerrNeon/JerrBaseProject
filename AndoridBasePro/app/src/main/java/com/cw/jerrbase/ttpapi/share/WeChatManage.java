@@ -1,9 +1,9 @@
 package com.cw.jerrbase.ttpapi.share;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.widget.Toast;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.bean.WeChatAccessTokenVO;
@@ -46,21 +46,19 @@ public class WeChatManage {
         WeiXinFriend, WeiXinCircle
     }
 
-    public static WeChatManage getInstance(Context context) {
-        if (sWeChatManage == null) {
-            synchronized (WeChatManage.class) {
-                if (sWeChatManage == null)
-                    sWeChatManage = new WeChatManage(context);
-            }
-        }
+    public static synchronized WeChatManage getInstance(Context context) {
+        if (sWeChatManage == null)
+            sWeChatManage = new WeChatManage(context.getApplicationContext());
         return sWeChatManage;
     }
 
     private WeChatManage(Context context) {
-        if (mContext == null)
-            this.mContext = context;
+        this.mContext = context;
+    }
+
+    private void init(Activity activity) {
         if (mIWXAPI == null)
-            mIWXAPI = WXAPIFactory.createWXAPI(mContext, TtpConstants.WECHAT_APP_ID, true);
+            mIWXAPI = WXAPIFactory.createWXAPI(activity, TtpConstants.WECHAT_APP_ID);
         if (mIWXAPI != null)
             mIWXAPI.registerApp(TtpConstants.WECHAT_APP_ID);
     }
@@ -70,8 +68,11 @@ public class WeChatManage {
      *
      * @param listener 结果监听
      */
-    public void login(WeChatResultListener listener) {
+    public void login(Activity activity, WeChatResultListener listener) {
+        init(activity);
         if (mIWXAPI == null)
+            return;
+        if (!checkWXAppInstalled())
             return;
         if (listener != null)
             WXEntryActivity.setWeChatResultListener(listener);
@@ -87,7 +88,8 @@ public class WeChatManage {
      * @param type     WeiXinFriend: 好友分享,WeiXinCircle：朋友圈分享
      * @param listener 结果监听
      */
-    public void share(ShareType type, WeChatResultListener listener) {
+    public void share(Activity activity, ShareType type, WeChatResultListener listener) {
+        init(activity);
         if (mIWXAPI == null)
             return;
         if (!checkWXAppInstalled())
@@ -123,7 +125,8 @@ public class WeChatManage {
      * @param info     支付信息
      * @param listener 结果监听
      */
-    public void pay(WxPayInfoVO info, WeChatResultListener listener) {
+    public void pay(Activity activity, WxPayInfoVO info, WeChatResultListener listener) {
+        init(activity);
         if (mIWXAPI == null)
             return;
         if (!checkWXAppInstalled())
@@ -155,8 +158,8 @@ public class WeChatManage {
      */
     private boolean checkWXAppInstalled() {
         if (!mIWXAPI.isWXAppInstalled()) {
-            Toast.makeText(mContext, "您还未安装微信,请安装微信客户端", Toast.LENGTH_SHORT).show();
-            return false;
+            //Toast.makeText(mContext, "您还未安装微信,请安装微信客户端", Toast.LENGTH_SHORT).show();
+            return true;
         }
         return true;
     }

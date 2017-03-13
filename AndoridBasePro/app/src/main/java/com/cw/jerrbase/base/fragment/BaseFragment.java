@@ -1,6 +1,7 @@
 package com.cw.jerrbase.base.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,13 +26,8 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment extends Fragment {
 
-    /**
-     * Activity对象
-     */
-    protected Activity mContext;
-    /**
-     * Fragment对象
-     */
+    protected Activity mActivity = null;
+    protected Context mContext = null;
     protected Fragment mFragment = null;
     /**
      * fragment布局
@@ -48,7 +44,8 @@ public abstract class BaseFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         mView = inflater.inflate(getLayoutResourceId(), null, false);
         unbinder = ButterKnife.bind(this, mView);
-        mContext = getActivity();
+        mActivity = getActivity();
+        mContext = getActivity().getApplicationContext();
         mFragment = this;
         return mView;
     }
@@ -131,9 +128,9 @@ public abstract class BaseFragment extends Fragment {
      * @param flag 数据
      */
     protected void openActivity(Class<?> cls, int flag) {
-        Intent intent = new Intent(mContext, cls);
+        Intent intent = new Intent(mActivity, cls);
         intent.setFlags(flag);
-        mContext.startActivity(intent);
+        mActivity.startActivity(intent);
     }
 
     /**
@@ -143,11 +140,11 @@ public abstract class BaseFragment extends Fragment {
      * @param bundle 数据
      */
     protected void openActivity(Class<?> cls, Bundle bundle) {
-        Intent intent = new Intent(mContext, cls);
+        Intent intent = new Intent(mActivity, cls);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
-        mContext.startActivity(intent);
+        mActivity.startActivity(intent);
     }
 
     /**
@@ -157,7 +154,7 @@ public abstract class BaseFragment extends Fragment {
      * @param bundle 数据
      */
     protected void openActivity(Class<?> cls, Bundle bundle, int requestCode) {
-        Intent intent = new Intent(mContext, cls);
+        Intent intent = new Intent(mActivity, cls);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
@@ -173,12 +170,12 @@ public abstract class BaseFragment extends Fragment {
      * @param targetPackageName 要跳转的类的包名
      */
     protected void openActivity(Class<?> cls, String targetPackageName, Bundle bundle) {
-        Intent intent = new Intent(mContext, cls);
+        Intent intent = new Intent(mActivity, cls);
         intent.putExtra(BaseActivity.class.getName(), targetPackageName);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
-        mContext.startActivity(intent);
+        mActivity.startActivity(intent);
     }
 
     protected abstract int getLayoutResourceId();
@@ -186,6 +183,8 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mActivity != null)
+            mActivity = null;
         if (mContext != null)
             mContext = null;
         if (mFragment != null)

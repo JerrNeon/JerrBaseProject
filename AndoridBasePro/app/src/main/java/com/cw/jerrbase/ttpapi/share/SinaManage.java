@@ -1,8 +1,11 @@
 package com.cw.jerrbase.ttpapi.share;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cw.jerrbase.BuildConfig;
@@ -33,25 +36,20 @@ import com.sina.weibo.sdk.exception.WeiboException;
 public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
 
     private static SinaManage sSinaManage = null;
-    private Activity mContext = null;
+    private Context mContext = null;
     private SsoHandler mSsoHandler = null;//授权关键类(登录仅用到此类)
     private IWeiboShareAPI mIWeiboShareAPI = null;//分享关键类
     private AuthInfo mAuthInfo = null;
     private SinaResultListener mSinaResultListener = null;//登录、分享结果监听
 
-    public static SinaManage getInstance(Activity context) {
-        if (sSinaManage == null) {
-            synchronized (SinaManage.class) {
-                if (sSinaManage == null)
-                    sSinaManage = new SinaManage(context);
-            }
-        }
+    public static synchronized SinaManage getInstance(Context context) {
+        if (sSinaManage == null)
+            sSinaManage = new SinaManage(context.getApplicationContext());
         return sSinaManage;
     }
 
-    private SinaManage(Activity context) {
-        if (mContext == null)
-            this.mContext = context;
+    private SinaManage(Context context) {
+        this.mContext = context;
     }
 
     /**
@@ -60,7 +58,7 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
      * @param savedInstanceState
      * @param intent
      */
-    public void onCreate(Bundle savedInstanceState, Intent intent) {
+    public void onCreate(@Nullable Bundle savedInstanceState, Intent intent) {
         if (mAuthInfo == null)
             mAuthInfo = new AuthInfo(mContext, TtpConstants.SINA_APP_KEY, TtpConstants.SINA_REDIRECT_URL, TtpConstants.SINA_SCOPE);
         mIWeiboShareAPI = WeiboShareSDK.createWeiboAPI(mContext, TtpConstants.SINA_APP_KEY);
@@ -74,10 +72,10 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
      *
      * @param listener 结果监听
      */
-    public void login(SinaResultListener listener) {
+    public void login(@NonNull Activity context, @NonNull SinaResultListener listener) {
         if (mAuthInfo == null)
             mAuthInfo = new AuthInfo(mContext, TtpConstants.SINA_APP_KEY, TtpConstants.SINA_REDIRECT_URL, TtpConstants.SINA_SCOPE);
-        mSsoHandler = new SsoHandler(mContext, mAuthInfo);
+        mSsoHandler = new SsoHandler(context, mAuthInfo);
         mSinaResultListener = listener;
         mSsoHandler.authorize(this);
     }
@@ -87,10 +85,10 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
      *
      * @param listener 结果监听
      */
-    public void share(SinaResultListener listener) {
+    public void share(@NonNull Activity context, @NonNull SinaResultListener listener) {
         if (mIWeiboShareAPI == null) return;
         mSinaResultListener = listener;
-        sendMultiMessage(true, false, false, false, false, false);
+        sendMultiMessage(context, true, false, false, false, false, false);
     }
 
     /**
@@ -103,7 +101,7 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
      * @param hasVideo
      * @param hasVoice
      */
-    private void sendMultiMessage(boolean hasText, boolean hasImage, boolean hasWebpage, boolean hasMusic, boolean hasVideo, boolean hasVoice) {
+    private void sendMultiMessage(@NonNull Activity context, boolean hasText, boolean hasImage, boolean hasWebpage, boolean hasMusic, boolean hasVideo, boolean hasVoice) {
         WeiboMultiMessage message = new WeiboMultiMessage();
         if (hasText) {
             TextObject textObject = new TextObject();
@@ -118,7 +116,7 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
         if (accessToken != null) {
             token = accessToken.getToken();
         }
-        mIWeiboShareAPI.sendRequest(mContext, request, mAuthInfo, token, this);
+        mIWeiboShareAPI.sendRequest(context, request, mAuthInfo, token, this);
     }
 
     /**

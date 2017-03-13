@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Handler.Callback;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
@@ -26,42 +26,39 @@ import java.net.URLConnection;
 /**
  * 银联支付
  */
-public class UnionPayManage implements Callback, Runnable {
+public class UnionPayManage implements Runnable {
 
     //Mode参数解释： "00" - 启动银联正式环境 "01" - 连接银联测试环境
     private String mMode = UnionPayConstants.UNION_OFFICIAL_CONNECT;
 
     private static UnionPayManage instance = null;
-    private Activity mContext;
     private Handler mHandler = null;
     private KProgressHUD mHUD = null;//加载框
     private UnionPayResultListener mUnionPayResultListener = null;//支付结果监听
 
-    private UnionPayManage(Activity mContext) {
-        if (mContext == null)
-            this.mContext = mContext;
-        if (mHandler == null)
-            this.mHandler = new Handler(this);
-        if (mHUD == null)
-            mHUD = KProgressHUD.create(mContext)
-                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                    .setDimAmount(0.5f);
+    private UnionPayManage() {
     }
 
-    public static UnionPayManage getInstance(Activity context) {
-        if (instance == null) {
-            synchronized (UnionPayManage.class) {
-                if (instance == null)
-                    instance = new UnionPayManage(context);
-            }
-        }
+    public static synchronized UnionPayManage getInstance() {
+        if (instance == null)
+            instance = new UnionPayManage();
         return instance;
+    }
+
+    private void init(Activity activity) {
+        this.mHandler = new MyHandler(activity);
+        if (mHUD == null) {
+            mHUD = KProgressHUD.create(activity)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setDimAmount(0.5f);
+        }
     }
 
     /**
      * 网络获取交易流水号后进行支付(TN)
      */
-    public void startPay(UnionPayResultListener listener) {
+    public void startPay(@NonNull Activity activity, @NonNull UnionPayResultListener listener) {
+        init(activity);
         mUnionPayResultListener = listener;
         if (mHUD != null)
             mHUD.show();
@@ -73,7 +70,8 @@ public class UnionPayManage implements Callback, Runnable {
      *
      * @param tn 流水号
      */
-    public void setTnAndStartPay(String tn, UnionPayResultListener listener) {
+    public void setTnAndStartPay(Activity activity, String tn, UnionPayResultListener listener) {
+        init(activity);
         mUnionPayResultListener = listener;
         Message msg = mHandler.obtainMessage();
         msg.obj = tn;
@@ -108,53 +106,59 @@ public class UnionPayManage implements Callback, Runnable {
         mHandler.sendMessage(msg);
     }
 
-    @Override
-    public boolean handleMessage(Message msg) {
-        if (BuildConfig.LOG_DEBUG)
-            Log.i(Config.PAY, "UnionPayTn: " + msg.obj);
-        if (mHUD.isShowing())
-            mHUD.dismiss();
-        if (msg.obj == null || ((String) msg.obj).length() == 0) {
-            new AlertDialog.Builder(mContext)
-                    .setTitle("错误提示")
-                    .setMessage("网络连接失败,请重试!")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+    private class MyHandler extends Handler {
+        private Activity mActivity;
 
-                        }
-                    }).create().show();
-        } else {
-            //通过银联工具类启动支付插件
-            doStartUnionPayPlugin(mContext, (String) msg.obj, mMode);
+        public MyHandler(Activity activity) {
+            this.mActivity = activity;
         }
 
-        return false;
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (BuildConfig.LOG_DEBUG)
+                Log.i(Config.PAY, "UnionPayTn: " + msg.obj);
+            if (mHUD.isShowing())
+                mHUD.dismiss();
+            if (msg.obj == null || ((String) msg.obj).length() == 0) {
+                new AlertDialog.Builder(mActivity)
+                        .setTitle("错误提示")
+                        .setMessage("网络连接失败,请重试!")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).create().show();
+            } else {
+                //通过银联工具类启动支付插件
+                doStartUnionPayPlugin(mActivity, (String) msg.obj, mMode);
+            }
+        }
     }
 
     /**
-     * @param activity
      * @param tn
-     * @param mode     0 - 启动银联正式环境,1 - 连接银联测试环境
+     * @param mode 0 - 启动银联正式环境,1 - 连接银联测试环境
      */
-    private void doStartUnionPayPlugin(Activity activity, String tn, String mode) {
+    private void doStartUnionPayPlugin(final Activity activity, String tn, String mode) {
         int ret = UPPayAssistEx.startPay(activity, null, null, tn, mode);
         if (BuildConfig.LOG_DEBUG)
             Log.e(Config.PAY, "UnionPayResult: " + ret);
-        if (!UPPayAssistEx.checkInstalled(mContext))//是否安装了银联Apk
+        if (!UPPayAssistEx.checkInstalled(activity))//是否安装了银联Apk
             return;
         if (ret == UnionPayConstants.PLUGIN_NEED_UPGRADE || ret == UnionPayConstants.PLUGIN_NOT_INSTALLED) {
             // 需要重新安装控件(更新)
             if (BuildConfig.LOG_DEBUG)
                 Log.e(Config.PAY, " plugin not found or need upgrade!!!");
-            new AlertDialog.Builder(mContext)
+            new AlertDialog.Builder(activity)
                     .setTitle("提示")
                     .setMessage("完成购买需要安装银联支付控件，是否安装？")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 目前使用的内置在assets文件夹中的apk，如果不考虑版本问题，应该使用下载链接
-                            UPPayAssistEx.installUPPayPlugin(mContext);
+                            UPPayAssistEx.installUPPayPlugin(activity);
                         }
                     })
                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {

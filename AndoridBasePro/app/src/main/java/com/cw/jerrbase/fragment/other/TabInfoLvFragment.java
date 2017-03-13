@@ -245,6 +245,6 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //以下代码为处理Android6.0、7.0动态权限所需
         PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionManager.handlePermissionsResult(mContext, type, invokeParam, this);
+        PermissionManager.handlePermissionsResult(mActivity, type, invokeParam, this);
     }
 }

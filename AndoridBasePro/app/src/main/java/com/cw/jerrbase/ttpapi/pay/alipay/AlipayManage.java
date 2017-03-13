@@ -1,8 +1,10 @@
 package com.cw.jerrbase.ttpapi.pay.alipay;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,44 +30,30 @@ public class AlipayManage implements Handler.Callback {
     private static final int SDK_PAY_FLAG = 1;//支付
     private static final int SDK_AUTH_FLAG = 2;//授权
 
-    private Activity mContext = null;
+    private static AlipayManage instance = null;
+    private Context mContext = null;
     private Handler mHandler = null;
     private AlipayResultListener mAlipayResultListener = null;
-    private AlipayType mAlipayType = null;
 
-    /**
-     * 支付类型
-     */
-    public enum AlipayType {
-        PAY, AUTH
-    }
-
-    private AlipayManage(Activity context) {
+    private AlipayManage(Context context) {
         this.mContext = context;
-        mHandler = new Handler(this);
     }
 
-    private void setAlipayType(AlipayType type) {
-        this.mAlipayType = type;
-    }
-
-    private void setAlipayResultListener(AlipayResultListener listener) {
-        this.mAlipayResultListener = listener;
-    }
-
-    private void create() {
-        if (mAlipayType == null)
-            return;
-        if (mAlipayType == AlipayType.PAY)
-            pay();
-        else
-            authV2();
+    public static synchronized AlipayManage getInstance(Context context) {
+        if (instance == null)
+            instance = new AlipayManage(context.getApplicationContext());
+        return instance;
     }
 
     /**
      * 支付
+     *
+     * @param activity activity
+     * @param listener 结果监听
      */
-    public void pay() {
+    public void pay(@NonNull final Activity activity, @NonNull AlipayResultListener listener) {
+        if (mHandler == null)
+            mHandler = new Handler(this);
         boolean isRsa2 = TtpConstants.ALIPAY_RSA2_PRIVATE.length() > 0;//是否使用rsa2秘钥
         String privateKey = isRsa2 ? TtpConstants.ALIPAY_RSA2_PRIVATE : TtpConstants.ALIPAY_RSA_PRIVATE;
         Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(TtpConstants.ALIPAY_APPID, isRsa2);
@@ -77,7 +65,7 @@ public class AlipayManage implements Handler.Callback {
 
             @Override
             public void run() {
-                PayTask alipay = new PayTask(mContext);
+                PayTask alipay = new PayTask(activity);
                 Map<String, String> result = alipay.payV2(orderInfo, true);
                 if (BuildConfig.LOG_DEBUG)
                     Log.i(Config.PAY, "AliPayResult：" + result.toString());
@@ -95,8 +83,13 @@ public class AlipayManage implements Handler.Callback {
 
     /**
      * 授权
+     *
+     * @param activity activity
+     * @param listener 结果监听
      */
-    public void authV2() {
+    public void authV2(@NonNull final Activity activity, @NonNull AlipayResultListener listener) {
+        if (mHandler == null)
+            mHandler = new Handler(this);
         boolean isRsa2 = TtpConstants.ALIPAY_RSA2_PRIVATE.length() > 0;//是否使用rsa2秘钥
         String privateKey = isRsa2 ? TtpConstants.ALIPAY_RSA2_PRIVATE : TtpConstants.ALIPAY_RSA_PRIVATE;
         Map<String, String> authInfoMap = OrderInfoUtil2_0.buildAuthInfoMap(TtpConstants.ALIPAY_PID, TtpConstants.ALIPAY_APPID, TtpConstants.ALIPAY_TARGET_ID, isRsa2);
@@ -108,7 +101,7 @@ public class AlipayManage implements Handler.Callback {
             @Override
             public void run() {
                 // 构造AuthTask 对象
-                AuthTask authTask = new AuthTask(mContext);
+                AuthTask authTask = new AuthTask(activity);
                 // 调用授权接口，获取授权结果
                 Map<String, String> result = authTask.authV2(authInfo, true);
 
@@ -176,34 +169,6 @@ public class AlipayManage implements Handler.Callback {
                 break;
         }
         return false;
-    }
-
-    public static class Builder {
-        private Activity mContext;
-        private AlipayResultListener mAlipayResultListener;
-        private AlipayType mAlipayType;
-
-        public Builder(Activity context) {
-            this.mContext = context;
-        }
-
-        public Builder setAlipayType(AlipayType type) {
-            this.mAlipayType = type;
-            return this;
-        }
-
-        public Builder setAlipayResultListener(AlipayResultListener listener) {
-            this.mAlipayResultListener = listener;
-            return this;
-        }
-
-        public AlipayManage build() {
-            AlipayManage alipayManage = new AlipayManage(mContext);
-            alipayManage.setAlipayType(mAlipayType);
-            alipayManage.setAlipayResultListener(mAlipayResultListener);
-            alipayManage.create();
-            return alipayManage;
-        }
     }
 
     public interface AlipayResultListener {

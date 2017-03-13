@@ -1,8 +1,10 @@
 package com.cw.jerrbase.ttpapi.share;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.cw.jerrbase.BuildConfig;
@@ -31,42 +33,60 @@ import java.util.ArrayList;
 public class QqManage implements IUiListener {
 
     private static QqManage sMQqManage = null;
-    private Activity mContext = null;
+    private Context mContext = null;
     private Tencent mTencent = null;
     private QqResultListener mQqResultListener = null;//登录、分享结果监听
 
-    public static QqManage getInstance(Activity context) {
-        if (sMQqManage == null) {
-            synchronized (QqManage.class) {
-                if (sMQqManage == null)
-                    sMQqManage = new QqManage(context);
-            }
-        }
+    public static synchronized QqManage getInstance(Context context) {
+        if (sMQqManage == null)
+            sMQqManage = new QqManage(context.getApplicationContext());
         return sMQqManage;
     }
 
 
-    private QqManage(Activity context) {
-        if (mContext == null)
-            this.mContext = context;
+    private QqManage(Context context) {
+        this.mContext = context;
+    }
+
+    private void init() {
         if (mTencent == null)
-            mTencent = Tencent.createInstance(TtpConstants.QQ_APP_ID, mContext.getApplicationContext());
+            mTencent = Tencent.createInstance(TtpConstants.QQ_APP_ID, mContext);
     }
 
     /**
      * 登录
+     *
+     * @param activity activity
+     * @param listener 结果监听
      */
-    public void login(QqResultListener listener) {
+    public void login(Activity activity, QqResultListener listener) {
+        init();
         if (!checkTecentAvailable())
             return;
         mQqResultListener = listener;
-        mTencent.login(mContext, "", this);
+        mTencent.login(activity, "", this);
     }
+
+    /**
+     * 登录
+     *
+     * @param fragment fragment
+     * @param listener 结果监听
+     */
+    public void login(Fragment fragment, QqResultListener listener) {
+        init();
+        if (!checkTecentAvailable())
+            return;
+        mQqResultListener = listener;
+        mTencent.login(fragment, "", this);
+    }
+
 
     /**
      * 注销
      */
     public void logout() {
+        init();
         if (!checkTecentAvailable())
             return;
         mTencent.logout(mContext);
@@ -74,8 +94,12 @@ public class QqManage implements IUiListener {
 
     /**
      * QQ分享
+     *
+     * @param activity activity
+     * @param listener 结果监听
      */
-    public void shareWithQQ(QqResultListener listener) {
+    public void shareWithQQ(Activity activity, QqResultListener listener) {
+        init();
         if (!checkTecentAvailable())
             return;
         mQqResultListener = listener;
@@ -92,13 +116,17 @@ public class QqManage implements IUiListener {
         params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "测试");
         //手Q客户端顶部，替换“返回”按钮文字，如果为空，用返回代替
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, mContext.getResources().getString(R.string.app_name));
-        mTencent.shareToQQ(mContext, params, this);
+        mTencent.shareToQQ(activity, params, this);
     }
 
     /**
      * Qzone分享
+     *
+     * @param activity activity
+     * @param listener 结果监听
      */
-    public void shareWithQzone(QqResultListener listener) {
+    public void shareWithQzone(Activity activity, QqResultListener listener) {
+        init();
         if (!checkTecentAvailable())
             return;
         mQqResultListener = listener;
@@ -110,7 +138,7 @@ public class QqManage implements IUiListener {
         ArrayList<String> imgUrlList = new ArrayList<>();
         imgUrlList.add("http://f.hiphotos.baidu.com/image/h%3D200/sign=6f05c5f929738bd4db21b531918a876c/6a600c338744ebf8affdde1bdef9d72a6059a702.jpg");
         params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imgUrlList);// 图片地址
-        mTencent.shareToQzone(mContext, params, this);
+        mTencent.shareToQzone(activity, params, this);
     }
 
     public boolean onActivityResultData(int requestCode, int resultCode, Intent data) {
@@ -121,6 +149,7 @@ public class QqManage implements IUiListener {
      * 获取用户信息
      */
     public void getUserInfo() {
+        init();
         if (!checkTecentAvailable())
             return;
         UserInfo userInfo = new UserInfo(mContext, mTencent.getQQToken());

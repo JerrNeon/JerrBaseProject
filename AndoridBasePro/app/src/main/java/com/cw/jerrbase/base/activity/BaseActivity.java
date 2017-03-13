@@ -34,7 +34,8 @@ public class BaseActivity extends AppCompatActivity {
     private static final String LAYOUT_RELATIVELAYOUT = "RelativeLayout";
 
     protected ActivityManager activityManager = ActivityManager.getActivityManager(this);
-    protected Activity mContext = null;
+    protected Activity mActivity = null;
+    protected Context mContext = null;
     /**
      * ButterKnife操作对象
      */
@@ -43,7 +44,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this;
+        mActivity = this;
+        mContext = getApplicationContext();
         activityManager.putActivity(this);
     }
 
@@ -190,6 +192,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         activityManager.removeActivity(this);
+        if (mActivity != null)
+            mActivity = null;
         if (mContext != null)
             mContext = null;
         if (unbinder != null)

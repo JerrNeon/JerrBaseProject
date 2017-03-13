@@ -86,7 +86,7 @@ public abstract class BaseTbActivity extends BaseActivity {
 
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setColor(mContext, ContextCompat.getColor(mContext, R.color.colorPrimary), 0);
+        StatusBarUtil.setColor(mActivity, ContextCompat.getColor(mContext, R.color.colorPrimary), 0);
     }
 
     /**
