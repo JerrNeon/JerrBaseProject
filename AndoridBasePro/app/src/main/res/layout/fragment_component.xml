@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:divider="@drawable/line_divider"
               android:background="@color/white"
+              android:divider="@drawable/line_divider"
               android:orientation="vertical"
               android:showDividers="middle">
 
@@ -32,12 +32,12 @@
         android:text="Video"/>
 
     <TextView
-        android:id="@+id/tv_UMShare"
+        android:id="@+id/tv_Share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableRight="@drawable/ic_right_arrow"
         android:padding="16dp"
-        android:text="UMShare And Login"/>
+        android:text="Share、Login And Pay"/>
 
     <include layout="@layout/base_line_layout"/>
 

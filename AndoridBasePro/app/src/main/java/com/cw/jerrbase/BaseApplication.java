@@ -1,6 +1,8 @@
 package com.cw.jerrbase;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.cw.jerrbase.base.exception.CrashHandler;
@@ -29,9 +31,15 @@ public class BaseApplication extends Application {
         //initCrashHandler();
         initAutoLayout();
         initLeakCanary();
-        //initOkGo();
+        initOkGo();
         initStetho();
         initBaiduMap();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static BaseApplication getInstance() {

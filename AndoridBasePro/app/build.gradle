@@ -146,4 +146,6 @@ dependencies {
     compile dep["constraint-layout"]
     //wechat
     compile dep["wechat-sdk"]
+    //multidex
+    compile dep["multidex"]
 }

@@ -40,6 +40,9 @@
 #混淆时采用的算法
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
+#匿名内部类的警告
+-keepattributes EnclosingMetho
+
 #API里边的类，最好都要避免混淆
 -keep public class * extends android.app.Fragment
 -keep public class * extends android.app.Activity

@@ -40,7 +40,7 @@ public class ComponentFragment extends BaseFragment {
         startActivity(new Intent(mContext, VideoActivity.class));
     }
 
-    @OnClick(R.id.tv_UMShare)
+    @OnClick(R.id.tv_Share)
     public void onUMShare() {
         openActivity(ShareActivity.class);
     }
