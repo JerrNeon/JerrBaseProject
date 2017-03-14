@@ -7,10 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
-import com.cw.jerrbase.BuildConfig;
-import com.cw.jerrbase.common.Config;
+import com.cw.jerrbase.base.api.ILog;
+import com.cw.jerrbase.util.LogUtil;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.unionpay.UPPayAssistEx;
 
@@ -26,7 +25,7 @@ import java.net.URLConnection;
 /**
  * 银联支付
  */
-public class UnionPayManage implements Runnable {
+public class UnionPayManage implements Runnable, ILog {
 
     //Mode参数解释： "00" - 启动银联正式环境 "01" - 连接银联测试环境
     private String mMode = UnionPayConstants.UNION_OFFICIAL_CONNECT;
@@ -106,6 +105,26 @@ public class UnionPayManage implements Runnable {
         mHandler.sendMessage(msg);
     }
 
+    @Override
+    public void logI(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logW(String message) {
+        LogUtil.w(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logE(String message) {
+        LogUtil.e(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public String getClassName() {
+        return getClass().getSimpleName();
+    }
+
     private class MyHandler extends Handler {
         private Activity mActivity;
 
@@ -116,8 +135,7 @@ public class UnionPayManage implements Runnable {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (BuildConfig.LOG_DEBUG)
-                Log.i(Config.PAY, "UnionPayTn: " + msg.obj);
+            logI("UnionPayTn: " + msg.obj);
             if (mHUD.isShowing())
                 mHUD.dismiss();
             if (msg.obj == null || ((String) msg.obj).length() == 0) {
@@ -143,14 +161,12 @@ public class UnionPayManage implements Runnable {
      */
     private void doStartUnionPayPlugin(final Activity activity, String tn, String mode) {
         int ret = UPPayAssistEx.startPay(activity, null, null, tn, mode);
-        if (BuildConfig.LOG_DEBUG)
-            Log.e(Config.PAY, "UnionPayResult: " + ret);
+        logI("UnionPayResult: " + ret);
         if (!UPPayAssistEx.checkInstalled(activity))//是否安装了银联Apk
             return;
         if (ret == UnionPayConstants.PLUGIN_NEED_UPGRADE || ret == UnionPayConstants.PLUGIN_NOT_INSTALLED) {
             // 需要重新安装控件(更新)
-            if (BuildConfig.LOG_DEBUG)
-                Log.e(Config.PAY, " plugin not found or need upgrade!!!");
+            logI(" plugin not found or need upgrade!!!");
             new AlertDialog.Builder(activity)
                     .setTitle("提示")
                     .setMessage("完成购买需要安装银联支付控件，是否安装？")
@@ -196,29 +212,24 @@ public class UnionPayManage implements Runnable {
                     boolean ret = RSAUtil.verify(dataOrg, sign, mMode);
                     if (ret) {
                         // 验签成功，显示支付结果
-                        if (BuildConfig.LOG_DEBUG)
-                            Log.i(Config.PAY, "onActivityResult: 验签后支付成功");
+                        logI("onActivityResult: 验签后支付成功");
                         if (mUnionPayResultListener != null)
                             mUnionPayResultListener.onSuccess();
                     } else {
                         // 验签失败
-                        if (BuildConfig.LOG_DEBUG)
-                            Log.i(Config.PAY, "onActivityResult: 验签后支付失败");
+                        logE("onActivityResult: 验签后支付失败");
                     }
                 } catch (JSONException e) {
                 }
             }
             // 结果result_data为成功时，去商户后台查询一下再展示成功
-            if (BuildConfig.LOG_DEBUG)
-                Log.i(Config.PAY, "onActivityResult: 验签前支付成功");
+            logI("onActivityResult: 验签前支付成功");
         } else if (str.equalsIgnoreCase("fail")) {
-            if (BuildConfig.LOG_DEBUG)
-                Log.i(Config.PAY, "onActivityResult: 支付失败");
+            logE("onActivityResult: 支付失败");
             if (mUnionPayResultListener != null)
                 mUnionPayResultListener.onFailure();
         } else if (str.equalsIgnoreCase("cancel")) {
-            if (BuildConfig.LOG_DEBUG)
-                Log.i(Config.PAY, "onActivityResult: 用户取消了支付");
+            logI("onActivityResult: 用户取消了支付");
         }
     }
 

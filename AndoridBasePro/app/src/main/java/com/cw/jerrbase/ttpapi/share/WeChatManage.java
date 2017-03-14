@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.bean.WeChatAccessTokenVO;
@@ -158,8 +159,8 @@ public class WeChatManage {
      */
     private boolean checkWXAppInstalled() {
         if (!mIWXAPI.isWXAppInstalled()) {
-            //Toast.makeText(mContext, "您还未安装微信,请安装微信客户端", Toast.LENGTH_SHORT).show();
-            return true;
+            Toast.makeText(mContext, "您还未安装微信,请安装微信客户端", Toast.LENGTH_SHORT).show();
+            return false;
         }
         return true;
     }

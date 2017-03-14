@@ -2,7 +2,6 @@ package com.cw.jerrbase.ttpapi.map;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -34,14 +33,14 @@ import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.cw.jerrbase.BaseApplication;
-import com.cw.jerrbase.BuildConfig;
-import com.cw.jerrbase.common.Config;
+import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.ttpapi.map.callback.LoctionResultListener;
 import com.cw.jerrbase.ttpapi.map.callback.RouteSearchResultListener;
 import com.cw.jerrbase.ttpapi.map.overlayutil.BikingRouteOverlay;
 import com.cw.jerrbase.ttpapi.map.overlayutil.DrivingRouteOverlay;
 import com.cw.jerrbase.ttpapi.map.overlayutil.TransitRouteOverlay;
 import com.cw.jerrbase.ttpapi.map.overlayutil.WalkingRouteOverlay;
+import com.cw.jerrbase.util.LogUtil;
 
 import java.util.List;
 
@@ -52,7 +51,7 @@ import java.util.List;
  * @create by: chenwei
  * @date 2017/3/13 13:27
  */
-public class BaiduMapManage {
+public class BaiduMapManage implements ILog {
 
     private static BaiduMapManage instance = null;
 
@@ -369,8 +368,7 @@ public class BaiduMapManage {
                     sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
                 }
             }
-            if (BuildConfig.LOG_DEBUG)
-                Log.i(Config.BAIDUMAP, sb.toString());
+            logI(sb.toString());
         }
 
         @Override
@@ -501,6 +499,26 @@ public class BaiduMapManage {
             mLoctionResultListener = null;
         if (mRouteSearchResultListener != null)
             mRouteSearchResultListener = null;
+    }
+
+    @Override
+    public void logI(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logW(String message) {
+        LogUtil.w(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logE(String message) {
+        LogUtil.e(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public String getClassName() {
+        return getClass().getSimpleName();
     }
 
 }

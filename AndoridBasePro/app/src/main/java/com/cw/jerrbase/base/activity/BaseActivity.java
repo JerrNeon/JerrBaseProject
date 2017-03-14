@@ -12,9 +12,11 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.cw.jerrbase.base.api.IFrame3;
+import com.cw.jerrbase.base.api.ILog2;
 import com.cw.jerrbase.base.api.IRoute3;
 import com.cw.jerrbase.common.ActivityManager;
 import com.cw.jerrbase.ttpapi.jpush.JpushManage;
+import com.cw.jerrbase.util.LogUtil;
 import com.zhy.autolayout.AutoFrameLayout;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
@@ -31,7 +33,7 @@ import butterknife.Unbinder;
  * @create by: chenwei
  * @date 2016/8/23 11:33
  */
-public class BaseActivity extends AppCompatActivity implements IFrame3, IRoute3 {
+public class BaseActivity extends AppCompatActivity implements IFrame3, IRoute3, ILog2 {
 
     private static final String LAYOUT_LINEARLAYOUT = "LinearLayout";
     private static final String LAYOUT_FRAMELAYOUT = "FrameLayout";
@@ -248,4 +250,28 @@ public class BaseActivity extends AppCompatActivity implements IFrame3, IRoute3 
             EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void logD(String message) {
+        LogUtil.d(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logV(String message) {
+        LogUtil.v(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logI(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logW(String message) {
+        LogUtil.w(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logE(String message) {
+        LogUtil.e(String.format(messageFormat, getClassName(), message));
+    }
 }

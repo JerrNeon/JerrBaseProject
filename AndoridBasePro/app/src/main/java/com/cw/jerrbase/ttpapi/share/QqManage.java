@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
-import com.cw.jerrbase.BuildConfig;
 import com.cw.jerrbase.R;
-import com.cw.jerrbase.common.Config;
+import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.ttpapi.TtpConstants;
+import com.cw.jerrbase.util.LogUtil;
 import com.cw.jerrbase.util.gson.JsonUtils;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.share.QQShare;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
  * @create by: chenwei
  * @date 2017/3/9 14:20
  */
-public class QqManage implements IUiListener {
+public class QqManage implements IUiListener, ILog {
 
     private static QqManage sMQqManage = null;
     private Context mContext = null;
@@ -167,34 +166,49 @@ public class QqManage implements IUiListener {
     @Override
     public void onComplete(Object response) {
         if (null == response) {
-            if (BuildConfig.LOG_DEBUG)
-                Log.i(Config.TAG, "onComplete: 登录失败");
+            logI("onComplete: 登录失败");
             return;
         }
         JSONObject jsonResponse = (JSONObject) response;
         if (null != jsonResponse && jsonResponse.length() == 0) {
-            if (BuildConfig.LOG_DEBUG)
-                Log.i(Config.TAG, "onComplete: 登录失败");
+            logI("onComplete: 登录失败");
             return;
         }
-        if (BuildConfig.LOG_DEBUG)
-            Log.i(Config.TAG, "onComplete: " + JsonUtils.toJson(jsonResponse));
+        logI("onComplete: " + JsonUtils.toJson(jsonResponse));
         if (mQqResultListener != null)
             mQqResultListener.onSuccess(jsonResponse);
     }
 
     @Override
     public void onError(UiError uiError) {
-        if (BuildConfig.LOG_DEBUG)
-            Log.i(Config.TAG, "onError: " + uiError.errorMessage);
+        logE( "onError: " + uiError.errorMessage);
         if (mQqResultListener != null)
             mQqResultListener.onFailure();
     }
 
     @Override
     public void onCancel() {
-        if (BuildConfig.LOG_DEBUG)
-            Log.i(Config.TAG, "onCancel: ");
+        logI("onCancel: ");
+    }
+
+    @Override
+    public void logI(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logW(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logE(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public String getClassName() {
+        return getClass().getSimpleName();
     }
 
     public interface QqResultListener {

@@ -6,14 +6,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.AuthTask;
 import com.alipay.sdk.app.PayTask;
-import com.cw.jerrbase.BuildConfig;
-import com.cw.jerrbase.common.Config;
+import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.ttpapi.TtpConstants;
+import com.cw.jerrbase.util.LogUtil;
 
 import java.util.Map;
 
@@ -25,7 +24,7 @@ import java.util.Map;
  * @create by: chenwei
  * @date 2017/3/9 17:17
  */
-public class AlipayManage implements Handler.Callback {
+public class AlipayManage implements Handler.Callback, ILog {
 
     private static final int SDK_PAY_FLAG = 1;//支付
     private static final int SDK_AUTH_FLAG = 2;//授权
@@ -67,8 +66,7 @@ public class AlipayManage implements Handler.Callback {
             public void run() {
                 PayTask alipay = new PayTask(activity);
                 Map<String, String> result = alipay.payV2(orderInfo, true);
-                if (BuildConfig.LOG_DEBUG)
-                    Log.i(Config.PAY, "AliPayResult：" + result.toString());
+               logI("AliPayResult：" + result.toString());
 
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
@@ -161,14 +159,33 @@ public class AlipayManage implements Handler.Callback {
                     if (mAlipayResultListener != null)
                         mAlipayResultListener.onFailure();
                 }
-                if (BuildConfig.LOG_DEBUG)
-                    Log.i(Config.LOGIN, String.format("authCode:%s", aliAuthResult.getAuthCode()));
+                logI(String.format("authCode:%s", aliAuthResult.getAuthCode()));
                 break;
             }
             default:
                 break;
         }
         return false;
+    }
+
+    @Override
+    public void logI(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logW(String message) {
+        LogUtil.w(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logE(String message) {
+        LogUtil.e(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public String getClassName() {
+        return getClass().getSimpleName();
     }
 
     public interface AlipayResultListener {

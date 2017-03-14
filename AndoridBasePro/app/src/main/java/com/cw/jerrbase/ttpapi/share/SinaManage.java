@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.cw.jerrbase.BuildConfig;
-import com.cw.jerrbase.common.Config;
+import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.ttpapi.TtpConstants;
+import com.cw.jerrbase.util.LogUtil;
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.api.share.BaseResponse;
@@ -33,7 +32,7 @@ import com.sina.weibo.sdk.exception.WeiboException;
  * @create by: chenwei
  * @date 2017/3/9 14:49
  */
-public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
+public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response, ILog {
 
     private static SinaManage sSinaManage = null;
     private Context mContext = null;
@@ -155,22 +154,19 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
             // 当您注册的应用程序签名不正确时，就会收到 Code，请确保签名正确
             String code = bundle.getString("code", "");
         }
-        if (BuildConfig.LOG_DEBUG)
-            Log.i(Config.TAG, "onComplete: ");
+        logI("onComplete: ");
     }
 
     @Override
     public void onWeiboException(WeiboException e) {
-        if (BuildConfig.LOG_DEBUG)
-            Log.i(Config.TAG, "onWeiboException: " + e.getMessage());
+        logE("onWeiboException: " + e.getMessage());
         if (mSinaResultListener != null)
             mSinaResultListener.onFailure();
     }
 
     @Override
     public void onCancel() {
-        if (BuildConfig.LOG_DEBUG)
-            Log.i(Config.TAG, "onCancel: ");
+        logI("onCancel: ");
     }
 
     //分享
@@ -178,24 +174,41 @@ public class SinaManage implements WeiboAuthListener, IWeiboHandler.Response {
     public void onResponse(BaseResponse baseResponse) {
         switch (baseResponse.errCode) {
             case WBConstants.ErrorCode.ERR_OK:
-                if (BuildConfig.LOG_DEBUG)
-                    Log.i(Config.TAG, "onResponse: ok");
+                logI("onResponse: ok");
                 if (mSinaResultListener != null)
                     mSinaResultListener.onSuccess();
                 break;
             case WBConstants.ErrorCode.ERR_CANCEL:
-                if (BuildConfig.LOG_DEBUG)
-                    Log.i(Config.TAG, "onResponse: cancel");
+                logI("onResponse: cancel");
                 break;
             case WBConstants.ErrorCode.ERR_FAIL:
-                if (BuildConfig.LOG_DEBUG)
-                    Log.i(Config.TAG, "onResponse: fail");
+                logE("onResponse: fail");
                 if (mSinaResultListener != null)
                     mSinaResultListener.onFailure();
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void logI(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logW(String message) {
+        LogUtil.w(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logE(String message) {
+        LogUtil.e(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public String getClassName() {
+        return getClass().getSimpleName();
     }
 
     public interface SinaResultListener {

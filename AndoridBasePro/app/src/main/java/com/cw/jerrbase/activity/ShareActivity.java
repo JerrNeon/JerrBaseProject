@@ -3,13 +3,10 @@ package com.cw.jerrbase.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 
-import com.cw.jerrbase.BuildConfig;
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.activity.BaseTbActivity;
-import com.cw.jerrbase.common.Config;
 import com.cw.jerrbase.dialog.ShareDialog;
 import com.cw.jerrbase.ttpapi.pay.alipay.AlipayManage;
 import com.cw.jerrbase.ttpapi.pay.unionpay.UnionPayManage;
@@ -189,14 +186,12 @@ public class ShareActivity extends BaseTbActivity {
                 mWeChatManage.pay(mActivity,wxPayInfoVO, new WeChatManage.WeChatResultListener() {
                     @Override
                     public void onSuccess(BaseResp resp) {
-                        if (BuildConfig.LOG_DEBUG)
-                            Log.i(Config.PAY, "onSuccess: ");
+                        logI("onSuccess: ");
                     }
 
                     @Override
                     public void onFailure(BaseResp resp) {
-                        if (BuildConfig.LOG_DEBUG)
-                            Log.i(Config.PAY, "onFailure: ");
+                        logI("onFailure: ");
                     }
                 });
                 break;
@@ -204,14 +199,12 @@ public class ShareActivity extends BaseTbActivity {
                 mAlipayManage.pay(mActivity, new AlipayManage.AlipayResultListener() {
                     @Override
                     public void onSuccess() {
-                        if (BuildConfig.LOG_DEBUG)
-                            Log.i(Config.PAY, "onSuccess: ");
+                        logI("onSuccess: ");
                     }
 
                     @Override
                     public void onFailure() {
-                        if (BuildConfig.LOG_DEBUG)
-                            Log.i(Config.PAY, "onFailure: ");
+                        logI("onFailure: ");
                     }
                 });
                 break;
@@ -219,14 +212,12 @@ public class ShareActivity extends BaseTbActivity {
                 mUnionPayManage.startPay(mActivity, new UnionPayManage.UnionPayResultListener() {
                     @Override
                     public void onSuccess() {
-                        if (BuildConfig.LOG_DEBUG)
-                            Log.i(Config.PAY, "onSuccess: ");
+                        logI("onSuccess: ");
                     }
 
                     @Override
                     public void onFailure() {
-                        if (BuildConfig.LOG_DEBUG)
-                            Log.i(Config.PAY, "onFailure: ");
+                        logI("onFailure: ");
                     }
                 });
                 break;
