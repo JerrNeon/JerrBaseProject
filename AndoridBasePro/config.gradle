@@ -77,6 +77,8 @@ ext {
             "GSYVideoPlayer"                 : "com.github.CarGuo:GSYVideoPlayer:v1.6.0",//视频播放
 
             "wechat-sdk"                     : 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2',
+            "jpush-sdk"                      : 'cn.jiguang.sdk:jpush:3.0.0',  // JPush
+            "jpush-core"                     : 'cn.jiguang.sdk:jcore:1.0.0',
 
             "umeng-analytics"                : "com.umeng.analytics:analytics:6.0.1",//友盟统计分析
             "picasso"                        : "com.squareup.picasso:picasso:2.5.2",//图片加载
@@ -110,5 +112,21 @@ ext {
             keyAlias     : "JerrBase",
             keyPassword  : "123456",
             fileName     : "JerrBase_v${android["versionName"]}.apk"// 输出apk名称为JerrBase_v1.0.apk
+    ]
+
+    jpush = [
+            JPUSH_APPKEY : "3ea70eb426a8c36d0955554f", //JPush上注册的包名对应的appkey.
+            JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+    ]
+
+    ndk = [
+            "armeabi"    : 'armeabi',
+            "armeabi-v7a": 'armeabi-v7a',
+            "armeabi-v8a": 'armeabi-v8a',
+            "arm64_v8a"  : 'arm64-v8a',
+            "mips"       : 'mips',
+            "mips64"     : 'mips64',
+            "x86"        : 'x86',
+            "x86_64"     : 'x86_64',
     ]
 }

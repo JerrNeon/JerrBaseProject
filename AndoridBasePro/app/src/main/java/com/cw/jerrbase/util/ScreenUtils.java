@@ -2,6 +2,7 @@ package com.cw.jerrbase.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
@@ -111,6 +112,29 @@ public class ScreenUtils {
         view.destroyDrawingCache();
         return bp;
 
+    }
+
+    /**
+     * 是否横屏
+     *
+     * @param context
+     * @return true为横屏，false为竖屏
+     */
+    public static boolean isLandscape(Context context) {
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否是平板 这个方法是从 Google I/O App for Android 的源码里找来的，非常准确。
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
 }

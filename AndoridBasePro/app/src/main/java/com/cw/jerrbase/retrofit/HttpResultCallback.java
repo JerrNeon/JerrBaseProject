@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 import com.cw.jerrbase.net.OkHttpErrorHelper;
 import com.cw.jerrbase.net.XaResult;
-import com.cw.jerrbase.util.NLogUtil;
+import com.cw.jerrbase.util.LogUtil;
 import com.google.gson.internal.$Gson$Types;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -67,7 +67,7 @@ public abstract class HttpResultCallback<T> {
      * @param callback
      */
     public void sendFailResultCallback(final XaResult result, final Throwable e, HttpResultCallback callback) {
-        NLogUtil.logE("onFailure 异常", e.toString());
+        LogUtil.e("onFailure 异常", e.toString());
         callback.onError(e);
         Toast.makeText(mContext, OkHttpErrorHelper.getMessage(result, e, mContext), Toast.LENGTH_SHORT).show();
     }

@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import com.cw.jerrbase.net.OkHttpClientManager;
 import com.cw.jerrbase.net.cache.InterceptorCache;
 import com.cw.jerrbase.net.callback.ResultCallback;
-import com.cw.jerrbase.util.NLogUtil;
+import com.cw.jerrbase.util.LogUtil;
 import com.cw.jerrbase.util.QMUtil;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Headers;
@@ -234,13 +234,13 @@ public abstract class OkHttpRequest {
                 //吧content修改掉成json串
                 Gson gson = new Gson();
                 content = gson.toJson(params);
-                NLogUtil.logD("OkHttpPostRequest json", content);
+                LogUtil.d("OkHttpPostRequest json", content);
             }
             if (QMUtil.isNotEmpty(params2)) {
                 //吧content修改掉成json串
                 Gson gson = new Gson();
                 content = gson.toJson(params2);
-                NLogUtil.logD("OkHttpPostRequest json", content);
+                LogUtil.d("OkHttpPostRequest json", content);
             }
             OkHttpRequest request = new OkHttpPostRequest(url, tag, params,
                     headers, mediaType, content, bytes, file);

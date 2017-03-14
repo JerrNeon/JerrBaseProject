@@ -5,7 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.cw.jerrbase.R;
-import com.cw.jerrbase.util.NLogUtil;
+import com.cw.jerrbase.util.LogUtil;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -36,7 +36,7 @@ public class OkHttpErrorHelper {
 		} else if (error instanceof SocketTimeoutException) {
 			return context.getResources().getString(R.string.connect_time_out);  //连接超时
 		}else if(error instanceof com.google.gson.JsonParseException){
-			NLogUtil.logE("OkHttpErrorHelper", context.getResources().getString(R.string.json_paser_error));
+			LogUtil.e("OkHttpErrorHelper", context.getResources().getString(R.string.json_paser_error));
 			return "";
 		}/*else if(error instanceof JsonPaserNullException){
 			NLogUtil.logE("OkHttpErrorHelper" ,context.getResources().getString(R.string.json_paser_null));
@@ -44,7 +44,7 @@ public class OkHttpErrorHelper {
 		}*/else if("java.net.SocketException: Socket closed".equals(error.toString())
 			|| "java.io.IOException: Canceled".equals(error.toString())){
 			//这里应该是用户取消请求抛出的异常,其他情况可能也会抛出此异常，上面大多数判断可以处理
-			NLogUtil.logE("OkHttpErrorHelper" ,context.getResources().getString(R.string.user_cancel));
+			LogUtil.e("OkHttpErrorHelper" ,context.getResources().getString(R.string.user_cancel));
 			return "";
 		}else if(error instanceof IOException){
 			return "";

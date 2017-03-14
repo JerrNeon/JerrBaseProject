@@ -7,6 +7,6 @@ package com.cw.jerrbase.common;
  * @create by: chenwei
  * @date 2016/10/9 14:28
  */
-public class Constants {
+public interface Constants {
 
 }

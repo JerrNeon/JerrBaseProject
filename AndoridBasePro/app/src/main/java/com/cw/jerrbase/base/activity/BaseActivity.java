@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.cw.jerrbase.common.ActivityManager;
+import com.cw.jerrbase.ttpapi.jpush.JpushManage;
 import com.zhy.autolayout.AutoFrameLayout;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
@@ -186,6 +187,18 @@ public class BaseActivity extends AppCompatActivity {
             intent.putExtras(bundle);
         }
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JpushManage.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JpushManage.onPause(this);
     }
 
     @Override

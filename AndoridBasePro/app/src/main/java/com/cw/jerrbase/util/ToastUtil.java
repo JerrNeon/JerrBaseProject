@@ -50,79 +50,125 @@ import android.widget.Toast;
 
 import com.cw.jerrbase.R;
 
-
 /**
- * @description (提示框工具类)
- * 
- * @author tulong
+ * @author tu
+ * @since 2015/4/27
  */
 public class ToastUtil {
 
-	/**
-	 * 居中带图片的toast
-	 * 
-	 * @param context
-	 * @param duration
-	 *            事件间隔
-	 */
-	public static void showToastByPic(Context context, String msg, int duration) {
-		Toast toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-		LinearLayout toastView = (LinearLayout) toast.getView();
-		ImageView imageCodeProject = new ImageView(context);
-		imageCodeProject.setImageResource(R.mipmap.ic_launcher);
-		toastView.addView(imageCodeProject, 0);
-		toast.show();
-	}
+    /******************* 多次触发Toast，只显示一次 *******************************/
 
-	/******************* 多次触发Toast，只显示一次 *******************************/
-	/**
-	 * @author tu
-	 * @since 2015/4/27
-	 */
-	private static String oldMsg;
-	private static long oneTime = 0;
-	private static long twoTime = 0;
-	private static Toast mToast = null;
+    private static String oldMsg;
+    private static long oneTime = 0;
+    private static long twoTime = 0;
+    private static Toast mToast = null;
 
-	public static void showToast(Context context, String s) {
-		if (mToast == null) {
-			mToast = Toast.makeText(context.getApplicationContext(), s, Toast.LENGTH_SHORT);
-			mToast.show();
-			oneTime = System.currentTimeMillis();
-		} else {
-			twoTime = System.currentTimeMillis();
-			if (s.equals(oldMsg)) {
-				if (twoTime - oneTime > Toast.LENGTH_SHORT) {
-					mToast.show();
-				}
-			} else {
-				oldMsg = s;
-				mToast.setText(s);
-				mToast.show();
-			}
-		}
-		oneTime = twoTime;
-	}
+    /**
+     * Toast.LENGTH_SHORT
+     *
+     * @param context
+     * @param s
+     */
+    public static void showToast(Context context, String s) {
+        if (mToast == null) {
+            mToast = Toast.makeText(context.getApplicationContext(), s, Toast.LENGTH_SHORT);
+            mToast.show();
+            oneTime = System.currentTimeMillis();
+        } else {
+            twoTime = System.currentTimeMillis();
+            if (s.equals(oldMsg)) {
+                if (twoTime - oneTime > Toast.LENGTH_SHORT) {
+                    mToast.show();
+                }
+            } else {
+                oldMsg = s;
+                mToast.setText(s);
+                mToast.show();
+            }
+        }
+        oneTime = twoTime;
+    }
 
-	/**
-	 * 多次触发Toast，只显示一次
-	 * 
-	 * @param context
-	 * @param resId
-	 */
-	public static void showToast(Context context, int resId) {
-		showToast(context, context.getString(resId));
-	}
+    /**
+     * 自定义时间
+     *
+     * @param context
+     * @param s
+     * @param duration
+     */
+    public static void showToast(Context context, String s, int duration) {
+        if (mToast == null) {
+            mToast = Toast.makeText(context.getApplicationContext(), s, duration);
+            mToast.show();
+            oneTime = System.currentTimeMillis();
+        } else {
+            twoTime = System.currentTimeMillis();
+            if (s.equals(oldMsg)) {
+                if (twoTime - oneTime > duration) {
+                    mToast.show();
+                }
+            } else {
+                oldMsg = s;
+                mToast.setText(s);
+                mToast.show();
+            }
+        }
+        oneTime = twoTime;
+    }
 
-	/**
-	 * 普通toast
-	 * 
-	 * @param ctx
-	 * @param string
-	 */
-	public static void showMessage(Context ctx, String string) {
-		Toast.makeText(ctx, string, Toast.LENGTH_SHORT).show();
+    /**
+     * 多次触发Toast，只显示一次
+     *
+     * @param context
+     * @param resId
+     */
+    public static void showToast(Context context, int resId) {
+        showToast(context, context.getString(resId));
+    }
 
-	}
+    /**
+     * 多次触发Toast，只显示一次
+     *
+     * @param context
+     * @param resId
+     */
+    public static void showToast(Context context, int resId, int duration) {
+        showToast(context, context.getString(resId), duration);
+    }
+
+    /**
+     * 普通toast
+     *
+     * @param ctx
+     * @param string
+     */
+    public static void showMessage(Context ctx, String string) {
+        Toast.makeText(ctx, string, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 普通toast
+     *
+     * @param ctx
+     * @param string
+     */
+    public static void showMessage(Context ctx, String string, int duration) {
+        Toast.makeText(ctx, string, duration).show();
+    }
+
+    /**
+     * 居中带图片的toast
+     *
+     * @param context
+     * @param duration 事件间隔
+     */
+    public static void showToastByPic(Context context, String msg, int duration) {
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        LinearLayout toastView = (LinearLayout) toast.getView();
+        ImageView imageCodeProject = new ImageView(context);
+        imageCodeProject.setImageResource(R.mipmap.ic_launcher);
+        toastView.addView(imageCodeProject, 0);
+        toast.show();
+    }
 }

@@ -13,6 +13,8 @@ import com.lzy.okgo.cache.CacheMode;
 import com.squareup.leakcanary.LeakCanary;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * @version V1.0
  * @ClassName: ${CLASS_NAME}
@@ -23,6 +25,8 @@ import com.zhy.autolayout.config.AutoLayoutConifg;
 public class BaseApplication extends Application {
 
     private static BaseApplication instance = null;
+    public static final boolean LOG_DEBUG = BuildConfig.LOG_DEBUG;
+    public static final String LOG_TAG = BuildConfig.LOG_TAG;
 
     @Override
     public void onCreate() {
@@ -34,12 +38,13 @@ public class BaseApplication extends Application {
         initOkGo();
         initStetho();
         initBaiduMap();
+        initJpush();
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        MultiDex.install(this);
+        MultiDex.install(this);//突破65536个方法数
     }
 
     public static BaseApplication getInstance() {
@@ -69,6 +74,11 @@ public class BaseApplication extends Application {
 
     private void initBaiduMap() {
         SDKInitializer.initialize(this);
+    }
+
+    private void initJpush() {
+        JPushInterface.setDebugMode(BuildConfig.LOG_DEBUG);
+        JPushInterface.init(this);
     }
 
     /**

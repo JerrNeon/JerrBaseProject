@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.cw.jerrbase.net.callback.ResultCallback;
-import com.cw.jerrbase.util.NLogUtil;
+import com.cw.jerrbase.util.LogUtil;
 import com.cw.jerrbase.util.date.CustomDateUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -109,7 +109,7 @@ public class OkHttpClientManager {
             @Override
             public void onFailure(final Request request, final IOException e) {
                 // 打印请求地址
-                NLogUtil.sysOut("Request URl", request.urlString());
+                LogUtil.sysOut("Request URl", request.urlString());
                 sendFailResultCallback(null, request, e, resCallBack);
             }
 
@@ -122,9 +122,9 @@ public class OkHttpClientManager {
 				 * catch (IOException e) { e.printStackTrace(); } return; }
 				 */
                 // 打印请求地址
-                NLogUtil.sysOut("Request URl", request.urlString());
+                LogUtil.sysOut("Request URl", request.urlString());
 
-                NLogUtil.sysOut("response code", response.code() + "");
+                LogUtil.sysOut("response code", response.code() + "");
                 // 404也会进来
                 if (response.code() != 200) {
                     // 错误信息
@@ -134,13 +134,13 @@ public class OkHttpClientManager {
                 }
                 try {
                     final String string = response.body().string();
-                    NLogUtil.sysOut("response", string);
+                    LogUtil.sysOut("response", string);
                     // 先解析成统一对象
                     XaResult result = mGson.fromJson(string, XaResult.class);
 
                     // 这里可以判断服务器返回的code 是否正确
                     if (!("0000").equals(result.getRspCode())) {
-                        NLogUtil.sysOut("response", result.getRspCode());
+                        LogUtil.sysOut("response", result.getRspCode());
                         // 错误信息
                         sendFailResultCallback(result, response.request(),
                                 new OkHttpException(), resCallBack);
@@ -187,7 +187,7 @@ public class OkHttpClientManager {
                                            final ResultCallback callback) {
         if (callback == null)
             return;
-        NLogUtil.logE("onFailure 异常", e.toString());
+        LogUtil.e("onFailure 异常", e.toString());
         mDelivery.post(new Runnable() {
             @Override
             public void run() {

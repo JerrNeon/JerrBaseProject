@@ -1,7 +1,7 @@
 package com.cw.jerrbase.retrofit;
 
 import com.cw.jerrbase.net.XaResult;
-import com.cw.jerrbase.util.NLogUtil;
+import com.cw.jerrbase.util.LogUtil;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -89,7 +89,7 @@ public class HttpRequestClient {
                             if (callback.getType() == String.class) {
                                 return (T) result;
                             } else {
-                                NLogUtil.sysOut("response", result);//打印返回的数据
+                                LogUtil.sysOut("response", result);//打印返回的数据
                                 return gson.fromJson(result, callback.getType());
                             }
                         }

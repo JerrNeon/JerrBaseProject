@@ -175,9 +175,8 @@
 #Jpush
 -dontwarn cn.jpush.**
 -keep class cn.jpush.** { *; }
--dontwarn com.google.**
--keep class com.google.gson.** {*;}
--keep class com.google.protobuf.** {*;}
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }
 
 -keep class org.apache.http.** {*;}
 
