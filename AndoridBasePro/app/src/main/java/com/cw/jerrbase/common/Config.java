@@ -9,8 +9,4 @@ package com.cw.jerrbase.common;
  */
 public interface Config {
 
-    String TAG = "tag";
-    String BAIDUMAP = "BaiduMap";
-    String PAY = "pay";
-    String LOGIN = "login";
 }

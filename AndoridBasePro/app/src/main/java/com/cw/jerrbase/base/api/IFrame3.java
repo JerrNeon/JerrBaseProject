@@ -2,6 +2,7 @@ package com.cw.jerrbase.base.api;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * @version V1.0
@@ -17,6 +18,7 @@ public interface IFrame3 extends IFrame2 {
      *
      * @param context
      * @param attrs
+     * @return view
      */
-    void initAutoLayout(Context context, AttributeSet attrs);
+    View initAutoLayout(String name, Context context, AttributeSet attrs);
 }

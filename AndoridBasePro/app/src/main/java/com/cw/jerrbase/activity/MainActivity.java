@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     }
 
     @Override
-    protected void setStatusBar() {
+    public void setStatusBar() {
         super.setStatusBar();
         StatusBarUtil.setColorNoTranslucentForDrawerLayout(mActivity, mMainDrawerLayout, ContextCompat.getColor(mContext, R.color.colorPrimary));
     }

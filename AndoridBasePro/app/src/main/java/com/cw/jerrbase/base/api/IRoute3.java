@@ -1,6 +1,8 @@
 package com.cw.jerrbase.base.api;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * @version V1.0
@@ -19,12 +21,12 @@ public interface IRoute3 extends IRoute2 {
      * @param bundle            数据
      * @param targetPackageName 要跳转的类的包名
      */
-    void openActivity(Class<?> cls, String targetPackageName, Bundle bundle);
+    void openActivity(@NonNull Class<?> cls, @NonNull String targetPackageName, @Nullable Bundle bundle);
 
     /**
      * 只有调用了openActivity(Class<?> cls, String targetPackageName, Bundle bundle)此方法才才有效
      *
      * @param bundle 数据
      */
-    void openTargetActivity(Bundle bundle);
+    void openTargetActivity(@Nullable Bundle bundle, @NonNull String targetPackageName);
 }

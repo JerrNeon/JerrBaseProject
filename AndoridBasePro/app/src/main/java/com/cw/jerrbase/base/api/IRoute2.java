@@ -2,6 +2,7 @@ package com.cw.jerrbase.base.api;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 /**
  * @version V1.0
@@ -18,7 +19,7 @@ public interface IRoute2 extends IRoute {
      * @param cls    需要跳转的类
      * @param bundle 数据
      */
-    void openActivity(Class<?> cls, Bundle bundle, int requestCode);
+    void openActivity(@NonNull Class<?> cls, @NonNull Bundle bundle, @NonNull int requestCode);
 
     /**
      * 数据回调
@@ -26,6 +27,6 @@ public interface IRoute2 extends IRoute {
      * @param requestCode 请求码
      * @param data        数据
      */
-    void onActivityResult(int requestCode, Intent data);
+    void onActivityResult(@NonNull int requestCode, @NonNull Intent data);
 
 }
