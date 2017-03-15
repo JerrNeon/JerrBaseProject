@@ -124,23 +124,23 @@
         </receiver>
 
 
-        <!-- autoLayout配置 -->
+        <!-- ==========================autoLayout配置begin========================== -->
         <meta-data
             android:name="design_width"
             android:value="768"/>
         <meta-data
             android:name="design_height"
             android:value="1280"/>
-        <!-- autoLayout配置 -->
+        <!-- ==========================autoLayout配置end========================== -->
 
-        <!-- Glide配置 -->
+        <!-- ==========================Glide配置begin========================== -->
         <meta-data
             android:name="com.cw.jerrbase.base.glide.GlideModelConfig"
             android:value="GlideModule"
             tools:node="remove"/>
-        <!-- Glide配置 -->
+        <!-- ==========================Glide配置end========================== -->
 
-        <!--BaiduMap-->
+        <!-- ==========================BaiduMap start========================== -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="mWRW73TNgt5CgfGixtDo7P57qPtkjFD8"/>
@@ -148,6 +148,7 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote"/>
+        <!-- ==========================BaiduMap end========================== -->
 
         <!-- =====================分享登录======================= -->
         <!--QQ-->
