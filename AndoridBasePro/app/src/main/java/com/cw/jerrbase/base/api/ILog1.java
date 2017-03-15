@@ -7,7 +7,7 @@ package com.cw.jerrbase.base.api;
  * @create by: chenwei
  * @date 2017/3/14 13:17
  */
-public interface ILog2 extends ILog {
+public interface ILog1 extends ILog {
 
     void logD(String message);
 

@@ -11,12 +11,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.cw.jerrbase.base.api.IFrame3;
-import com.cw.jerrbase.base.api.ILog2;
+import com.cw.jerrbase.base.api.IFrame2;
+import com.cw.jerrbase.base.api.ILog1;
 import com.cw.jerrbase.base.api.IRoute3;
+import com.cw.jerrbase.base.api.IToast1;
+import com.cw.jerrbase.base.api.IUtil;
 import com.cw.jerrbase.common.ActivityManager;
 import com.cw.jerrbase.ttpapi.jpush.JpushManage;
 import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.QMUtil;
+import com.cw.jerrbase.util.ToastUtil;
 import com.zhy.autolayout.AutoFrameLayout;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
@@ -33,11 +37,7 @@ import butterknife.Unbinder;
  * @create by: chenwei
  * @date 2016/8/23 11:33
  */
-public class BaseActivity extends AppCompatActivity implements IFrame3, IRoute3, ILog2 {
-
-    private static final String LAYOUT_LINEARLAYOUT = "LinearLayout";
-    private static final String LAYOUT_FRAMELAYOUT = "FrameLayout";
-    private static final String LAYOUT_RELATIVELAYOUT = "RelativeLayout";
+public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3, ILog1, IToast1,IUtil {
 
     protected ActivityManager activityManager = ActivityManager.getActivityManager(this);
     protected Activity mActivity = null;
@@ -146,7 +146,7 @@ public class BaseActivity extends AppCompatActivity implements IFrame3, IRoute3,
     }
 
     @Override
-    public void openActivity(@NonNull Class<?> cls, @NonNull Bundle bundle, @NonNull int requestCode) {
+    public void openActivity(@NonNull Class<?> cls, @Nullable Bundle bundle, @NonNull int requestCode) {
         Intent intent = new Intent(this, cls);
         if (bundle != null) {
             intent.putExtras(bundle);
@@ -179,7 +179,6 @@ public class BaseActivity extends AppCompatActivity implements IFrame3, IRoute3,
      */
     @Override
     public void openTargetActivity(@Nullable Bundle bundle, @NonNull String targetPackageName) {
-        if (getIntent() == null) return;
         Intent intent = null;
         try {
             intent = new Intent(this, Class.forName(targetPackageName));
@@ -220,7 +219,7 @@ public class BaseActivity extends AppCompatActivity implements IFrame3, IRoute3,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && data != null)
+        if (resultCode == RESULT_OK_FLAG && data != null)
             onActivityResult(requestCode, data);
     }
 
@@ -273,5 +272,52 @@ public class BaseActivity extends AppCompatActivity implements IFrame3, IRoute3,
     @Override
     public void logE(String message) {
         LogUtil.e(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void showToast(String message) {
+        ToastUtil.showToast(mContext, message);
+    }
+
+    @Override
+    public void showToast(String message, int duration) {
+        ToastUtil.showToast(mContext, message, duration);
+    }
+
+    @Override
+    public boolean checkObject(Object object) {
+        return QMUtil.isEmpty(object);
+    }
+
+    @Override
+    public String checkStr(String str) {
+        return QMUtil.checkStr(str);
+    }
+
+    @Override
+    public int str2Int(String str) {
+        return QMUtil.strToInt(str);
+    }
+
+    @Override
+    public long str2Long(String str) {
+        return QMUtil.strToInt(str);
+    }
+
+    @Override
+    public float str2Float(String str) {
+        return QMUtil.strToInt(str);
+    }
+
+    @Override
+    public double str2Double(String str) {
+        return QMUtil.strToInt(str);
+    }
+
+    @Override
+    public String object2Str(Object object) {
+        if (object instanceof Integer || object instanceof Long || object instanceof Float || object instanceof Double)
+            return String.valueOf(object);
+        return "";
     }
 }

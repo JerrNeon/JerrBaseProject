@@ -4,13 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cw.jerrbase.base.activity.BaseActivity;
+import com.cw.jerrbase.base.api.IFrame;
+import com.cw.jerrbase.base.api.ILog1;
+import com.cw.jerrbase.base.api.IRoute4;
+import com.cw.jerrbase.base.api.IToast1;
+import com.cw.jerrbase.base.api.IUtil;
+import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.QMUtil;
+import com.cw.jerrbase.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -24,7 +32,7 @@ import butterknife.Unbinder;
  * @create by: chenwei
  * @date 2016/9/30 11:04
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements IFrame, IRoute4, ILog1, IToast1, IUtil {
 
     protected Activity mActivity = null;
     protected Context mContext = null;
@@ -43,28 +51,40 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         mView = inflater.inflate(getLayoutResourceId(), null, false);
-        unbinder = ButterKnife.bind(this, mView);
         mActivity = getActivity();
         mContext = getActivity().getApplicationContext();
         mFragment = this;
+        initButterKnife();
         return mView;
+    }
+
+    protected abstract int getLayoutResourceId();
+
+    @Override
+    public void initButterKnife() {
+        unbinder = ButterKnife.bind(this, mView);
     }
 
     /**
      * 初始化EventBus
      */
-    protected void initEventBus() {
+    @Override
+    public void initEventBus() {
         EventBus.getDefault().register(this);
     }
 
-    /**
-     * 获得Fragment对象
-     *
-     * @param tClass 传递的目的Fragment的Class对象
-     * @param <T>    传递的目的Fragment
-     * @return
-     */
-    public static <T extends Fragment> T newInstance(Class<T> tClass) {
+    @Override
+    public void setStatusBar() {
+
+    }
+
+    @Override
+    public String getClassName() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass) {
         T fragment = null;
         try {
             fragment = tClass.newInstance();
@@ -76,15 +96,8 @@ public abstract class BaseFragment extends Fragment {
         return fragment;
     }
 
-    /**
-     * 获得Fragment对象并传递参数
-     *
-     * @param arguments 要传递的参数
-     * @param tClass    传递的目的Fragment的Class对象
-     * @param <T>       传递的目的Fragment
-     * @return
-     */
-    public static <T extends Fragment> T newInstance(String arguments, Class<T> tClass) {
+    @Override
+    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull int param) {
         T fragment = null;
         try {
             fragment = tClass.newInstance();
@@ -93,67 +106,120 @@ public abstract class BaseFragment extends Fragment {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        if (arguments != null) {
-            Bundle bundle = new Bundle();
-            bundle.putString(tClass.getName(), arguments);
-            fragment.setArguments(bundle);
-        }
+        Bundle bundle = new Bundle();
+        bundle.putInt(tClass.getName(), param);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
-    /**
-     * 获取参数
-     *
-     * @param tClass 传递的目的Fragment的Class对象
-     * @param <T>    传递的目的Fragment
-     * @return 传递的参数
-     */
-    protected <T extends Fragment> String getParemters(Class<T> tClass) {
-        return getArguments().getString(tClass.getName(), "");
+    @Override
+    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull long param) {
+        T fragment = null;
+        try {
+            fragment = tClass.newInstance();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putLong(tClass.getName(), param);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
-    /**
-     * 通过类名启动Activity
-     *
-     * @param cls 需要跳转的类
-     */
-    protected void openActivity(Class<?> cls) {
-        openActivity(cls, null);
+    @Override
+    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull String param) {
+        T fragment = null;
+        try {
+            fragment = tClass.newInstance();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString(tClass.getName(), param);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
-    /**
-     * 通过类名启动Activity，并且含有Flag标识
-     *
-     * @param cls  需要跳转的类
-     * @param flag 数据
-     */
-    protected void openActivity(Class<?> cls, int flag) {
+    @Override
+    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull Bundle params) {
+        T fragment = null;
+        try {
+            fragment = tClass.newInstance();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putBundle(tClass.getName(), params);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    @Override
+    public void openActivity(@NonNull Class<?> cls) {
+        Intent intent = new Intent(mActivity, cls);
+        mActivity.startActivity(intent);
+    }
+
+    @Override
+    public void openActivity(@NonNull Class<?> cls, @NonNull int flag) {
         Intent intent = new Intent(mActivity, cls);
         intent.setFlags(flag);
         mActivity.startActivity(intent);
     }
 
-    /**
-     * 通过类名启动Activity，并且含有Bundle数据
-     *
-     * @param cls    需要跳转的类
-     * @param bundle 数据
-     */
-    protected void openActivity(Class<?> cls, Bundle bundle) {
+    @Override
+    public void openActivity(@NonNull Class<?> cls, @NonNull long param) {
         Intent intent = new Intent(mActivity, cls);
+        intent.putExtra(cls.getSimpleName(), param);
+        mActivity.startActivity(intent);
+    }
+
+    @Override
+    public void openActivity(@NonNull Class<?> cls, @NonNull String param) {
+        Intent intent = new Intent(mActivity, cls);
+        intent.putExtra(cls.getSimpleName(), param);
+        mActivity.startActivity(intent);
+    }
+
+    @Override
+    public void openActivity(@NonNull Class<?> cls, @NonNull Bundle bundle) {
+        Intent intent = new Intent(mActivity, cls);
+        intent.putExtras(bundle);
+        mActivity.startActivity(intent);
+    }
+
+    @Override
+    public void openActivity(@NonNull Class<?> cls, @NonNull String targetPackageName, @Nullable Bundle bundle) {
+        Intent intent = new Intent(mActivity, cls);
+        intent.putExtra(cls.getSimpleName(), targetPackageName);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
         mActivity.startActivity(intent);
     }
 
-    /**
-     * 通过类名启动Activity，并且含有Bundle数据
-     *
-     * @param cls    需要跳转的类
-     * @param bundle 数据
-     */
-    protected void openActivity(Class<?> cls, Bundle bundle, int requestCode) {
+    @Override
+    public void openTargetActivity(@Nullable Bundle bundle, @NonNull String targetPackageName) {
+        Intent intent = null;
+        try {
+            intent = new Intent(mActivity, Class.forName(targetPackageName));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void openActivity(@NonNull Class<?> cls, @Nullable Bundle bundle, @NonNull int requestCode) {
         Intent intent = new Intent(mActivity, cls);
         if (bundle != null) {
             intent.putExtras(bundle);
@@ -161,24 +227,37 @@ public abstract class BaseFragment extends Fragment {
         startActivityForResult(intent, requestCode);
     }
 
-    /**
-     * 通过类名启动Activity，并且含有Bundle数据，并会再打开另一个activity
-     * 例如：登录成功后需要打开新的activity（@param targetcls）
-     *
-     * @param cls               需要跳转的类
-     * @param bundle            数据
-     * @param targetPackageName 要跳转的类的包名
-     */
-    protected void openActivity(Class<?> cls, String targetPackageName, Bundle bundle) {
-        Intent intent = new Intent(mActivity, cls);
-        intent.putExtra(BaseActivity.class.getName(), targetPackageName);
-        if (bundle != null) {
-            intent.putExtras(bundle);
-        }
-        mActivity.startActivity(intent);
+    @Override
+    public void onActivityResult(@NonNull int requestCode, @NonNull Intent data) {
+
     }
 
-    protected abstract int getLayoutResourceId();
+    @Override
+    public int getInt() {
+        return getArguments().getInt(getClassName());
+    }
+
+    @Override
+    public String getString() {
+        return getArguments().getString(getClassName());
+    }
+
+    @Override
+    public long getLong() {
+        return getArguments().getLong(getClassName());
+    }
+
+    @Override
+    public Bundle getBundle() {
+        return getArguments();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK_FLAG && data != null)
+            onActivityResult(requestCode, data);
+    }
 
     @Override
     public void onDestroyView() {
@@ -194,4 +273,77 @@ public abstract class BaseFragment extends Fragment {
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
     }
+
+    @Override
+    public void logD(String message) {
+        LogUtil.d(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logV(String message) {
+        LogUtil.v(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logI(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logW(String message) {
+        LogUtil.w(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logE(String message) {
+        LogUtil.e(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void showToast(String message) {
+        ToastUtil.showToast(mContext, message);
+    }
+
+    @Override
+    public void showToast(String message, int duration) {
+        ToastUtil.showToast(mContext, message, duration);
+    }
+
+    @Override
+    public boolean checkObject(Object object) {
+        return QMUtil.isEmpty(object);
+    }
+
+    @Override
+    public String checkStr(String str) {
+        return QMUtil.checkStr(str);
+    }
+
+    @Override
+    public int str2Int(String str) {
+        return QMUtil.strToInt(str);
+    }
+
+    @Override
+    public long str2Long(String str) {
+        return QMUtil.strToInt(str);
+    }
+
+    @Override
+    public float str2Float(String str) {
+        return QMUtil.strToInt(str);
+    }
+
+    @Override
+    public double str2Double(String str) {
+        return QMUtil.strToInt(str);
+    }
+
+    @Override
+    public String object2Str(Object object) {
+        if (object instanceof Integer || object instanceof Long || object instanceof Float || object instanceof Double)
+            return String.valueOf(object);
+        return "";
+    }
+
 }

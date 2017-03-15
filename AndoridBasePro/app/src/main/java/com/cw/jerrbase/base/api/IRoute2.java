@@ -3,6 +3,7 @@ package com.cw.jerrbase.base.api;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * @version V1.0
@@ -11,7 +12,7 @@ import android.support.annotation.NonNull;
  * @create by: chenwei
  * @date 2017/3/14 13:43
  */
-public interface IRoute2 extends IRoute {
+public interface IRoute2 extends IRoute1 {
 
     /**
      * 通过类名启动Activity，并且含有Bundle数据和返回数据
@@ -19,7 +20,7 @@ public interface IRoute2 extends IRoute {
      * @param cls    需要跳转的类
      * @param bundle 数据
      */
-    void openActivity(@NonNull Class<?> cls, @NonNull Bundle bundle, @NonNull int requestCode);
+    void openActivity(@NonNull Class<?> cls, @Nullable Bundle bundle, @NonNull int requestCode);
 
     /**
      * 数据回调

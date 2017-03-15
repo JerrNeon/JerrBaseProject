@@ -5,10 +5,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
-import android.util.Log;
-import android.widget.Toast;
 
+import com.cw.jerrbase.base.api.ILog;
+import com.cw.jerrbase.base.api.IToast;
 import com.cw.jerrbase.util.ImageUtil;
+import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.ToastUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,9 +27,7 @@ import java.util.Date;
  * @create by: chenwei
  * @date 2016/10/18 10:09
  */
-public class CrashHandler implements Thread.UncaughtExceptionHandler {
-
-    private static final String TAG = "CrashHandler";
+public class CrashHandler implements Thread.UncaughtExceptionHandler, ILog, IToast {
 
     private static CrashHandler sInstance = new CrashHandler();
     private Thread.UncaughtExceptionHandler mDefaultCrashHandler;
@@ -72,9 +72,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             try {
                 //延迟2秒杀进程
                 Thread.sleep(2000);
-                Toast.makeText(mContext, "程序出错了~", Toast.LENGTH_SHORT).show();
+                showToast("程序出错了~");
             } catch (InterruptedException e) {
-                Log.e(TAG, "error : ", e);
+                logE("error : " + e.getMessage());
             }
             android.os.Process.killProcess(Process.myPid());
         }
@@ -96,10 +96,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             pw.println();
             ex.printStackTrace(pw);
             pw.close();
-            Log.e(TAG, "dump crash info seccess");
+            logI("dump crash info seccess");
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            Log.e(TAG, "dump crash info failed");
+            logE(e.getMessage());
+            logE("dump crash info failed");
         }
     }
 
@@ -137,5 +137,30 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     private void uploadExceptionToServer() {
 
+    }
+
+    @Override
+    public void logI(String message) {
+        LogUtil.i(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logW(String message) {
+        LogUtil.w(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public void logE(String message) {
+        LogUtil.e(String.format(messageFormat, getClassName(), message));
+    }
+
+    @Override
+    public String getClassName() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public void showToast(String message) {
+        ToastUtil.showToast(mContext, message);
     }
 }

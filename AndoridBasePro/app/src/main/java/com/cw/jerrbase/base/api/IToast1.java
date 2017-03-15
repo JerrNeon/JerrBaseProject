@@ -7,7 +7,7 @@ package com.cw.jerrbase.base.api;
  * @create by: chenwei
  * @date 2017/3/14 14:21
  */
-public interface IToast2 extends IToast {
+public interface IToast1 extends IToast {
 
     /**
      * 显示Toast

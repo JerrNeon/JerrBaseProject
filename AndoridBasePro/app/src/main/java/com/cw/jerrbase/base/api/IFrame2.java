@@ -1,25 +1,24 @@
 package com.cw.jerrbase.base.api;
 
-import android.support.v7.widget.Toolbar;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * @version V1.0
  * @ClassName: ${CLASS_NAME}
- * @Description: (基础框架)
+ * @Description: (框架)
  * @create by: chenwei
- * @date 2017/3/14 14:57
+ * @date 2017/3/14 15:00
  */
-public interface IFrame2 extends IFrame {
+public interface IFrame2 extends IFrame1 {
 
     /**
-     * 设置ToolBar
+     * 初始化AutoLayout
      *
-     * @param toolbar
+     * @param context
+     * @param attrs
+     * @return view
      */
-    void setToolBar(Toolbar toolbar);
-
-    /**
-     * 退出
-     */
-    void exit();
+    View initAutoLayout(String name, Context context, AttributeSet attrs);
 }
