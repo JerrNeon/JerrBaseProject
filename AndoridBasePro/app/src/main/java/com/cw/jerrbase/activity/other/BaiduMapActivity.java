@@ -162,7 +162,7 @@ public class BaiduMapActivity extends BaseTbActivity {
                 mBmWalk.setSelected(false);
                 break;
             case R.id.bm_walk:
-                showProgressDialog("");
+                showProgressDialog("获取步行路线");
                 mBaiduMapManage.walkingSearch(locLng, toll, new MyRouteSearchResultListener());
                 mBmCar.setSelected(false);
                 mBmBus.setSelected(false);

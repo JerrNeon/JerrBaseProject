@@ -14,10 +14,10 @@ import java.lang.reflect.Type;
 
 
 public abstract class ResultCallback<T> {
+
     public Type mType;
     private Context mContext;
     private Object tag1;
-    //private ProgressDialog mDialog;
     private KProgressHUD hud;
 
     public Object getTag() {

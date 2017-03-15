@@ -159,7 +159,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
 
     @Override
     public void onItemClick(AdapterView adapterView, View view, int position, long id) {
-        DialogUtils.showImageDialog(mContext, new OnItemClickListener() {
+        DialogUtils.showImageDialog(mActivity, new OnItemClickListener() {
             @Override
             public void onItemClick(Object o, int position) {
                 //裁剪配置
@@ -177,7 +177,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-        DialogUtils.showAlertDialog(mContext, "确认删除吗", new OnItemClickListener() {
+        DialogUtils.showAlertDialog(mActivity, "确认删除吗", new OnItemClickListener() {
             @Override
             public void onItemClick(Object o, int position) {
 
