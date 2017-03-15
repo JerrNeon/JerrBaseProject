@@ -90,7 +90,7 @@ public class VideoActivity extends BaseActivity {
                 //直接横屏
                 //orientationUtils.resolveByClick();
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                mGsyVieoPlayer.startWindowFullscreen(mContext, true, true);
+                mGsyVieoPlayer.startWindowFullscreen(mActivity, true, true);
             }
         });
         mGsyVieoPlayer.setLockClickListener(new LockClickListener() {
@@ -253,7 +253,7 @@ public class VideoActivity extends BaseActivity {
         if (isPlay && !isPause) {
             if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
                 if (!mGsyVieoPlayer.isIfCurrentIsFullscreen()) {
-                    mGsyVieoPlayer.startWindowFullscreen(mContext, true, true);
+                    mGsyVieoPlayer.startWindowFullscreen(mActivity, true, true);
                 }
             } else {
                 //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突

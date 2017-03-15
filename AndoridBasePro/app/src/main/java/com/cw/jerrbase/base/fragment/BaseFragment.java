@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cw.jerrbase.base.api.IDialog;
 import com.cw.jerrbase.base.api.IFrame;
 import com.cw.jerrbase.base.api.ILog1;
 import com.cw.jerrbase.base.api.IRoute3;
@@ -19,6 +20,7 @@ import com.cw.jerrbase.base.api.IUtil;
 import com.cw.jerrbase.util.LogUtil;
 import com.cw.jerrbase.util.QMUtil;
 import com.cw.jerrbase.util.ToastUtil;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -32,7 +34,7 @@ import butterknife.Unbinder;
  * @create by: chenwei
  * @date 2016/9/30 11:04
  */
-public abstract class BaseFragment extends Fragment implements IFrame, IRoute3, ILog1, IToast1, IUtil {
+public abstract class BaseFragment extends Fragment implements IFrame, IRoute3, ILog1, IToast1, IUtil, IDialog {
 
     protected Activity mActivity = null;
     protected Context mContext = null;
@@ -45,6 +47,10 @@ public abstract class BaseFragment extends Fragment implements IFrame, IRoute3, 
      * butterknift操作对象
      */
     protected Unbinder unbinder;
+    /**
+     * 加载框
+     */
+    protected KProgressHUD mHUD = null;
 
     @Nullable
     @Override
@@ -76,6 +82,24 @@ public abstract class BaseFragment extends Fragment implements IFrame, IRoute3, 
     @Override
     public void setStatusBar() {
 
+    }
+
+    @Override
+    public void showProgressDialog(String message) {
+        mHUD = KProgressHUD.create(mActivity)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setDimAmount(0.5f);
+        if (!checkObject(message))
+            mHUD.setLabel(message);
+        mHUD.show();
+    }
+
+    @Override
+    public void dismisssProgressDialog() {
+        if (mHUD == null)
+            return;
+        if (mHUD.isShowing())
+            mHUD.dismiss();
     }
 
     @Override
@@ -174,7 +198,7 @@ public abstract class BaseFragment extends Fragment implements IFrame, IRoute3, 
     /**
      * 获得Fragment对象并传递参数
      *
-     * @param params  要传递的参数
+     * @param params 要传递的参数
      * @param tClass 传递的目的Fragment的Class对象
      * @param <T>    传递的目的Fragment
      * @return
@@ -306,6 +330,8 @@ public abstract class BaseFragment extends Fragment implements IFrame, IRoute3, 
             unbinder.unbind();
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
+        if (mHUD != null)
+            mHUD = null;
     }
 
     @Override

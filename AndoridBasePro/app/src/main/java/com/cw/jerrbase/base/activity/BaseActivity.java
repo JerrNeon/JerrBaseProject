@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.cw.jerrbase.base.api.IDialog;
 import com.cw.jerrbase.base.api.IFrame2;
 import com.cw.jerrbase.base.api.ILog1;
 import com.cw.jerrbase.base.api.IRoute3;
@@ -21,6 +22,7 @@ import com.cw.jerrbase.ttpapi.jpush.JpushManage;
 import com.cw.jerrbase.util.LogUtil;
 import com.cw.jerrbase.util.QMUtil;
 import com.cw.jerrbase.util.ToastUtil;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.zhy.autolayout.AutoFrameLayout;
 import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.AutoRelativeLayout;
@@ -37,7 +39,7 @@ import butterknife.Unbinder;
  * @create by: chenwei
  * @date 2016/8/23 11:33
  */
-public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3, ILog1, IToast1,IUtil {
+public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3, ILog1, IToast1, IUtil, IDialog {
 
     protected ActivityManager activityManager = ActivityManager.getActivityManager(this);
     protected Activity mActivity = null;
@@ -46,6 +48,10 @@ public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3,
      * ButterKnife操作对象
      */
     protected Unbinder unbinder;
+    /**
+     * 加载框
+     */
+    protected KProgressHUD mHUD = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +92,24 @@ public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3,
     @Override
     public void setToolBar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void showProgressDialog(String message) {
+        mHUD = KProgressHUD.create(mActivity)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setDimAmount(0.5f);
+        if (!checkObject(message))
+            mHUD.setLabel(message);
+        mHUD.show();
+    }
+
+    @Override
+    public void dismisssProgressDialog() {
+        if (mHUD == null)
+            return;
+        if (mHUD.isShowing())
+            mHUD.dismiss();
     }
 
     @Override
@@ -247,6 +271,8 @@ public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3,
             unbinder.unbind();
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
+        if (mHUD != null)
+            mHUD.dismiss();
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.cw.jerrbase.base.api.IDialog;
 import com.cw.jerrbase.base.api.IFrame;
 import com.cw.jerrbase.base.api.ILog1;
 import com.cw.jerrbase.base.api.IRoute3;
@@ -25,6 +26,7 @@ import com.cw.jerrbase.base.api.IUtil;
 import com.cw.jerrbase.util.LogUtil;
 import com.cw.jerrbase.util.QMUtil;
 import com.cw.jerrbase.util.ToastUtil;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,7 +40,7 @@ import butterknife.Unbinder;
  * @create by: chenwei
  * @date 2017/3/8 11:06
  */
-public abstract class BaseDialog extends DialogFragment implements IFrame, IRoute3, ILog1, IToast1, IUtil {
+public abstract class BaseDialog extends DialogFragment implements IFrame, IRoute3, ILog1, IToast1, IUtil, IDialog {
 
     protected Activity mActivity = null;
     protected Context mContext = null;
@@ -51,6 +53,10 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
      * butterknift操作对象
      */
     protected Unbinder unbinder;
+    /**
+     * 加载框
+     */
+    protected KProgressHUD mHUD = null;
 
     @Override
     public void onStart() {
@@ -98,6 +104,24 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
     @Override
     public void setStatusBar() {
 
+    }
+
+    @Override
+    public void showProgressDialog(String message) {
+        mHUD = KProgressHUD.create(mActivity)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setDimAmount(0.5f);
+        if (!checkObject(message))
+            mHUD.setLabel(message);
+        mHUD.show();
+    }
+
+    @Override
+    public void dismisssProgressDialog() {
+        if (mHUD == null)
+            return;
+        if (mHUD.isShowing())
+            mHUD.dismiss();
     }
 
     @Override
@@ -196,7 +220,7 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
     /**
      * 获得Fragment对象并传递参数
      *
-     * @param params  要传递的参数
+     * @param params 要传递的参数
      * @param tClass 传递的目的Fragment的Class对象
      * @param <T>    传递的目的Fragment
      * @return
@@ -328,6 +352,8 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
             unbinder.unbind();
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
+        if (mHUD != null)
+            mHUD = null;
     }
 
     @Override

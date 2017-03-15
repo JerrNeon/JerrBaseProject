@@ -18,7 +18,6 @@ import com.cw.jerrbase.base.activity.BaseTbActivity;
 import com.cw.jerrbase.ttpapi.map.BaiduMapManage;
 import com.cw.jerrbase.ttpapi.map.callback.LoctionResultListener;
 import com.cw.jerrbase.ttpapi.map.callback.RouteSearchResultListener;
-import com.cw.jerrbase.util.ToastUtil;
 
 import java.util.List;
 
@@ -67,6 +66,7 @@ public class BaiduMapActivity extends BaseTbActivity {
         mBmCar.setSelected(true);
         mBaiduMap = mBmView.getMap();
 
+        showProgressDialog("正在加载地图");
         mBaiduMapManage = BaiduMapManage.getInstance();
         mBaiduMapManage.startLoc(new LoctionResultListener() {
             @Override
@@ -79,7 +79,8 @@ public class BaiduMapActivity extends BaseTbActivity {
 
             @Override
             public void onFailure(BDLocation location) {
-                ToastUtil.showToast(mContext, "定位失败");
+                showToast("定位失败");
+                dismisssProgressDialog();
             }
         });
     }
@@ -89,21 +90,25 @@ public class BaiduMapActivity extends BaseTbActivity {
         @Override
         public void onDrivingSuccess(List<DrivingRouteLine> rLines) {
             mBaiduMapManage.updateDrivingSearchMapStatus(mBaiduMap, rLines);
+            dismisssProgressDialog();
         }
 
         @Override
         public void onTransitSuccess(List<TransitRouteLine> rLines) {
             mBaiduMapManage.updateTransitSearchMapStatus(mBaiduMap, rLines);
+            dismisssProgressDialog();
         }
 
         @Override
         public void onBikingSuccess(List<BikingRouteLine> rLines) {
             mBaiduMapManage.updateBikingSearchMapStatus(mBaiduMap, rLines);
+            dismisssProgressDialog();
         }
 
         @Override
         public void onWalkingSuccess(List<WalkingRouteLine> rLines) {
             mBaiduMapManage.updateWalkingSearchMapStatus(mBaiduMap, rLines);
+            dismisssProgressDialog();
         }
 
         @Override
@@ -124,6 +129,7 @@ public class BaiduMapActivity extends BaseTbActivity {
                 default:
                     break;
             }
+            dismisssProgressDialog();
         }
     }
 
@@ -132,6 +138,7 @@ public class BaiduMapActivity extends BaseTbActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bm_car:
+                showProgressDialog("获取驾车路线");
                 mBaiduMapManage.drivingSearch(cityName, locLng, toll, null, new MyRouteSearchResultListener());
                 mBmCar.setSelected(true);
                 mBmBus.setSelected(false);
@@ -139,6 +146,7 @@ public class BaiduMapActivity extends BaseTbActivity {
                 mBmWalk.setSelected(false);
                 break;
             case R.id.bm_bus:
+                showProgressDialog("获取公交路线");
                 mBaiduMapManage.transitSearch(cityName, locLng, toll, null, new MyRouteSearchResultListener());
                 mBmCar.setSelected(false);
                 mBmBus.setSelected(true);
@@ -146,6 +154,7 @@ public class BaiduMapActivity extends BaseTbActivity {
                 mBmWalk.setSelected(false);
                 break;
             case R.id.bm_cycling:
+                showProgressDialog("获取骑行路线");
                 mBaiduMapManage.bikingSearch(locLng, toll, new MyRouteSearchResultListener());
                 mBmCar.setSelected(false);
                 mBmBus.setSelected(false);
@@ -153,6 +162,7 @@ public class BaiduMapActivity extends BaseTbActivity {
                 mBmWalk.setSelected(false);
                 break;
             case R.id.bm_walk:
+                showProgressDialog("");
                 mBaiduMapManage.walkingSearch(locLng, toll, new MyRouteSearchResultListener());
                 mBmCar.setSelected(false);
                 mBmBus.setSelected(false);
