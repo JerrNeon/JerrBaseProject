@@ -27,7 +27,7 @@ public class TabInfoActivity extends BaseTabActivity {
 
     @Override
     protected Fragment[] getFragments() {
-        return new Fragment[]{TabInfoLvFragment.newInstance("1", TabInfoLvFragment.class), TabInfoLvFragment.newInstance("2", TabInfoLvFragment.class), RecyerViewFragment.newInstance("3", RecyerViewFragment.class), RxJavaFragment.newInstance("4", RxJavaFragment.class), TabInfoFragment.newInstance("5", TabInfoFragment.class)};
+        return new Fragment[]{TabInfoLvFragment.newInstance(TabInfoLvFragment.class,"1"), TabInfoLvFragment.newInstance(TabInfoLvFragment.class,"2"), RecyerViewFragment.newInstance(RecyerViewFragment.class,"3"), RxJavaFragment.newInstance(RxJavaFragment.class,"4"), TabInfoFragment.newInstance(TabInfoFragment.class,"5")};
     }
 
     @Override

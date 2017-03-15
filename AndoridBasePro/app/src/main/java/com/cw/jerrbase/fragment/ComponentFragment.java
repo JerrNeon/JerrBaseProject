@@ -1,7 +1,5 @@
 package com.cw.jerrbase.fragment;
 
-import android.content.Intent;
-
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.activity.ShareActivity;
 import com.cw.jerrbase.activity.other.BaiduMapActivity;
@@ -27,17 +25,17 @@ public class ComponentFragment extends BaseFragment {
 
     @OnClick(R.id.tv_tablayout_okhttp)
     public void onTabLayoutAndOkHttp() {
-        startActivity(new Intent(mContext, TabInfoActivity.class));
+        openActivity(TabInfoActivity.class);
     }
 
     @OnClick(R.id.tv_baiduMap)
     public void onBaiduMap() {
-        startActivity(new Intent(mContext, BaiduMapActivity.class));
+        openActivity(BaiduMapActivity.class);
     }
 
     @OnClick(R.id.tv_video)
     public void onVideo() {
-        startActivity(new Intent(mContext, VideoActivity.class));
+        openActivity(VideoActivity.class);
     }
 
     @OnClick(R.id.tv_Share)

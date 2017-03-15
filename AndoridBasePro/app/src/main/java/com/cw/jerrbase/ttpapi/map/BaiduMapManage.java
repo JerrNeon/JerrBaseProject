@@ -54,6 +54,7 @@ import java.util.List;
 public class BaiduMapManage implements ILog {
 
     private static BaiduMapManage instance = null;
+    private boolean isLocSuccess;//是否定位成功
 
     private LocationClient mLocationClient = null;//定位关键类
     private BDLocationListener myListener = null;//定位监听
@@ -310,8 +311,10 @@ public class BaiduMapManage implements ILog {
                 sb.append("\ndescribe : ");
                 sb.append("gps定位成功");
 
-                if (mLoctionResultListener != null)
+                if (mLoctionResultListener != null && !isLocSuccess) {
                     mLoctionResultListener.onSuccess(location);
+                    isLocSuccess = true;
+                }
             } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
 
                 // 网络定位结果
@@ -323,16 +326,20 @@ public class BaiduMapManage implements ILog {
 
                 sb.append("\ndescribe : ");
                 sb.append("网络定位成功");
-                if (mLoctionResultListener != null)
+                if (mLoctionResultListener != null && !isLocSuccess) {
                     mLoctionResultListener.onSuccess(location);
+                    isLocSuccess = true;
+                }
             } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {
 
                 // 离线定位结果
                 sb.append("\ndescribe : ");
                 sb.append("离线定位成功，离线定位结果也是有效的");
 
-                if (mLoctionResultListener != null)
+                if (mLoctionResultListener != null && !isLocSuccess) {
                     mLoctionResultListener.onSuccess(location);
+                    isLocSuccess = true;
+                }
             } else if (location.getLocType() == BDLocation.TypeServerError) {
 
                 sb.append("\ndescribe : ");
@@ -385,11 +392,13 @@ public class BaiduMapManage implements ILog {
                 //未找到结果
                 if (mRouteSearchResultListener != null)
                     mRouteSearchResultListener.onFailure(RouteSearchResultListener.Type.WALKING);
+                logE("步行路线获取失败");
                 return;
             }
             if (walkingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
                 //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
                 //walkingRouteResult.getSuggestAddrInfo()
+                logE("步行起终点或途经点地址有岐义");
                 return;
             }
             if (walkingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
@@ -398,6 +407,7 @@ public class BaiduMapManage implements ILog {
                 if (null == wrLines) return;
                 if (mRouteSearchResultListener != null)
                     mRouteSearchResultListener.onWalkingSuccess(wrLines);
+                logI("步行路线获取成功");
             }
         }
 
@@ -407,11 +417,13 @@ public class BaiduMapManage implements ILog {
                 //未找到结果
                 if (mRouteSearchResultListener != null)
                     mRouteSearchResultListener.onFailure(RouteSearchResultListener.Type.TRANSIT);
+                logE("公交路线获取失败");
                 return;
             }
             if (transitRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
                 //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
                 //transitRouteResult.getSuggestAddrInfo()
+                logE("公交起终点或途经点地址有岐义");
                 return;
             }
             if (transitRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
@@ -420,6 +432,7 @@ public class BaiduMapManage implements ILog {
                 if (null == wrLines) return;
                 if (mRouteSearchResultListener != null)
                     mRouteSearchResultListener.onTransitSuccess(wrLines);
+                logI("公交路线获取成功");
             }
         }
 
@@ -434,11 +447,13 @@ public class BaiduMapManage implements ILog {
                 //未找到结果
                 if (mRouteSearchResultListener != null)
                     mRouteSearchResultListener.onFailure(RouteSearchResultListener.Type.DRIVING);
+                logE("驾车路线获取失败");
                 return;
             }
             if (drivingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
                 //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
                 //drivingRouteResult.getSuggestAddrInfo()
+                logE("驾车起终点或途经点地址有岐义");
                 return;
             }
             if (drivingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
@@ -447,6 +462,7 @@ public class BaiduMapManage implements ILog {
                 if (null == wrLines) return;
                 if (mRouteSearchResultListener != null)
                     mRouteSearchResultListener.onDrivingSuccess(wrLines);
+                logI("驾车路线获取成功");
             }
         }
 
@@ -461,11 +477,13 @@ public class BaiduMapManage implements ILog {
                 //未找到结果
                 if (mRouteSearchResultListener != null)
                     mRouteSearchResultListener.onFailure(RouteSearchResultListener.Type.BIKING);
+                logE("骑行路线获取失败");
                 return;
             }
             if (bikingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
                 //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
                 //bikingRouteResult.getSuggestAddrInfo()
+                logE("骑行起终点或途经点地址有岐义");
                 return;
             }
             if (bikingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
@@ -473,6 +491,7 @@ public class BaiduMapManage implements ILog {
                 if (null == wrLines) return;
                 if (mRouteSearchResultListener != null)
                     mRouteSearchResultListener.onBikingSuccess(wrLines);
+                logI("骑行路线获取成功");
             }
         }
     }

@@ -19,7 +19,7 @@ import android.view.WindowManager;
 
 import com.cw.jerrbase.base.api.IFrame;
 import com.cw.jerrbase.base.api.ILog1;
-import com.cw.jerrbase.base.api.IRoute4;
+import com.cw.jerrbase.base.api.IRoute3;
 import com.cw.jerrbase.base.api.IToast1;
 import com.cw.jerrbase.base.api.IUtil;
 import com.cw.jerrbase.util.LogUtil;
@@ -38,7 +38,7 @@ import butterknife.Unbinder;
  * @create by: chenwei
  * @date 2017/3/8 11:06
  */
-public abstract class BaseDialog extends DialogFragment implements IFrame, IRoute4, ILog1, IToast1, IUtil {
+public abstract class BaseDialog extends DialogFragment implements IFrame, IRoute3, ILog1, IToast1, IUtil {
 
     protected Activity mActivity = null;
     protected Context mContext = null;
@@ -105,8 +105,14 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
         return getClass().getSimpleName();
     }
 
-    @Override
-    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass) {
+    /**
+     * 获得Fragment对象
+     *
+     * @param tClass 传递的目的Fragment的Class对象
+     * @param <T>    传递的目的Fragment
+     * @return
+     */
+    public static <T extends Fragment> T newInstance(@NonNull Class<T> tClass) {
         T fragment = null;
         try {
             fragment = tClass.newInstance();
@@ -118,8 +124,15 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
         return fragment;
     }
 
-    @Override
-    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull int param) {
+    /**
+     * 获得Fragment对象并传递参数
+     *
+     * @param param  要传递的参数
+     * @param tClass 传递的目的Fragment的Class对象
+     * @param <T>    传递的目的Fragment
+     * @return
+     */
+    public static <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull int param) {
         T fragment = null;
         try {
             fragment = tClass.newInstance();
@@ -134,8 +147,15 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
         return fragment;
     }
 
-    @Override
-    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull long param) {
+    /**
+     * 获得Fragment对象并传递参数
+     *
+     * @param param  要传递的参数
+     * @param tClass 传递的目的Fragment的Class对象
+     * @param <T>    传递的目的Fragment
+     * @return
+     */
+    public static <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull long param) {
         T fragment = null;
         try {
             fragment = tClass.newInstance();
@@ -150,8 +170,15 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
         return fragment;
     }
 
-    @Override
-    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull String param) {
+    /**
+     * 获得Fragment对象并传递参数
+     *
+     * @param param  要传递的参数
+     * @param tClass 传递的目的Fragment的Class对象
+     * @param <T>    传递的目的Fragment
+     * @return
+     */
+    public static <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull String param) {
         T fragment = null;
         try {
             fragment = tClass.newInstance();
@@ -166,8 +193,15 @@ public abstract class BaseDialog extends DialogFragment implements IFrame, IRout
         return fragment;
     }
 
-    @Override
-    public <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull Bundle params) {
+    /**
+     * 获得Fragment对象并传递参数
+     *
+     * @param params  要传递的参数
+     * @param tClass 传递的目的Fragment的Class对象
+     * @param <T>    传递的目的Fragment
+     * @return
+     */
+    public static <T extends Fragment> T newInstance(@NonNull Class<T> tClass, @NonNull Bundle params) {
         T fragment = null;
         try {
             fragment = tClass.newInstance();

@@ -24,21 +24,7 @@ import butterknife.BindView;
  * @create by: chenwei
  * @date 2016/10/8 15:46
  */
-public abstract class BaseLazyListFragment<T> extends BaseFragment implements PullToRefreshBase.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
-
-    /**
-     * 标志位，标志已经初始化完成，因为setUserVisibleHint是在onCreateView之前调用的，
-     * 在视图未初始化的时候，在lazyLoad当中就使用的话，就会有空指针的异常
-     */
-    protected boolean isPrepared;
-    /**
-     * 标志当前页面是否可见
-     */
-    protected boolean isVisible;
-    /**
-     * 是否已经加载过
-     */
-    protected boolean isLoad;
+public abstract class BaseLazyListFragment<T> extends BaseLazyFragment implements PullToRefreshBase.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     /**
      * 当前页
@@ -74,26 +60,6 @@ public abstract class BaseLazyListFragment<T> extends BaseFragment implements Pu
         initLv();
         setLvListener();
         return mView;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        isPrepared = true;
-        lazyLoad();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        //懒加载
-        if (getUserVisibleHint()) {
-            isVisible = true;
-            onVisible();
-        } else {
-            isVisible = false;
-            onInvisible();
-        }
     }
 
     private void initLv() {
@@ -183,22 +149,7 @@ public abstract class BaseLazyListFragment<T> extends BaseFragment implements Pu
         return false;
     }
 
-    /**
-     * 页面可见
-     */
-    protected void onVisible() {
-        lazyLoad();
-    }
-
-    /**
-     * 页面不可见
-     */
-    protected void onInvisible() {
-    }
-
-    /**
-     * 懒加载
-     */
+    @Override
     protected void lazyLoad() {
         if (!isVisible || !isPrepared)
             return;
@@ -207,5 +158,4 @@ public abstract class BaseLazyListFragment<T> extends BaseFragment implements Pu
             isLoad = true;
         }
     }
-
 }

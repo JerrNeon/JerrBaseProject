@@ -110,16 +110,16 @@ public class BaiduMapActivity extends BaseTbActivity {
         public void onFailure(Type type) {
             switch (type) {
                 case DRIVING:
-                    ToastUtil.showToast(mContext, "驾车路线获取失败");
+                    showToast("驾车路线获取失败");
                     break;
                 case TRANSIT:
-                    ToastUtil.showToast(mContext, "公交路线获取失败");
+                    showToast("公交路线获取失败");
                     break;
                 case BIKING:
-                    ToastUtil.showToast(mContext, "骑行路线获取失败");
+                    showToast("骑行路线获取失败");
                     break;
                 case WALKING:
-                    ToastUtil.showToast(mContext, "步行路线获取失败");
+                    showToast("步行路线获取失败");
                     break;
                 default:
                     break;
