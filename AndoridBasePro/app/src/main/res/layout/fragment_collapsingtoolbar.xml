@@ -44,4 +44,16 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_arrow_top"
+        app:elevation="4dp"
+        android:visibility="invisible"
+        app:layout_anchor="@id/coll_recyerview"
+        app:layout_anchorGravity="right|bottom"
+        app:layout_behavior="com.cw.jerrbase.widget.behavior.FloatingActionButtonBehavior2"/>
+
 </android.support.design.widget.CoordinatorLayout>
