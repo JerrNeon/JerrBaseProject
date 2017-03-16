@@ -2,7 +2,7 @@ package com.cw.jerrbase.net.request;
 
 import com.cw.jerrbase.net.OkHttpClientManager;
 import com.cw.jerrbase.net.callback.ResultCallback;
-import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.LogUtils;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -91,7 +91,7 @@ public class OkHttpDownloadRequest extends OkHttpGetRequest
             final long total = response.body().contentLength();
             long sum = 0;
 
-            LogUtil.e("OkhttpDownLoadRequest", total + "");
+            LogUtils.e("OkhttpDownLoadRequest", total + "");
 
             File dir = new File(destFileDir);
             if (!dir.exists())

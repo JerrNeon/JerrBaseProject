@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import com.cw.jerrbase.activity.MainActivity;
 import com.cw.jerrbase.base.api.IBSRoute;
 import com.cw.jerrbase.base.api.ILog;
-import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.LogUtils;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -88,16 +88,16 @@ public class JpushMessageReceiver extends BroadcastReceiver implements IBSRoute,
 
     @Override
     public void logI(String message) {
-        LogUtil.i(String.format(ILog.messageFormat, getClassName(), message));
+        LogUtils.i(String.format(ILog.messageFormat, getClassName(), message));
     }
 
     @Override
     public void logW(String message) {
-        LogUtil.w(String.format(ILog.messageFormat, getClassName(), message));
+        LogUtils.w(String.format(ILog.messageFormat, getClassName(), message));
     }
 
     @Override
     public void logE(String message) {
-        LogUtil.e(String.format(ILog.messageFormat, getClassName(), message));
+        LogUtils.e(String.format(ILog.messageFormat, getClassName(), message));
     }
 }

@@ -60,7 +60,7 @@ public class CollapsingToolbarActivity extends BaseActivity {
 
     @Override
     public void setStatusBar() {
-        StatusBarUtil.setTranslucentForCoordinatorLayout(mActivity,122);
+        StatusBarUtil.setTranslucentForCoordinatorLayout(mActivity, 122);
     }
 
     private void initCollapsingToolbarLayout() {
@@ -76,9 +76,11 @@ public class CollapsingToolbarActivity extends BaseActivity {
         for (int i = 0; i < 20; i++) {
             s.add(i + "");
         }
-        RecyerAdapter adapter = new RecyerAdapter(mContext, s);
+        RecyerAdapter adapter = new RecyerAdapter(mContext);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(adapter);
+        adapter.addAll(s);
+        adapter.notifyDataSetChanged();
     }
 }

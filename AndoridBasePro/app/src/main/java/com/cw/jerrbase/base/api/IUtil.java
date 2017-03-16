@@ -58,4 +58,20 @@ public interface IUtil {
      * @return
      */
     String object2Str(Object object);
+
+    /**
+     * 格式化金额
+     *
+     * @param price
+     * @return
+     */
+    String formatPrice(String price);
+
+    /**
+     * 格式化时间
+     *
+     * @param time
+     * @return
+     */
+    String formatTime(long time);
 }

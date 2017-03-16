@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment;
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.ttpapi.TtpConstants;
-import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.LogUtils;
 import com.cw.jerrbase.util.gson.JsonUtils;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.share.QQShare;
@@ -193,17 +193,17 @@ public class QqManage implements IUiListener, ILog {
 
     @Override
     public void logI(String message) {
-        LogUtil.i(String.format(messageFormat, getClassName(), message));
+        LogUtils.i(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logW(String message) {
-        LogUtil.i(String.format(messageFormat, getClassName(), message));
+        LogUtils.i(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logE(String message) {
-        LogUtil.i(String.format(messageFormat, getClassName(), message));
+        LogUtils.i(String.format(messageFormat, getClassName(), message));
     }
 
     @Override

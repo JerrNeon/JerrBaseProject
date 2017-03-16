@@ -17,7 +17,7 @@ import butterknife.BindView;
 /**
  * @version V1.0
  * @ClassName: ${CLASS_NAME}
- * @Description: (BaseTbListActivity toolbar不需要自定义的带刷新的activity)
+ * @Description: (BaseTbListActivity toolbar不需要自定义的带刷新的ListView Activity)
  * @create by: chenwei
  * @date 2016/10/8 16:28
  */
@@ -44,7 +44,7 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
      * 请求类型
      */
     protected enum RequestType {
-        PULLTOREFRESHLISTVIEW, LISTVIEW;//带刷新的/不带刷新的
+        LISTVIEW, PULLTOREFRESHLISTVIEW;//带刷新的/不带刷新的
     }
 
     @BindView(R.id.common_pullrefreshLv)
@@ -137,11 +137,17 @@ public abstract class BaseTbListActivity<T> extends BaseTbActivity implements Pu
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
+        onItemClick(adapterView, view, position, id, mAdapter.getItem((int) id));
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+        return onItemLongClick(adapterView, view, position, id, mAdapter.getItem((int) id));
+    }
+
+    public abstract void onItemClick(AdapterView<?> adapterView, View view, int position, long id, T bean);
+
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id, T bean) {
         return false;
     }
 }

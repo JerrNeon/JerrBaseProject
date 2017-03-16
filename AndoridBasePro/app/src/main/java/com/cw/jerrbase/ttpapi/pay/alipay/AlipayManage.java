@@ -12,7 +12,7 @@ import com.alipay.sdk.app.AuthTask;
 import com.alipay.sdk.app.PayTask;
 import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.ttpapi.TtpConstants;
-import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.LogUtils;
 
 import java.util.Map;
 
@@ -170,17 +170,17 @@ public class AlipayManage implements Handler.Callback, ILog {
 
     @Override
     public void logI(String message) {
-        LogUtil.i(String.format(messageFormat, getClassName(), message));
+        LogUtils.i(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logW(String message) {
-        LogUtil.w(String.format(messageFormat, getClassName(), message));
+        LogUtils.w(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logE(String message) {
-        LogUtil.e(String.format(messageFormat, getClassName(), message));
+        LogUtils.e(String.format(messageFormat, getClassName(), message));
     }
 
     @Override

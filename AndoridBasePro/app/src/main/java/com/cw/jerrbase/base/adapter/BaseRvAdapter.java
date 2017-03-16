@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.base.api.IRoute;
@@ -26,65 +26,64 @@ import java.util.List;
 /**
  * @version V1.0
  * @ClassName: ${CLASS_NAME}
- * @Description: (ListView的适配器)
+ * @Description: (RecyclerView的适配器)
  * @create by: chenwei
  * @date 2017/3/16 10:35
  */
-public abstract class BaseListAdapter<T> extends BaseAdapter implements IRoute, ILog, IToast, IUtil {
+public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<BaseRvViewHolder> implements IRoute, ILog, IToast, IUtil {
 
-    /**
-     * 数据集
-     */
-    protected List<T> mList = null;
     protected Context mContext = null;
     protected Fragment mFragment = null;
-    protected LayoutInflater inflate = null;
+    protected List<T> mList = null;
+    protected LayoutInflater inflate;
+    protected onItemClickListener mOnItemClickListener = null;
+    protected onItemLongClickListener mOnItemLongClickListener = null;
 
-    public BaseListAdapter(Context context) {
+    public BaseRvAdapter(@NonNull Context context) {
         mContext = context;
         mList = new ArrayList<>();
         inflate = LayoutInflater.from(context);
     }
 
-    public BaseListAdapter(Context context, Fragment fragment) {
+    public BaseRvAdapter(@NonNull Context context, @NonNull Fragment fragment) {
         this(context);
         mFragment = fragment;
     }
 
-    /**
-     * 获取item布局id
-     *
-     * @return
-     */
     protected abstract int getLayoutResourceId();
 
-    public abstract void getView(int position, BaseListHolder holder, T bean);
+    protected abstract void onBindViewHolder(BaseRvViewHolder holder, int position, T bean);
 
     @Override
-    public int getCount() {
-        return (mList == null) ? 0 : mList.size();
+    public BaseRvViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new BaseRvViewHolder(mContext, mFragment, inflate.inflate(getLayoutResourceId(), parent, false));
     }
 
     @Override
-    public T getItem(int position) {
-        return (mList == null) ? null : mList.get(position);
-    }
-
-    public T getLastItme() {
-        return (mList == null) ? null : mList.get(mList.size() - 1);
+    public void onBindViewHolder(final BaseRvViewHolder holder, final int position) {
+        onBindViewHolder(holder, position, position >= mList.size() ? null : mList.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemClickListener != null)
+                    mOnItemClickListener.onItemCLick(holder, position, position >= mList.size() ? null : mList.get(position));
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (mOnItemLongClickListener != null) {
+                    mOnItemLongClickListener.onItemLongClick(holder, position, position >= mList.size() ? null : mList.get(position));
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    //重写这里修改getview
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        BaseListHolder holder = BaseListHolder.get(mContext, mFragment, convertView, parent, getLayoutResourceId());
-        getView(position, holder, position >= mList.size() ? null : mList.get(position));
-        return holder.getConvertView();
+    public int getItemCount() {
+        return mList == null ? 0 : mList.size();
     }
 
     /**
@@ -126,6 +125,14 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IRoute, 
 
     public boolean isNotEmpty() {
         return !mList.isEmpty();
+    }
+
+    public void setOnItemClickListener(@NonNull onItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(@NonNull onItemLongClickListener onItemLongClickListener) {
+        mOnItemLongClickListener = onItemLongClickListener;
     }
 
     @Override
@@ -233,7 +240,12 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IRoute, 
     public String formatTime(long time) {
         return DateUtils.formateDateLongToString(time);
     }
+
+    public interface onItemClickListener<T> {
+        void onItemCLick(BaseRvViewHolder holder, int position, T bean);
+    }
+
+    public interface onItemLongClickListener<T> {
+        void onItemLongClick(BaseRvViewHolder holder, int position, T bean);
+    }
 }
-
-
-

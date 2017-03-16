@@ -20,7 +20,7 @@ import butterknife.BindView;
 /**
  * @version V1.0
  * @ClassName: ${CLASS_NAME}
- * @Description: (base 刷新fragment--->不带懒加载)
+ * @Description: (base 刷新ListView Fragment--->不带懒加载)
  * @create by: chenwei
  * @date 2016/10/8 15:46
  */
@@ -41,7 +41,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
     /**
      * 适配器
      */
-    protected BaseListAdapter mAdapter = null;
+    protected BaseListAdapter<T> mAdapter = null;
 
     /**
      * 请求类型
@@ -123,7 +123,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
     /**
      * 设置下拉或上拉完成(当请求完成时)
      */
-    public void setPullUpOrDownRefreshComplete(){
+    public void setPullUpOrDownRefreshComplete() {
         mPullToRefreshListView.onPullUpRefreshComplete();
         mPullToRefreshListView.onPullDownRefreshComplete();
     }
@@ -142,11 +142,17 @@ public abstract class BaseListFragment<T> extends BaseFragment implements PullTo
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
+        onItemClick(adapterView, view, position, id, mAdapter.getItem((int) id));
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+        return onItemLongClick(adapterView, view, position, id, mAdapter.getItem((int) id));
+    }
+
+    public abstract void onItemClick(AdapterView<?> adapterView, View view, int position, long id, T bean);
+
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id, T bean) {
         return false;
     }
 

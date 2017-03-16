@@ -135,7 +135,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
         for (MarketMainModel model : list) {
             long count = mMarketMainModelDao.queryBuilder().where(MarketMainModelDao.Properties.Id.eq(model.getId())).count();
             if (count <= 0)
-               mMarketMainModelDao.insert(model);
+                mMarketMainModelDao.insert(model);
         }
         //mMarketMainModelDao.insertInTx(list);
     }
@@ -149,7 +149,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
 
     @Override
     protected BaseListAdapter getAdapter() {
-        return new CarHotListAdapter(mContext);
+        return new CarHotListAdapter(mContext, mFragment);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
     }
 
     @Override
-    public void onItemClick(AdapterView adapterView, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id, MarketMainModel bean) {
         DialogUtils.showImageDialog(mActivity, new OnItemClickListener() {
             @Override
             public void onItemClick(Object o, int position) {
@@ -173,16 +173,18 @@ public class TabInfoLvFragment extends BaseLazyListFragment<MarketMainModel> imp
                     takePhoto.onPickFromGallery();
             }
         });
+        logI(bean.getName());
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id, MarketMainModel bean) {
         DialogUtils.showAlertDialog(mActivity, "确认删除吗", new OnItemClickListener() {
             @Override
             public void onItemClick(Object o, int position) {
 
             }
         });
+        logI(bean.getName());
         return true;
     }
 

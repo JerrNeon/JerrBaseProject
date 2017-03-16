@@ -40,7 +40,7 @@ import com.cw.jerrbase.ttpapi.map.overlayutil.BikingRouteOverlay;
 import com.cw.jerrbase.ttpapi.map.overlayutil.DrivingRouteOverlay;
 import com.cw.jerrbase.ttpapi.map.overlayutil.TransitRouteOverlay;
 import com.cw.jerrbase.ttpapi.map.overlayutil.WalkingRouteOverlay;
-import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.LogUtils;
 
 import java.util.List;
 
@@ -522,17 +522,17 @@ public class BaiduMapManage implements ILog {
 
     @Override
     public void logI(String message) {
-        LogUtil.i(String.format(messageFormat, getClassName(), message));
+        LogUtils.i(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logW(String message) {
-        LogUtil.w(String.format(messageFormat, getClassName(), message));
+        LogUtils.w(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logE(String message) {
-        LogUtil.e(String.format(messageFormat, getClassName(), message));
+        LogUtils.e(String.format(messageFormat, getClassName(), message));
     }
 
     @Override

@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.ttpapi.share.WeChatManage;
-import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.LogUtils;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -103,17 +103,17 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
     @Override
     public void logI(String message) {
-        LogUtil.i(String.format(messageFormat, getClassName(), message));
+        LogUtils.i(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logW(String message) {
-        LogUtil.w(String.format(messageFormat, getClassName(), message));
+        LogUtils.w(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logE(String message) {
-        LogUtil.e(String.format(messageFormat, getClassName(), message));
+        LogUtils.e(String.format(messageFormat, getClassName(), message));
     }
 
     @Override

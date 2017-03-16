@@ -12,7 +12,7 @@ import android.widget.GridView;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.adapter.BaseListAdapter;
-import com.cw.jerrbase.base.adapter.ToolViewHolder;
+import com.cw.jerrbase.base.adapter.BaseListHolder;
 import com.cw.jerrbase.base.dialog.BaseDialog;
 import com.cw.jerrbase.bean.ShareVO;
 
@@ -96,14 +96,14 @@ public class ShareDialog extends BaseDialog {
         }
 
         @Override
-        public int getLayoutId() {
+        public int getLayoutResourceId() {
             return R.layout.dialog_item_share;
         }
 
         @Override
-        public void getView(int position, ToolViewHolder holder, ShareVO bean) {
-            holder.ivSetImage(R.id.share_img, bean.getImg());
-            holder.tvSetText(R.id.share_title, bean.getTitle());
+        public void getView(int position, BaseListHolder holder, ShareVO bean) {
+            holder.setImageResource(R.id.share_img, bean.getImg());
+            holder.setText(R.id.share_title, bean.getTitle());
         }
     }
 

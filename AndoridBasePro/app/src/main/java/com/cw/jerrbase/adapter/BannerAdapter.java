@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.adapter.BaseListAdapter;
-import com.cw.jerrbase.base.adapter.ToolViewHolder;
+import com.cw.jerrbase.base.adapter.BaseListHolder;
 
 /**
  * @version V1.0
@@ -20,12 +20,12 @@ public class BannerAdapter extends BaseListAdapter<String> {
     }
 
     @Override
-    public int getLayoutId() {
+    public int getLayoutResourceId() {
         return R.layout.item_main;
     }
 
     @Override
-    public void getView(int position, ToolViewHolder holder, String bean) {
-        holder.tvSetText(R.id.tv_banner_transform, bean);
+    public void getView(int position, BaseListHolder holder, String bean) {
+        holder.setText(R.id.tv_banner_transform, bean);
     }
 }

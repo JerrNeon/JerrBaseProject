@@ -1,6 +1,7 @@
 package com.cw.jerrbase.adapter;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -8,10 +9,9 @@ import android.widget.TextView;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.adapter.BaseListAdapter;
-import com.cw.jerrbase.base.adapter.ToolViewHolder;
-import com.cw.jerrbase.base.glide.GlideUtil;
+import com.cw.jerrbase.base.adapter.BaseListHolder;
 import com.cw.jerrbase.bean.MarketMainModel;
-import com.cw.jerrbase.util.QMUtil;
+import com.cw.jerrbase.util.MathUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,17 +25,17 @@ public class CarHotListAdapter extends BaseListAdapter<MarketMainModel> {
         super(context);
     }
 
+    public CarHotListAdapter(Context context, Fragment fragment) {
+        super(context, fragment);
+    }
+
     @Override
-    public int getLayoutId() {
+    public int getLayoutResourceId() {
         return R.layout.fragment_postcar;
     }
 
     @Override
-    public void getView(int position, ToolViewHolder holder, MarketMainModel bean) {
-        MarketMainModel model = getItem(position);
-        ImageView iv_product_icon = holder.getChildView(R.id.iv_postcar_img);//车型图标
-        TextView tv_product_title = holder.getChildView(R.id.tv_postcar_name);//车型
-        TextView tv_product_price = holder.getChildView(R.id.tv_postcar_price);//价格
+    public void getView(int position, BaseListHolder holder, MarketMainModel bean) {
         TextView tv_product_spec = holder.getChildView(R.id.tv_postcar_spec);//规格
         TextView tv_productcar_unit = holder.getChildView(R.id.tv_postcar_unit);//单位
         TextView tv_product_color = holder.getChildView(R.id.tv_postcar_color);//颜色
@@ -47,67 +47,59 @@ public class CarHotListAdapter extends BaseListAdapter<MarketMainModel> {
         TextView tv_product_date = holder.getChildView(R.id.tv_postcar_date);//时间
         LinearLayout ll_productcar_remark = holder.getChildView(R.id.ll_postcar_remark);
 
-
-        GlideUtil.displayImage(mContext, model.getImg(), iv_product_icon);
-        if (QMUtil.isNotEmpty(model.getName())) {
-            tv_product_title.setText(model.getName());
-        }
-        if (QMUtil.isEmpty(model.getCustomcar())) {
-            if (QMUtil.isNotEmpty(model.getColor1()) || QMUtil.isNotEmpty(model.getColor2())) {
-                tv_product_color.setText(model.getColor1() + "/" + model.getColor2());
-            }
-        } else {
+        holder.displayImage(R.id.iv_postcar_img, bean.getImg());//车型图标
+        holder.setText(R.id.tv_postcar_name, checkStr(bean.getName()));//车型
+        if (checkObject(bean.getCustomcar()))
+            holder.setText(R.id.tv_postcar_color, checkStr(bean.getColor1()) + "/" + checkStr(bean.getColor2()));
+        else {
             try {
-                JSONArray customsArr = new JSONArray(model.getCustomcar());
+                JSONArray customsArr = new JSONArray(bean.getCustomcar());
                 if (customsArr.length() == 3)
-                    tv_product_color.setText(customsArr.optString(1) + "/" + customsArr.optString(2));
+                    holder.setText(R.id.tv_postcar_color, checkStr(customsArr.optString(1)) + "/" + checkStr(customsArr.optString(2)));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-//        double price = Utils.strTodouble(model.getPrice());
-//        tv_product_price.setText(price == 0 ? "电议" : String.format("%.2f", price) + "万");
-//        if (QMUtil.isNotEmpty(model.getTime())) {
-//            tv_product_date.setText(Utils.getStrTimeNoH(model.getTime() + ""));
-//        }
-        if (QMUtil.isNotEmpty(model.getAddressfrom())) {
-            iv_product_addr.setVisibility(View.VISIBLE);
-            tv_product_fromaddr.setText(model.getAddressfrom());
+        //(String.format("%.2f", price)
+        double price = str2Double(bean.getPrice());
+        holder.setText(R.id.tv_postcar_price, price == 0 ? "电议" : formatPrice(bean.getPrice()) + "万");//价格
+        holder.setText(R.id.tv_postcar_date, formatTime(bean.getTime()));//时间
+        if (checkObject(bean.getAddressfrom())) {
+            holder.setVisibity(R.id.iv_postcar_addr, View.GONE);
+            holder.setVisibity(R.id.tv_postcar_fromaddr, View.GONE);
         } else {
-            iv_product_addr.setVisibility(View.GONE);
-            tv_product_fromaddr.setText("");
+            holder.setVisibity(R.id.iv_postcar_addr, View.VISIBLE);
+            holder.setText(R.id.tv_postcar_fromaddr, bean.getAddressfrom());
         }
-        if (QMUtil.isNotEmpty(model.getAddressto())) {
-            tv_product_toaddr.setText(model.getAddressto().toString());
+        holder.setText(R.id.tv_postcar_toaddr, bean.getAddressto());
+        double guideprice = str2Double(bean.getGuideprice1());
+        String feerule;
+        if (checkObject(bean.getFeerule()))
+            feerule = "电议";
+        else {
+            if ("下点".equals(bean.getFeerule()) && !checkObject(bean.getFeevalue()))
+                feerule = String.format("下%s点", bean.getFeevalue());
+            else if ("优惠".equals(bean.getFeerule())) {
+                feerule = String.format("优惠%s万", MathUtil.sub(guideprice, price) + "");
+            } else if ("加".equals(bean.getFeerule())) {
+                feerule = String.format("加%s万", MathUtil.sub(price, guideprice) + "");
+            } else
+                feerule = bean.getFeerule();
         }
-        //double guideprice = Utils.strTodouble(model.getGuideprice1());
-//        String feerule;
-//        if (QMUtil.isEmpty(model.getFeerule()))
-//            feerule = "电议";
-//        else {
-//            if ("下点".equals(model.getFeerule()) && QMUtil.isNotEmpty(model.getFeevalue()))
-//                feerule = String.format("下%s点", model.getFeevalue());
-//            else if ("优惠".equals(model.getFeerule())) {
-//                feerule = String.format("优惠%s万", MathUtil.sub(guideprice, price) + "");
-//            } else if ("加".equals(model.getFeerule())) {
-//                feerule = String.format("加%s万", MathUtil.sub(price, guideprice) + "");
-//            } else
-//                feerule = model.getFeerule();
-//        }
-//        if (guideprice == 0)
-//            tv_productcar_unit.setText(feerule);
-//        else {
-//            String prePrice = String.format("%.2f", guideprice) + "万";
-//            tv_productcar_unit.setText(String.format("%s/%s", prePrice, feerule));
-//        }
-        if (QMUtil.isNotEmpty(model.getSpecifications()) && QMUtil.isNotEmpty(model.getCarstatus())) {
-            tv_product_spec.setText(String.format("%s/%s", model.getSpecifications(), model.getCarstatus()));
+        if (guideprice == 0)
+            holder.setText(R.id.tv_postcar_unit,feerule);
+        else {
+            String prePrice = String.format("%.2f", guideprice) + "万";
+            tv_productcar_unit.setText(String.format("%s/%s", prePrice, feerule));
         }
-        if (QMUtil.isEmpty(model.getRemark())) {
-            ll_productcar_remark.setVisibility(View.GONE);
+        if (!checkObject(bean.getSpecifications()) && !checkObject(bean.getCarstatus())) {
+            holder.setText(R.id.tv_postcar_spec, String.format("%s/%s", bean.getSpecifications(), bean.getCarstatus()));
+        }
+        if (checkObject(bean.getRemark())) {
+            holder.setVisibity(R.id.ll_postcar_remark, View.GONE);
         } else {
-            ll_productcar_remark.setVisibility(View.VISIBLE);
-            tv_productcar_remark.setText(model.getRemark());
+            holder.setVisibity(R.id.ll_postcar_remark, View.VISIBLE);
+            holder.setText(R.id.tv_postcar_remark, bean.getRemark());
         }
 //        if (QMUtil.isEmpty(model.getStarlevelname()))
 //            tv_productcar_rb.setRating(0);

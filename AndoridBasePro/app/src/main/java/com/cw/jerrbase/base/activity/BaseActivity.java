@@ -19,7 +19,9 @@ import com.cw.jerrbase.base.api.IToast1;
 import com.cw.jerrbase.base.api.IUtil;
 import com.cw.jerrbase.common.ActivityManager;
 import com.cw.jerrbase.ttpapi.jpush.JpushManage;
-import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.DateUtils;
+import com.cw.jerrbase.util.LogUtils;
+import com.cw.jerrbase.util.NumberUtils;
 import com.cw.jerrbase.util.QMUtil;
 import com.cw.jerrbase.util.ToastUtil;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -277,27 +279,27 @@ public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3,
 
     @Override
     public void logD(String message) {
-        LogUtil.d(String.format(messageFormat, getClassName(), message));
+        LogUtils.d(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logV(String message) {
-        LogUtil.v(String.format(messageFormat, getClassName(), message));
+        LogUtils.v(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logI(String message) {
-        LogUtil.i(String.format(messageFormat, getClassName(), message));
+        LogUtils.i(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logW(String message) {
-        LogUtil.w(String.format(messageFormat, getClassName(), message));
+        LogUtils.w(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logE(String message) {
-        LogUtil.e(String.format(messageFormat, getClassName(), message));
+        LogUtils.e(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
@@ -327,17 +329,17 @@ public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3,
 
     @Override
     public long str2Long(String str) {
-        return QMUtil.strToInt(str);
+        return QMUtil.strToLong(str);
     }
 
     @Override
     public float str2Float(String str) {
-        return QMUtil.strToInt(str);
+        return QMUtil.strToFloat(str);
     }
 
     @Override
     public double str2Double(String str) {
-        return QMUtil.strToInt(str);
+        return QMUtil.strToDouble(str);
     }
 
     @Override
@@ -345,5 +347,15 @@ public class BaseActivity extends AppCompatActivity implements IFrame2, IRoute3,
         if (object instanceof Integer || object instanceof Long || object instanceof Float || object instanceof Double)
             return String.valueOf(object);
         return "";
+    }
+
+    @Override
+    public String formatPrice(String price) {
+        return NumberUtils.formatDouble2String(str2Double(price));
+    }
+
+    @Override
+    public String formatTime(long time) {
+        return DateUtils.formateDateLongToString(time);
     }
 }

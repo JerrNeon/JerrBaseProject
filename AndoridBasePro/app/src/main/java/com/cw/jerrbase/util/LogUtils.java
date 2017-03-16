@@ -9,12 +9,12 @@ import com.cw.jerrbase.BaseApplication;
  *
  * @author way
  */
-public class LogUtil {
+public class LogUtils {
 
     private static final boolean isDebug = BaseApplication.LOG_DEBUG;// 是否需要打印bug，可以在application的onCreate函数里面初始化
     private static final String TAG = BaseApplication.LOG_TAG;
 
-    private LogUtil() {
+    private LogUtils() {
         /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
     }

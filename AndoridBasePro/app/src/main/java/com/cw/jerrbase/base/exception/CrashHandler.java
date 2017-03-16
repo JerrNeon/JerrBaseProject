@@ -9,7 +9,7 @@ import android.os.Process;
 import com.cw.jerrbase.base.api.ILog;
 import com.cw.jerrbase.base.api.IToast;
 import com.cw.jerrbase.util.ImageUtil;
-import com.cw.jerrbase.util.LogUtil;
+import com.cw.jerrbase.util.LogUtils;
 import com.cw.jerrbase.util.ToastUtil;
 
 import java.io.BufferedWriter;
@@ -141,17 +141,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler, ILog, IToa
 
     @Override
     public void logI(String message) {
-        LogUtil.i(String.format(messageFormat, getClassName(), message));
+        LogUtils.i(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logW(String message) {
-        LogUtil.w(String.format(messageFormat, getClassName(), message));
+        LogUtils.w(String.format(messageFormat, getClassName(), message));
     }
 
     @Override
     public void logE(String message) {
-        LogUtil.e(String.format(messageFormat, getClassName(), message));
+        LogUtils.e(String.format(messageFormat, getClassName(), message));
     }
 
     @Override

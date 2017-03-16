@@ -41,7 +41,7 @@ public abstract class BaseLazyListFragment<T> extends BaseLazyFragment implement
     /**
      * 适配器
      */
-    protected BaseListAdapter mAdapter = null;
+    protected BaseListAdapter<T> mAdapter = null;
 
     /**
      * 请求类型
@@ -141,11 +141,17 @@ public abstract class BaseLazyListFragment<T> extends BaseLazyFragment implement
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
+        onItemClick(adapterView, view, position, id, mAdapter.getItem((int) id));
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+        return onItemLongClick(adapterView, view, position, id, mAdapter.getItem((int) id));
+    }
+
+    public abstract void onItemClick(AdapterView<?> adapterView, View view, int position, long id, T bean);
+
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id, T bean) {
         return false;
     }
 
