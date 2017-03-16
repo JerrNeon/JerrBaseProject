@@ -109,7 +109,7 @@ public class OkHttpClientManager {
             @Override
             public void onFailure(final Request request, final IOException e) {
                 // 打印请求地址
-                LogUtils.sysOut("Request URl", request.urlString());
+                LogUtils.d("Request URl--->" + request.urlString());
                 sendFailResultCallback(null, request, e, resCallBack);
             }
 
@@ -134,13 +134,13 @@ public class OkHttpClientManager {
                 }
                 try {
                     final String string = response.body().string();
-                    LogUtils.sysOut("response", string);
+                    LogUtils.d("response--->" + string);
                     // 先解析成统一对象
                     XaResult result = mGson.fromJson(string, XaResult.class);
 
                     // 这里可以判断服务器返回的code 是否正确
                     if (!("0000").equals(result.getRspCode())) {
-                        LogUtils.sysOut("response", result.getRspCode());
+                        LogUtils.d("response--->" + result.getRspCode());
                         // 错误信息
                         sendFailResultCallback(result, response.request(),
                                 new OkHttpException(), resCallBack);
@@ -187,7 +187,7 @@ public class OkHttpClientManager {
                                            final ResultCallback callback) {
         if (callback == null)
             return;
-        LogUtils.e("onFailure 异常", e.toString());
+        LogUtils.e("onFailure 异常--->" + e.toString());
         mDelivery.post(new Runnable() {
             @Override
             public void run() {

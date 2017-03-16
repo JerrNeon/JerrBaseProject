@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.cw.jerrbase.BaseApplication;
 
+
 /**
  * Log统一管理类
  *
@@ -13,6 +14,8 @@ public class LogUtils {
 
     private static final boolean isDebug = BaseApplication.LOG_DEBUG;// 是否需要打印bug，可以在application的onCreate函数里面初始化
     private static final String TAG = BaseApplication.LOG_TAG;
+    private static final String sysOutMessageFormat1 = "%s: %s:>>> %s";
+    private static final String sysOutMessageFormat2 = "%s:>>> %s";
 
     private LogUtils() {
         /* cannot be instantiated */
@@ -78,7 +81,7 @@ public class LogUtils {
      */
     public static void sysOut(String s) {
         if (isDebug) {
-            System.out.println(s);
+            System.out.println(TAG + s);
         }
     }
 
@@ -86,11 +89,23 @@ public class LogUtils {
      * system 输出
      *
      * @param s
-     * @param TAG
+     * @param tag
      */
-    public static void sysOut(String TAG, Object s) {
+    public static void sysOut(String tag, Object s) {
         if (isDebug) {
-            System.out.println(TAG + ":>>> " + s);
+            System.out.println(String.format(sysOutMessageFormat1, TAG, tag, s));
+        }
+    }
+
+    /**
+     * system 输出
+     *
+     * @param s
+     * @param tag
+     */
+    public static void sysOut1(String tag, Object s) {
+        if (isDebug) {
+            System.out.println(String.format(sysOutMessageFormat2, tag, s));
         }
     }
 }

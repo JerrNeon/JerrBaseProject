@@ -234,17 +234,16 @@ public abstract class OkHttpRequest {
                 //吧content修改掉成json串
                 Gson gson = new Gson();
                 content = gson.toJson(params);
-                LogUtils.d("OkHttpPostRequest json", content);
+                LogUtils.d("OkHttpPostRequest json--->" + content);
             }
             if (QMUtil.isNotEmpty(params2)) {
                 //吧content修改掉成json串
                 Gson gson = new Gson();
                 content = gson.toJson(params2);
-                LogUtils.d("OkHttpPostRequest json", content);
+                LogUtils.d("OkHttpPostRequest json--->" + content);
             }
             OkHttpRequest request = new OkHttpPostRequest(url, tag, params,
                     headers, mediaType, content, bytes, file);
-//			NLogUtil.logD("OkHttpPostRequest params", params.toString());
             request.invokeAsyn(callback);
             return request;
         }
@@ -261,7 +260,7 @@ public abstract class OkHttpRequest {
             tag(callback.getTag());
             OkHttpRequest request = new OkHttpPostRequest(url, tag, params,
                     headers, mediaType, null, bytes, file);
-//			NLogUtil.logD("OkHttpPostRequest params", params.toString());
+			LogUtils.d("OkHttpPostValiForm params--->" + params.toString());
             request.invokeAsyn(callback);
             return request;
         }
