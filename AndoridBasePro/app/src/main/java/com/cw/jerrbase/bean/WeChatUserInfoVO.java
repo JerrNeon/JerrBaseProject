@@ -9,7 +9,7 @@ import java.util.List;
  * @create by: chenwei
  * @date 2017/3/9 13:44
  */
-public class WeChatUserInfoVo {
+public class WeChatUserInfoVO {
 
     /**
      * openid : OPENID

@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.bean.WeChatAccessTokenVO;
-import com.cw.jerrbase.bean.WeChatUserInfoVo;
+import com.cw.jerrbase.bean.WeChatUserInfoVO;
 import com.cw.jerrbase.net.callback.ResultCallback;
 import com.cw.jerrbase.net.request.OkHttpRequest;
 import com.cw.jerrbase.ttpapi.TtpConstants;
@@ -231,10 +231,10 @@ public class WeChatManage {
         WeakHashMap<String, String> params = new WeakHashMap<>();
         params.put("access_token", weChatAccessTokenVO.getAccess_token());//调用接口凭证
         params.put("openid", weChatAccessTokenVO.getOpenid());//普通用户标识，对该公众帐号唯一
-        new OkHttpRequest.Builder().params(params).url(WeChatURL.GET_USER_INFO).get(new ResultCallback<WeChatUserInfoVo>(mContext, WeChatURL.GET_USER_INFO) {
+        new OkHttpRequest.Builder().params(params).url(WeChatURL.GET_USER_INFO).get(new ResultCallback<WeChatUserInfoVO>(mContext, WeChatURL.GET_USER_INFO) {
 
             @Override
-            public void onResponse(WeChatUserInfoVo response) {
+            public void onResponse(WeChatUserInfoVO response) {
 
             }
         });
