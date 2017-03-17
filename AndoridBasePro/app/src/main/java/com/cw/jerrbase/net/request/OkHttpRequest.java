@@ -113,7 +113,8 @@ public abstract class OkHttpRequest {
         private int errorResId = -1;
 
         // for post
-        private String content = "";
+        private String content = "";//text/plain格式
+        private String json = "";//application/json格式
         private byte[] bytes;
         private File file;
 
@@ -188,6 +189,11 @@ public abstract class OkHttpRequest {
             return this;
         }
 
+        public Builder json(String json){
+            this.json = json;
+            return this;
+        }
+
         public Builder mediaType(MediaType mediaType) {
             this.mediaType = mediaType;
             return this;
@@ -221,7 +227,7 @@ public abstract class OkHttpRequest {
         }
 
         /**
-         * 参数是以JSON格式传到服务器的(设置params和params2都可以)
+         * 参数是以text/plain格式传到服务器的(设置params和params2都可以)
          *
          * @param callback
          * @return
@@ -244,6 +250,34 @@ public abstract class OkHttpRequest {
             }
             OkHttpRequest request = new OkHttpPostRequest(url, tag, params,
                     headers, mediaType, content, bytes, file);
+            request.invokeAsyn(callback);
+            return request;
+        }
+
+        /**
+         * 参数是以application/json格式传到服务器的(设置params和params2都可以)
+         *
+         * @param callback
+         * @return
+         */
+        public OkHttpRequest postJson(ResultCallback callback) {
+            // 这里传入tag 用于返回键取消请求
+            tag(callback.getTag());
+            //todo dz修改
+            if (QMUtil.isNotEmpty(params)) {
+                //吧content修改掉成json串
+                Gson gson = new Gson();
+                json = gson.toJson(params);
+                LogUtils.d("OkHttpPostRequest json--->" + content);
+            }
+            if (QMUtil.isNotEmpty(params2)) {
+                //吧content修改掉成json串
+                Gson gson = new Gson();
+                json = gson.toJson(params2);
+                LogUtils.d("OkHttpPostRequest json--->" + content);
+            }
+            OkHttpRequest request = new OkHttpPostRequest(url, tag, params,
+                    headers, mediaType, content, json, bytes, file);
             request.invokeAsyn(callback);
             return request;
         }

@@ -16,6 +16,7 @@ import java.util.Map;
  */
 public class OkHttpPostRequest extends OkHttpRequest {
     private String content;
+    private String json;
     private byte[] bytes;
     private File file;
     private MediaType mediaType;
@@ -25,10 +26,11 @@ public class OkHttpPostRequest extends OkHttpRequest {
     private static final int TYPE_STRING = 2;
     private static final int TYPE_BYTES = 3;
     private static final int TYPE_FILE = 4;
+    private static final int TYPE_JSON = 5;
 
     private final MediaType MEDIA_TYPE_STREAM = MediaType.parse("application/octet-stream;charset=utf-8");
     private final MediaType MEDIA_TYPE_STRING = MediaType.parse("text/plain;charset=utf-8");
-
+    private final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json;charset=utf-8");
 
     protected OkHttpPostRequest(String url, Object tag, Map<String, String> params, Map<String, String> headers, MediaType mediaType, String content, byte[] bytes, File file) {
         super(url, tag, params, headers);
@@ -36,6 +38,11 @@ public class OkHttpPostRequest extends OkHttpRequest {
         this.content = content;
         this.bytes = bytes;
         this.file = file;
+    }
+
+    protected OkHttpPostRequest(String url, Object tag, Map<String, String> params, Map<String, String> headers, MediaType mediaType, String content, String json, byte[] bytes, File file) {
+        this(url, tag, params, headers, mediaType, content, bytes, file);
+        this.json = json;
     }
 
     protected void validParams() {
@@ -55,6 +62,10 @@ public class OkHttpPostRequest extends OkHttpRequest {
         }
         if (file != null) {
             type = TYPE_FILE;
+            count++;
+        }
+        if (json != null) {
+            type = TYPE_JSON;
             count++;
         }
 
@@ -98,6 +109,9 @@ public class OkHttpPostRequest extends OkHttpRequest {
                 break;
             case TYPE_STRING:
                 requestBody = RequestBody.create(mediaType != null ? mediaType : MEDIA_TYPE_STRING, content);
+                break;
+            case TYPE_JSON:
+                requestBody = RequestBody.create(mediaType != null ? mediaType : MEDIA_TYPE_JSON, json);
                 break;
         }
         return requestBody;
