@@ -56,7 +56,7 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<BaseRvViewHo
 
     @Override
     public BaseRvViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BaseRvViewHolder(mContext, mFragment, inflate.inflate(getLayoutResourceId(), parent, false));
+        return BaseRvViewHolder.create(mContext, mFragment, inflate.inflate(getLayoutResourceId(), parent, false));
     }
 
     @Override

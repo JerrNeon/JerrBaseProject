@@ -3,9 +3,6 @@ package com.cw.jerrbase.adapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.adapter.BaseListAdapter;
@@ -36,17 +33,6 @@ public class CarHotListAdapter extends BaseListAdapter<MarketMainModel> {
 
     @Override
     public void getView(int position, BaseListHolder holder, MarketMainModel bean) {
-        TextView tv_product_spec = holder.getChildView(R.id.tv_postcar_spec);//规格
-        TextView tv_productcar_unit = holder.getChildView(R.id.tv_postcar_unit);//单位
-        TextView tv_product_color = holder.getChildView(R.id.tv_postcar_color);//颜色
-        TextView tv_product_fromaddr = holder.getChildView(R.id.tv_postcar_fromaddr);//来源地址
-        TextView tv_product_toaddr = holder.getChildView(R.id.tv_postcar_toaddr);//目的地址
-        ImageView iv_product_addr = holder.getChildView(R.id.iv_postcar_addr);//地址图标
-        TextView tv_productcar_remark = holder.getChildView(R.id.tv_postcar_remark);//备注
-        //RatingBar tv_productcar_rb = holder.getChildView(R.id.tv_postcar_rb);//信誉度
-        TextView tv_product_date = holder.getChildView(R.id.tv_postcar_date);//时间
-        LinearLayout ll_productcar_remark = holder.getChildView(R.id.ll_postcar_remark);
-
         holder.displayImage(R.id.iv_postcar_img, bean.getImg());//车型图标
         holder.setText(R.id.tv_postcar_name, checkStr(bean.getName()));//车型
         if (checkObject(bean.getCustomcar()))
@@ -87,10 +73,10 @@ public class CarHotListAdapter extends BaseListAdapter<MarketMainModel> {
                 feerule = bean.getFeerule();
         }
         if (guideprice == 0)
-            holder.setText(R.id.tv_postcar_unit,feerule);
+            holder.setText(R.id.tv_postcar_unit, feerule);
         else {
             String prePrice = String.format("%.2f", guideprice) + "万";
-            tv_productcar_unit.setText(String.format("%s/%s", prePrice, feerule));
+            holder.setText(R.id.tv_postcar_unit, String.format("%s/%s", prePrice, feerule));
         }
         if (!checkObject(bean.getSpecifications()) && !checkObject(bean.getCarstatus())) {
             holder.setText(R.id.tv_postcar_spec, String.format("%s/%s", bean.getSpecifications(), bean.getCarstatus()));
@@ -101,6 +87,8 @@ public class CarHotListAdapter extends BaseListAdapter<MarketMainModel> {
             holder.setVisibity(R.id.ll_postcar_remark, View.VISIBLE);
             holder.setText(R.id.tv_postcar_remark, bean.getRemark());
         }
+
+        //RatingBar tv_productcar_rb = holder.getChildView(R.id.tv_postcar_rb);//信誉度
 //        if (QMUtil.isEmpty(model.getStarlevelname()))
 //            tv_productcar_rb.setRating(0);
 //        else {

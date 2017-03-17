@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,19 +26,38 @@ import com.cw.jerrbase.base.glide.GlideUtil;
  */
 public class BaseRvViewHolder extends RecyclerView.ViewHolder {
 
+    protected SparseArray<View> mViews = null;
     protected Context mContext = null;
     protected Fragment mFragment = null;
-    protected View mView = null;
+    protected View mItemView = null;
 
-    public BaseRvViewHolder(Context context, View itemView) {
+    public BaseRvViewHolder(@NonNull Context context, @NonNull View itemView) {
         super(itemView);
         this.mContext = context;
-        this.mView = itemView;
+        this.mItemView = itemView;
+        mViews = new SparseArray<>();
     }
 
-    public BaseRvViewHolder(Context context, Fragment fragment, View itemView) {
+    public BaseRvViewHolder(@NonNull Context context, @NonNull Fragment fragment, @NonNull View itemView) {
         this(context, itemView);
         this.mFragment = fragment;
+    }
+
+    public static BaseRvViewHolder create(@NonNull Context context, @NonNull View itemView) {
+        return new BaseRvViewHolder(context, itemView);
+    }
+
+    public static BaseRvViewHolder create(@NonNull Context context, @NonNull Fragment fragment, @NonNull View itemView) {
+        return new BaseRvViewHolder(context, fragment, itemView);
+    }
+
+    /**
+     * 获取itemView
+     *
+     * @return
+     */
+    public View getItemView() {
+        return mItemView;
     }
 
     /**
@@ -48,8 +68,13 @@ public class BaseRvViewHolder extends RecyclerView.ViewHolder {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public <T extends View> T getChildView(@IdRes int viewId) {
-        return (T) mView.findViewById(viewId);
+    public <T extends View> T getView(@IdRes int viewId) {
+        View view = mViews.get(viewId);
+        if (view == null) {
+            view = mItemView.findViewById(viewId);
+            mViews.put(viewId, view);
+        }
+        return (T) view;
     }
 
     /**
@@ -59,7 +84,7 @@ public class BaseRvViewHolder extends RecyclerView.ViewHolder {
      * @param visibility View.VISIBLE/View.GONE/View.INVISIBLE
      */
     public void setVisibity(@IdRes int viewId, int visibility) {
-        View view = getChildView(viewId);
+        View view = getView(viewId);
         view.setVisibility(visibility);
     }
 
@@ -70,7 +95,7 @@ public class BaseRvViewHolder extends RecyclerView.ViewHolder {
      * @param content
      */
     public void setText(@IdRes int viewId, @NonNull String content) {
-        TextView tv = getChildView(viewId);
+        TextView tv = getView(viewId);
         tv.setText(content);
     }
 
@@ -81,7 +106,7 @@ public class BaseRvViewHolder extends RecyclerView.ViewHolder {
      * @param imgResourceId
      */
     public void setImageResource(@IdRes int viewId, @DrawableRes int imgResourceId) {
-        ImageView iv = getChildView(viewId);
+        ImageView iv = getView(viewId);
         iv.setImageResource(imgResourceId);
     }
 
@@ -92,7 +117,7 @@ public class BaseRvViewHolder extends RecyclerView.ViewHolder {
      * @param drawable
      */
     public void setImageDrawable(@IdRes int viewId, @NonNull Drawable drawable) {
-        ImageView iv = getChildView(viewId);
+        ImageView iv = getView(viewId);
         iv.setImageDrawable(drawable);
     }
 
@@ -114,7 +139,7 @@ public class BaseRvViewHolder extends RecyclerView.ViewHolder {
      * @param errorImgResourceId 加载失败或加载错误的图片
      */
     public void displayImage(@IdRes int viewId, @Nullable String imgUrl, @IdRes int errorImgResourceId) {
-        ImageView view = getChildView(viewId);
+        ImageView view = getView(viewId);
         if (mContext instanceof Activity) {
             if (errorImgResourceId == -1)
                 GlideUtil.displayImage((Activity) mContext, imgUrl, view);
@@ -151,7 +176,7 @@ public class BaseRvViewHolder extends RecyclerView.ViewHolder {
      * @param errorImgResourceId 加载失败或加载错误的图片
      */
     public void displayImageWithRound(@IdRes int viewId, @Nullable String imgUrl, @IdRes int errorImgResourceId) {
-        ImageView view = getChildView(viewId);
+        ImageView view = getView(viewId);
         if (mContext instanceof Activity) {
             if (errorImgResourceId == -1)
                 GlideUtil.displayImageWithRound((Activity) mContext, imgUrl, view);

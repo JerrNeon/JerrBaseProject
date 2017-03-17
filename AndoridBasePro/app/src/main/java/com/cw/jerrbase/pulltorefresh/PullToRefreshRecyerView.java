@@ -8,7 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
+import com.cw.jerrbase.widget.recyclerview.HeaderAndFooterWrapper;
 
 /**
  * @version V1.0

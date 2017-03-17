@@ -31,25 +31,22 @@ public class BaseListHolder {
     private SparseArray<View> mViews = null;
     private Context mContext = null;
     private Fragment mFragment = null;
-    private View mConvertView = null;
+    private View mItemView = null;
 
     private BaseListHolder(@NonNull Context context, @LayoutRes int layoutId, ViewGroup parent) {
         this.mContext = context;
         this.mViews = new SparseArray<>();
-        this.mConvertView = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        this.mConvertView.setTag(this);
+        this.mItemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
+        this.mItemView.setTag(this);
     }
 
     private BaseListHolder(@NonNull Context context, @NonNull Fragment fragment, @LayoutRes int layoutId, ViewGroup parent) {
-        this.mContext = context;
+        this(context, layoutId, parent);
         this.mFragment = fragment;
-        this.mViews = new SparseArray<>();
-        this.mConvertView = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        this.mConvertView.setTag(this);
     }
 
-    public View getConvertView() {
-        return mConvertView;
+    public View getItemView() {
+        return mItemView;
     }
 
     /**
@@ -60,7 +57,7 @@ public class BaseListHolder {
      * @param layoutId    layoutID
      * @return
      */
-    public static BaseListHolder get(Context mContext, View convertView, ViewGroup parent, @LayoutRes int layoutId) {
+    public static BaseListHolder create(Context mContext, View convertView, ViewGroup parent, @LayoutRes int layoutId) {
         if (convertView == null)
             return new BaseListHolder(mContext, layoutId, parent);
         return (BaseListHolder) convertView.getTag();
@@ -74,7 +71,7 @@ public class BaseListHolder {
      * @param layoutId    layoutID
      * @return
      */
-    public static BaseListHolder get(Context mContext, Fragment fragment, View convertView, ViewGroup parent, @LayoutRes int layoutId) {
+    public static BaseListHolder create(Context mContext, Fragment fragment, View convertView, ViewGroup parent, @LayoutRes int layoutId) {
         if (convertView == null)
             return new BaseListHolder(mContext, fragment, layoutId, parent);
         return (BaseListHolder) convertView.getTag();
@@ -87,10 +84,10 @@ public class BaseListHolder {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public <T extends View> T getChildView(@IdRes int viewId) {
+    public <T extends View> T getView(@IdRes int viewId) {
         View view = mViews.get(viewId);
         if (view == null) {
-            view = mConvertView.findViewById(viewId);
+            view = mItemView.findViewById(viewId);
             mViews.put(viewId, view);
         }
         return (T) view;
@@ -103,7 +100,7 @@ public class BaseListHolder {
      * @param visibility View.VISIBLE/View.GONE/View.INVISIBLE
      */
     public void setVisibity(@IdRes int viewId, int visibility) {
-        View view = getChildView(viewId);
+        View view = getView(viewId);
         view.setVisibility(visibility);
     }
 
@@ -114,7 +111,7 @@ public class BaseListHolder {
      * @param content
      */
     public void setText(@IdRes int viewId, @NonNull String content) {
-        TextView view = getChildView(viewId);
+        TextView view = getView(viewId);
         view.setText(content);
     }
 
@@ -125,7 +122,7 @@ public class BaseListHolder {
      * @param imgResId
      */
     public void setImageResource(@IdRes int viewId, @DrawableRes int imgResId) {
-        ImageView view = getChildView(viewId);
+        ImageView view = getView(viewId);
         view.setImageResource(imgResId);
     }
 
@@ -136,7 +133,7 @@ public class BaseListHolder {
      * @param img
      */
     public void setImageDrawable(@IdRes int viewId, @NonNull Drawable img) {
-        ImageView view = getChildView(viewId);
+        ImageView view = getView(viewId);
         view.setImageDrawable(img);
     }
 
@@ -158,7 +155,7 @@ public class BaseListHolder {
      * @param errorImgResourceId 加载失败或加载错误的图片
      */
     public void displayImage(@IdRes int viewId, @Nullable String imgUrl, @IdRes int errorImgResourceId) {
-        ImageView view = getChildView(viewId);
+        ImageView view = getView(viewId);
         if (mContext instanceof Activity) {
             if (errorImgResourceId == -1)
                 GlideUtil.displayImage((Activity) mContext, imgUrl, view);
@@ -195,7 +192,7 @@ public class BaseListHolder {
      * @param errorImgResourceId 加载失败或加载错误的图片
      */
     public void displayImageWithRound(@IdRes int viewId, @Nullable String imgUrl, @IdRes int errorImgResourceId) {
-        ImageView view = getChildView(viewId);
+        ImageView view = getView(viewId);
         if (mContext instanceof Activity) {
             if (errorImgResourceId == -1)
                 GlideUtil.displayImageWithRound((Activity) mContext, imgUrl, view);

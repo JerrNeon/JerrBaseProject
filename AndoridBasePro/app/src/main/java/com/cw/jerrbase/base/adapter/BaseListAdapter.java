@@ -82,9 +82,9 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IRoute, 
     //重写这里修改getview
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        BaseListHolder holder = BaseListHolder.get(mContext, mFragment, convertView, parent, getLayoutResourceId());
+        BaseListHolder holder = BaseListHolder.create(mContext, mFragment, convertView, parent, getLayoutResourceId());
         getView(position, holder, position >= mList.size() ? null : mList.get(position));
-        return holder.getConvertView();
+        return holder.getItemView();
     }
 
     /**
