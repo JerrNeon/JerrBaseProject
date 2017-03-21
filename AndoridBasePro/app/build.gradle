@@ -108,8 +108,6 @@ dependencies {
     annotationProcessor dep["butterknife-annotationProcessor"]
     //EventBus
     compile dep["eventbus"]
-    //状态栏一体化
-    compile dep["statusbarlibrary"]
     //加载框
     compile dep["kprogresshud"]
     //适配

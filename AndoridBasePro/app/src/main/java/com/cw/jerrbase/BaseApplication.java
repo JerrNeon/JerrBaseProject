@@ -56,7 +56,7 @@ public class BaseApplication extends Application {
     }
 
     private void initAutoLayout() {
-        AutoLayoutConifg.getInstance().useDeviceSize();
+        AutoLayoutConifg.getInstance().useDeviceSize().init(this);
     }
 
     /**
