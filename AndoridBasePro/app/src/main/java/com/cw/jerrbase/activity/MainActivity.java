@@ -21,7 +21,7 @@ import com.cw.jerrbase.base.activity.BaseActivity;
 import com.cw.jerrbase.fragment.ComponentFragment;
 import com.cw.jerrbase.fragment.MainFragment;
 import com.cw.jerrbase.fragment.MineFragment;
-import com.jaeger.library.StatusBarUtil;
+import com.cw.jerrbase.util.StatusBarUtils;
 
 import butterknife.BindView;
 
@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @Override
     public void setStatusBar() {
         super.setStatusBar();
-        StatusBarUtil.setColorNoTranslucentForDrawerLayout(mActivity, mMainDrawerLayout, ContextCompat.getColor(mContext, R.color.colorPrimary));
+        StatusBarUtils.setColorNoTranslucentForDrawerLayout(mActivity, mMainDrawerLayout, ContextCompat.getColor(mContext, R.color.colorPrimary));
     }
 
     @Override

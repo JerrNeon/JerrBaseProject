@@ -6,7 +6,7 @@ import android.widget.ImageView;
 
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.base.activity.BaseActivity;
-import com.jaeger.library.StatusBarUtil;
+import com.cw.jerrbase.util.StatusBarUtils;
 
 import butterknife.BindView;
 
@@ -31,6 +31,6 @@ public class ImageStatusActivity extends BaseActivity {
 
     @Override
     public void setStatusBar() {
-        StatusBarUtil.setTranslucentForImageView(mActivity, 0, iv);
+        StatusBarUtils.setTranslucentForImageView(mActivity, 0, iv);
     }
 }

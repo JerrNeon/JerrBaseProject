@@ -13,7 +13,7 @@ import android.view.View;
 import com.cw.jerrbase.R;
 import com.cw.jerrbase.adapter.RecyerAdapter;
 import com.cw.jerrbase.base.activity.BaseActivity;
-import com.jaeger.library.StatusBarUtil;
+import com.cw.jerrbase.util.StatusBarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +60,7 @@ public class CollapsingToolbarActivity extends BaseActivity {
 
     @Override
     public void setStatusBar() {
-        StatusBarUtil.setTranslucentForCoordinatorLayout(mActivity, 122);
+        StatusBarUtils.setTranslucentForCoordinatorLayout(mActivity, 122);
     }
 
     private void initCollapsingToolbarLayout() {

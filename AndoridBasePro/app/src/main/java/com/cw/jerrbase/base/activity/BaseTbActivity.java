@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cw.jerrbase.R;
-import com.jaeger.library.StatusBarUtil;
+import com.cw.jerrbase.util.StatusBarUtils;
 
 import butterknife.OnClick;
 
@@ -86,7 +86,7 @@ public abstract class BaseTbActivity extends BaseActivity {
 
     @Override
     public void setStatusBar() {
-        StatusBarUtil.setColor(mActivity, ContextCompat.getColor(mContext, R.color.colorPrimary), 0);
+        StatusBarUtils.setColor(mActivity, ContextCompat.getColor(mContext, R.color.colorPrimary), 0);
     }
 
     /**
